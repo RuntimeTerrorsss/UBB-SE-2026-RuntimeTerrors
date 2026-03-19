@@ -1,0 +1,31 @@
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using OurApp.Core.Models;
+using OurApp.Core.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OurApp.Core.Services
+{
+    public class EventsService
+    {
+        EventsRepo repository;
+        public EventsService(EventsRepo repo) 
+        {
+            this.repository = repo;
+        }
+
+        public void AddEvent(string photo, string title, string description, string start, string end, string location)
+        {
+            Event e = new Event(photo, title, description, start, end, location, 1, 1);
+            this.repository.Add(e);
+        }
+
+        public void printAll()
+        {
+            this.repository.printAll();
+        }
+    }
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="OurApp.WinUI.CreateEventPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OurApp.WinUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <StackPanel>
+            <TextBox 
+                Header="Enter photo url:" 
+                PlaceholderText="Photo"
+                Text="{Binding Photo, Mode=TwoWay}"
+            />
+
+            <TextBox 
+                Header="Enter event title:" 
+                PlaceholderText="Title"
+                Text="{Binding Title, Mode=TwoWay}"
+            />
+            
+            <TextBox 
+                Header="Enter event desc:" 
+                PlaceholderText="Desc"
+                Text="{Binding Description, Mode=TwoWay}"
+            />
+
+            <TextBox 
+                Header="Enter event starting date:" 
+                PlaceholderText="Start"
+                Text="{Binding StartDate, Mode=TwoWay}"
+            />
+
+            <TextBox 
+                Header="Enter event ending date:" 
+                PlaceholderText="End"
+                Text="{Binding EndDate, Mode=TwoWay}"
+            />
+
+            <TextBox 
+                Header="Enter your location:" 
+                PlaceholderText="Location"
+                Text="{Binding Location, Mode=TwoWay}"
+            />
+
+            <Button Content="Create Event" Command="{Binding TapCommand}"></Button>
+        </StackPanel>
+    </Grid>
+</Page>

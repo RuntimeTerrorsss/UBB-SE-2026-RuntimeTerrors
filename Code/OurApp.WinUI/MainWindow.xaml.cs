@@ -26,6 +26,7 @@ namespace OurApp.WinUI
         public MainWindow()
         {
             InitializeComponent();
+            RootFrame.Navigate(typeof(CreateEventPage));
         }
     }
 }
