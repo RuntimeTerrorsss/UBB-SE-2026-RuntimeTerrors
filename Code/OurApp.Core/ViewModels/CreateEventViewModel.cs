@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
+using OurApp.Core.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace OurApp.Core.ViewModels
     public partial class CreateEventViewModel : ObservableObject
     {
         EventsService service = new EventsService(new EventsRepo());
+        public EventValidator validator = new EventValidator();
 
         [ObservableProperty]
         private string photo;

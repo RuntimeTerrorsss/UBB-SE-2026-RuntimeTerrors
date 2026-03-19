@@ -17,11 +17,18 @@
             />
 
             <TextBox 
+                x:Name="TitleBox"
                 Header="Enter event title:" 
                 PlaceholderText="Title"
-                Text="{Binding Title, Mode=TwoWay}"
+                Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                LostFocus="Title_LostFocus"
             />
-            
+            <TextBlock 
+                x:Name="TitleError"
+                Foreground="Red"
+                FontSize="12"
+            />
+
             <TextBox 
                 Header="Enter event desc:" 
                 PlaceholderText="Desc"
