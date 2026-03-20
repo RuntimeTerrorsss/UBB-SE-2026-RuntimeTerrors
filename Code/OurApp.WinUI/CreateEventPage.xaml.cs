@@ -40,7 +40,7 @@ namespace OurApp.WinUI
             IsLoaded = true;
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = App.MainWin;
             mainWindow.RootFrame.Navigate(typeof(OurEventsPage));

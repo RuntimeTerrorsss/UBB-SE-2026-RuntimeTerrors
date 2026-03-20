@@ -11,6 +11,8 @@
     <Grid>
         <StackPanel Padding="20">
 
+            <Button Content="Back" Click="NavigateBack_Click"></Button>
+            
             <TextBox 
                 Header="Enter photo url:" 
                 PlaceholderText="Photo"
@@ -83,14 +85,14 @@
             />
 
             <Button 
-                Content="Create Event" Command="{Binding TapCommand}"></Button>
+                Content="Create Event" Command="{Binding TapCommand}"  Click="NavigateBack_Click"></Button>
             <TextBlock
                 Foreground="Red"
                 FontSize="12"
                 Text="{Binding AddError, Mode=OneWay}"
             />
 
-            <Button Content="Cancel" Click="CancelButton_Click"></Button>
+            <Button Content="Cancel" Click="NavigateBack_Click"></Button>
         </StackPanel>
 
     </Grid>
