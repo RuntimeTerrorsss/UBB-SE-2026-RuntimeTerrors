@@ -40,6 +40,12 @@ namespace OurApp.WinUI
             IsLoaded = true;
         }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = App.MainWin;
+            mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
+        }
+
         private void Title_LostFocus(object sender, RoutedEventArgs e)
         {
             var binding = TitleBox.GetBindingExpression(TextBox.TextProperty);

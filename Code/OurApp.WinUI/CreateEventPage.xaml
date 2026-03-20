@@ -89,6 +89,8 @@
                 FontSize="12"
                 Text="{Binding AddError, Mode=OneWay}"
             />
+
+            <Button Content="Cancel" Click="CancelButton_Click"></Button>
         </StackPanel>
 
     </Grid>
