@@ -45,21 +45,14 @@ namespace OurApp.WinUI
             var binding = TitleBox.GetBindingExpression(TextBox.TextProperty);
             binding?.UpdateSource();
 
-            EventValidator validator = ViewModel.validator;
-            try
+            if (ViewModel.ValidateTitle())
             {
-                if (validator.TitleValidator(ViewModel.Title))
-                {
-                    TitleError.Text = "";
-                    TitleBox.BorderBrush = new SolidColorBrush(Colors.Green);
-                }
+                TitleBox.BorderBrush = new SolidColorBrush(Colors.Green);
             }
-            catch (Exception ex)
+            else
             {
-                TitleError.Text = ex.Message;
                 TitleBox.BorderBrush = new SolidColorBrush(Colors.Red);
             }
-            
         }
 
         private void Description_LostFocus(object sender, RoutedEventArgs e)
@@ -67,21 +60,14 @@ namespace OurApp.WinUI
             var binding = DescriptionBox.GetBindingExpression(TextBox.TextProperty);
             binding?.UpdateSource();
 
-            EventValidator validator = ViewModel.validator;
-            try
+            if (ViewModel.ValidateDescription())
             {
-                if (validator.DescriptionValidator(ViewModel.Description))
-                {
-                    DescriptionError.Text = "";
-                    DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Green);
-                }
+                DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Green);
             }
-            catch (Exception ex)
+            else
             {
-                DescriptionError.Text = ex.Message;
-                DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                DescriptionBox.BorderBrush= new SolidColorBrush(Colors.Red);
             }
-
         }
 
         private void Location_LostFocus(object sender, RoutedEventArgs e)
@@ -89,18 +75,12 @@ namespace OurApp.WinUI
             var binding = LocationBox.GetBindingExpression(TextBox.TextProperty);
             binding?.UpdateSource();
 
-            EventValidator validator = ViewModel.validator;
-            try
+            if (ViewModel.ValidateLocation())
             {
-                if (validator.LocationValidator(ViewModel.Location))
-                {
-                    LocationError.Text = "";
-                    LocationBox.BorderBrush = new SolidColorBrush(Colors.Green);
-                }
+                LocationBox.BorderBrush = new SolidColorBrush(Colors.Green);
             }
-            catch (Exception ex)
+            else
             {
-                LocationError.Text = ex.Message;
                 LocationBox.BorderBrush = new SolidColorBrush(Colors.Red);
             }
 
@@ -147,7 +127,7 @@ namespace OurApp.WinUI
             try
             {
                 EventValidator validator = ViewModel.validator;
-                if (validator.EndDateValidator(ViewModel.StartDate))
+                if (validator.EndDateValidator(ViewModel.EndDate))
                 {
                     EndDateError.Text = "";
                     EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);

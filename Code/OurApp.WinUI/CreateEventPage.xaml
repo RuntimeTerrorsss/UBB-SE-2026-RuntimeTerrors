@@ -24,9 +24,9 @@
                 LostFocus="Title_LostFocus"
             />
             <TextBlock 
-                x:Name="TitleError"
                 Foreground="Red"
                 FontSize="12"
+                Text="{Binding TitleError, Mode=OneWay}"
             />
 
             <TextBox 
@@ -37,9 +37,9 @@
                 LostFocus="Description_LostFocus"
             />
             <TextBlock 
-                x:Name="DescriptionError"
                 Foreground="Red"
                 FontSize="12"
+                Text="{Binding DescriptionError, Mode=OneWay}"
             />
 
             <CalendarDatePicker 
@@ -76,9 +76,9 @@
                 LostFocus="Location_LostFocus"
             />
             <TextBlock 
-                x:Name="LocationError"
                 Foreground="Red"
                 FontSize="12"
+                Text="{Binding LocationError, Mode=OneWay}"
             />
 
             <Button Content="Create Event" Command="{Binding TapCommand}"></Button>
