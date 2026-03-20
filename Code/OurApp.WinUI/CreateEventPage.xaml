@@ -82,6 +82,11 @@
             />
 
             <Button Content="Create Event" Command="{Binding TapCommand}"></Button>
+            <TextBlock
+                Foreground="Red"
+                FontSize="12"
+                Text="{Binding AddError, Mode=OneWay}"
+            />
         </StackPanel>
     </Grid>
 </Page>

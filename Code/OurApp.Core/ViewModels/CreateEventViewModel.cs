@@ -38,15 +38,18 @@ namespace OurApp.Core.ViewModels
         [ObservableProperty] private string locationError;
         private bool validLocation = false;
 
+        [ObservableProperty] private string addError;
 
         [RelayCommand]
         void Tap()
         {
             if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
             {
+                AddError = "Please enter valid inputs before creating an event";
                 return;
             }
 
+            AddError = "";
             DateTime start = startDate.Value.DateTime;
             DateTime end = endDate.Value.DateTime;
 
