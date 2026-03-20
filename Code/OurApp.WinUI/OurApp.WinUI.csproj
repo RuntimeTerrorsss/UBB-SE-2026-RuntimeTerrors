@@ -11,6 +11,8 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+	<SelfContained>true</SelfContained>
+	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,6 +40,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
   </ItemGroup>
 
   <!--

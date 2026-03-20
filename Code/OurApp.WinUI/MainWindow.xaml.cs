@@ -2,30 +2,54 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using OurApp.Core.Repositories;
+using OurApp.Core.Services;
+using OurApp.Core.ViewModels;
 
 namespace OurApp.WinUI
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public GameViewModel ViewModel { get; set; }
+
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+
+            var repo = new MockRepository();
+            var service = new GameService(repo);
+            ViewModel = new GameViewModel(service);
+
+            this.Bindings.Update();
+
+            TestLogic();
+        }
+
+        private void OnChoiceButtonClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null && ViewModel != null)
+            {
+                string choiceText = button.Content.ToString();
+                int index = ViewModel.CurrentChoices.IndexOf(choiceText);
+                ViewModel.OnChoiceSelected(index);
+                this.Bindings.Update();
+            }
+        }
+
+        public void TestLogic()
+        {
+            if (ViewModel == null) return;
+
+            System.Diagnostics.Debug.WriteLine(ViewModel.WelcomeMessage);
+            System.Diagnostics.Debug.WriteLine("Scenariu: " + ViewModel.CurrentQuestion);
+
+            foreach (var choice in ViewModel.CurrentChoices)
+            {
+                System.Diagnostics.Debug.WriteLine("Varianta: " + choice);
+            }
         }
     }
 }

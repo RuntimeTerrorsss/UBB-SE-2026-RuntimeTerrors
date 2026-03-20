@@ -7,13 +7,50 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="OurApp.WinUI">
+    Title="Office Wellbeing Game">
 
     <Window.SystemBackdrop>
-        <MicaBackdrop />
+        <MicaBackdrop Kind="BaseAlt" />
     </Window.SystemBackdrop>
 
     <Grid>
+        <StackPanel Padding="40" Spacing="25" HorizontalAlignment="Center" VerticalAlignment="Center">
 
+            <TextBlock Text="{x:Bind ViewModel.WelcomeMessage, Mode=OneWay}" 
+                       FontSize="28" 
+                       FontWeight="Bold" 
+                       Foreground="{ThemeResource SystemAccentColor}" 
+                       TextAlignment="Center"/>
+
+            <TextBlock Text="{x:Bind ViewModel.CurrentQuestion, Mode=OneWay}" 
+                       FontSize="18" 
+                       TextWrapping="Wrap" 
+                       TextAlignment="Center" 
+                       MaxWidth="500"/>
+
+            <MenuFlyoutSeparator Margin="0,10,0,10"/>
+
+            <ItemsControl ItemsSource="{x:Bind ViewModel.CurrentChoices, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Button Content="{Binding}" 
+                                Margin="0,5,0,5" 
+                                HorizontalAlignment="Stretch"
+                                FontSize="16"
+                                Padding="10"
+                                Click="OnChoiceButtonClick"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="{x:Bind ViewModel.Feedback, Mode=OneWay}" 
+                       FontSize="16" 
+                       FontStyle="Italic" 
+                       Foreground="LightGreen" 
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
+                       MaxWidth="450"/>
+
+        </StackPanel>
     </Grid>
 </Window>

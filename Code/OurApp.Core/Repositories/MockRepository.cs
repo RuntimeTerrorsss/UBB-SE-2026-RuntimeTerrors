@@ -14,6 +14,7 @@ namespace OurApp.Core.Repositories
         public MockRepository() {
             this.Scenarios = new List<Scenario>();
             this.Buddy = new Buddy(1, "Alex");
+            this.MakeMockScenarios();
         }
         public string GetConclusion()
         {
