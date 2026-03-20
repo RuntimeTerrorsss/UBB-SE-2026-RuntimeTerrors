@@ -9,24 +9,7 @@
     mc:Ignorable="d">
 
     <Grid>
-        <StackPanel>
-            <MenuBar>
-                <MenuBarItem Title="Profile">
-                </MenuBarItem>
-
-                <MenuBarItem Title="Our Jobs">
-                </MenuBarItem>
-
-                <MenuBarItem Title="Past jobs">
-                </MenuBarItem>
-
-                <MenuBarItem Title="Our events">
-                </MenuBarItem>
-
-                <MenuBarItem Title="Past events">
-                </MenuBarItem>
-            </MenuBar>
-
+        <StackPanel Padding="20">
 
             <TextBox 
                 Header="Enter photo url:" 
@@ -99,12 +82,14 @@
                 Text="{Binding LocationError, Mode=OneWay}"
             />
 
-            <Button Content="Create Event" Command="{Binding TapCommand}"></Button>
+            <Button 
+                Content="Create Event" Command="{Binding TapCommand}"></Button>
             <TextBlock
                 Foreground="Red"
                 FontSize="12"
                 Text="{Binding AddError, Mode=OneWay}"
             />
         </StackPanel>
+
     </Grid>
 </Page>

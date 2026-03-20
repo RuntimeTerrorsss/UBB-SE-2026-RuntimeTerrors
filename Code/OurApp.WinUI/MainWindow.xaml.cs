@@ -23,10 +23,16 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public Frame RootFrame => rootFrame;
         public MainWindow()
         {
             InitializeComponent();
-            RootFrame.Navigate(typeof(CreateEventPage));
+        }
+
+        private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Clicked to nav");
+            RootFrame.Navigate(typeof(OurEventsPage));
         }
     }
 }

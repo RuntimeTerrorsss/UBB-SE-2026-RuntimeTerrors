@@ -57,6 +57,7 @@ namespace OurApp.Core.ViewModels
             service.printAll();
         }
 
+
         public bool ValidateTitle()
         {
             try

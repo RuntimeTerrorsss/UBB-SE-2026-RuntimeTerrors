@@ -13,6 +13,16 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Frame x:Name="RootFrame"/>
+    <Grid>
+        <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
+            <AppBarButton Label="Profile"/>
+            <AppBarButton Label="Our jobs"/>
+            <AppBarButton Label="Past jobs"/>
+            <AppBarButton Label="Our events" Click="NavigateToOurEvents_Click"/>
+            <AppBarButton Label="Past events"/>
+        </CommandBar>
+
+        <Frame x:Name="rootFrame"/>
+    </Grid>
 
 </Window>
