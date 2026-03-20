@@ -20,25 +20,36 @@ namespace OurApp.Core.ViewModels
 
         [ObservableProperty] private string title;
         [ObservableProperty] private string titleError;
+        private bool validTitle = false;
 
         [ObservableProperty] private string description;
         [ObservableProperty] private string descriptionError;
+        private bool validDescription = true;
 
         [ObservableProperty] private DateTimeOffset? startDate = DateTimeOffset.Now;
         [ObservableProperty] private string startDateError;
+        private bool validStartDate = true;
 
         [ObservableProperty] private DateTimeOffset? endDate = DateTimeOffset.Now;
         [ObservableProperty] private string endDateError;
+        private bool validEndDate = true;
 
         [ObservableProperty] private string location;
         [ObservableProperty] private string locationError;
+        private bool validLocation = false;
 
 
         [RelayCommand]
         void Tap()
         {
+            if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
+            {
+                return;
+            }
+
             DateTime start = startDate.Value.DateTime;
             DateTime end = endDate.Value.DateTime;
+
             service.AddEvent(Photo, Title, Description, start, end, Location);
             service.printAll();
         }
@@ -50,12 +61,14 @@ namespace OurApp.Core.ViewModels
                 if (validator.TitleValidator(Title))
                 {
                     TitleError = "";
+                    validTitle = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 TitleError = ex.Message;
+                validTitle = false;
             }
             return false;
         }
@@ -67,12 +80,14 @@ namespace OurApp.Core.ViewModels
                 if (validator.DescriptionValidator(Description))
                 {
                     DescriptionError = "";
+                    validDescription = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 DescriptionError = ex.Message;
+                validDescription = false;
             }
             return false;
         }
@@ -84,12 +99,14 @@ namespace OurApp.Core.ViewModels
                 if (validator.LocationValidator(Location))
                 {
                     LocationError = "";
+                    validLocation = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 LocationError = ex.Message;
+                validLocation = false;
             }
             return false;
         }
@@ -101,12 +118,14 @@ namespace OurApp.Core.ViewModels
                 if (validator.StartDateValidator(StartDate))
                 {
                     StartDateError = "";
+                    validStartDate = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 StartDateError = ex.Message;
+                validStartDate = false;
             }
             return false;
         }
@@ -118,12 +137,14 @@ namespace OurApp.Core.ViewModels
                 if (validator.EndDateValidator(EndDate))
                 {
                     EndDateError = "";
+                    validEndDate = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 EndDateError = ex.Message;
+                validEndDate = false;
             }
             return false;
         }
@@ -135,12 +156,14 @@ namespace OurApp.Core.ViewModels
                 if (validator.DateCronologityValidator(StartDate, EndDate))
                 {
                     EndDateError = "";
+                    validEndDate = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 EndDateError = ex.Message;
+                validEndDate = false;
             }
             return false;
         }
