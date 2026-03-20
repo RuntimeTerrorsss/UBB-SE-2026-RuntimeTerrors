@@ -10,6 +10,24 @@
 
     <Grid>
         <StackPanel>
+            <MenuBar>
+                <MenuBarItem Title="Profile">
+                </MenuBarItem>
+
+                <MenuBarItem Title="Our Jobs">
+                </MenuBarItem>
+
+                <MenuBarItem Title="Past jobs">
+                </MenuBarItem>
+
+                <MenuBarItem Title="Our events">
+                </MenuBarItem>
+
+                <MenuBarItem Title="Past events">
+                </MenuBarItem>
+            </MenuBar>
+
+
             <TextBox 
                 Header="Enter photo url:" 
                 PlaceholderText="Photo"
