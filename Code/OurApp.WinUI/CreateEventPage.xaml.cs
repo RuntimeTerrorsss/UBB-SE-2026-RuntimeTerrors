@@ -97,18 +97,12 @@ namespace OurApp.WinUI
                 return;
             }
 
-            try
+            if (ViewModel.ValidateStartDate())
             {
-                EventValidator validator = ViewModel.validator;
-                if (validator.StartDateValidator(ViewModel.StartDate))
-                {
-                    StartDateError.Text = "";
-                    StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
-                }
+                StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
             }
-            catch (Exception ex)
+            else
             {
-                StartDateError.Text = ex.Message;
                 StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
             }
         }
@@ -124,19 +118,25 @@ namespace OurApp.WinUI
                 return;
             }
 
-            try
+            if (ViewModel.ValidateEndDate())
             {
-                EventValidator validator = ViewModel.validator;
-                if (validator.EndDateValidator(ViewModel.EndDate))
+                EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
+            }
+
+            if (StartDateModified)
+            {
+                if (ViewModel.ValidateDatesCronologity())
                 {
-                    EndDateError.Text = "";
                     EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
                 }
-            }
-            catch (Exception ex)
-            {
-                EndDateError.Text = ex.Message;
-                EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
+                else
+                {
+                    EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
+                }
             }
         }
     }

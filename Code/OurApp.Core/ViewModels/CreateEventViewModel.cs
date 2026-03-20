@@ -24,11 +24,11 @@ namespace OurApp.Core.ViewModels
         [ObservableProperty] private string description;
         [ObservableProperty] private string descriptionError;
 
-        [ObservableProperty]
-        private DateTimeOffset? startDate = DateTimeOffset.Now;
+        [ObservableProperty] private DateTimeOffset? startDate = DateTimeOffset.Now;
+        [ObservableProperty] private string startDateError;
 
-        [ObservableProperty]
-        private DateTimeOffset? endDate = DateTimeOffset.Now;
+        [ObservableProperty] private DateTimeOffset? endDate = DateTimeOffset.Now;
+        [ObservableProperty] private string endDateError;
 
         [ObservableProperty] private string location;
         [ObservableProperty] private string locationError;
@@ -90,6 +90,57 @@ namespace OurApp.Core.ViewModels
             catch (Exception ex)
             {
                 LocationError = ex.Message;
+            }
+            return false;
+        }
+
+        public bool ValidateStartDate()
+        {
+            try
+            {
+                if (validator.StartDateValidator(StartDate))
+                {
+                    StartDateError = "";
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                StartDateError = ex.Message;
+            }
+            return false;
+        }
+
+        public bool ValidateEndDate()
+        {
+            try
+            {
+                if (validator.EndDateValidator(EndDate))
+                {
+                    EndDateError = "";
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                EndDateError = ex.Message;
+            }
+            return false;
+        }
+
+        public bool ValidateDatesCronologity()
+        {
+            try
+            {
+                if (validator.DateCronologityValidator(StartDate, EndDate))
+                {
+                    EndDateError = "";
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                EndDateError = ex.Message;
             }
             return false;
         }

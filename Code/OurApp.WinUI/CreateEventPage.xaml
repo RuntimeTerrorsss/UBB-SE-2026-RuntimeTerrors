@@ -50,9 +50,9 @@
                 DateChanged="StartDatePicker_DateChanged"
             />
             <TextBlock 
-                x:Name="StartDateError"
                 Foreground="Red"
                 FontSize="12"
+                Text="{Binding StartDateError, Mode=OneWay}"
             />
 
             <CalendarDatePicker 
@@ -63,9 +63,9 @@
                 DateChanged="EndDatePicker_DateChanged"
             />
             <TextBlock 
-                x:Name="EndDateError"
                 Foreground="Red"
                 FontSize="12"
+                Text="{Binding EndDateError, Mode=OneWay}"
             />
 
             <TextBox 

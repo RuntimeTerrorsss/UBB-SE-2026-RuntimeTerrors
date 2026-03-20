@@ -69,15 +69,13 @@ namespace OurApp.Core.Validators
             return true;
         }
 
-        //public bool DateValidator(string start, string end)
-        //{
-        //    int comparison = String.Compare(start, end, comparisonType: StringComparison.OrdinalIgnoreCase);
-
-        //    if (comparison > 0) // start > end
-        //    {
-        //        throw new Exception("Event must begin before ending");
-        //    }
-        //    return true;
-        //}
+        public bool DateCronologityValidator(DateTimeOffset? startDate, DateTimeOffset? endDate)
+        {
+            if (startDate > endDate)
+            {
+                throw new Exception("Event must begin before ending");
+            }
+            return true;
+        }
     }
 }
