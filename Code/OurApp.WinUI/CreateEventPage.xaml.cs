@@ -27,12 +27,17 @@ namespace OurApp.WinUI
     public sealed partial class CreateEventPage : Page
     {
         public CreateEventViewModel ViewModel { get; }
+        private bool IsLoaded = false;
+        private bool StartDateModified = false;
+        private bool EndDateModified = false;
         public CreateEventPage()
         {
-            InitializeComponent(); 
-            ViewModel = new CreateEventViewModel(); 
+            ViewModel = new CreateEventViewModel();
             this.DataContext = ViewModel;
-            //System.Diagnostics.Debug.WriteLine("DataContext set!"); 
+
+            InitializeComponent();
+
+            IsLoaded = true;
         }
 
         private void Title_LostFocus(object sender, RoutedEventArgs e)
@@ -41,21 +46,17 @@ namespace OurApp.WinUI
             binding?.UpdateSource();
 
             EventValidator validator = ViewModel.validator;
-
-            string value = ViewModel?.Title;
-            //System.Diagnostics.Debug.WriteLine($"Title value: {(value == null ? "NULL" : value)}");
-
             try
             {
                 if (validator.TitleValidator(ViewModel.Title))
                 {
-                    TitleError.Text = ""; // clear previous error
+                    TitleError.Text = "";
                     TitleBox.BorderBrush = new SolidColorBrush(Colors.Green);
                 }
             }
             catch (Exception ex)
             {
-                TitleError.Text = ex.Message; // clear previous error
+                TitleError.Text = ex.Message;
                 TitleBox.BorderBrush = new SolidColorBrush(Colors.Red);
             }
             
@@ -67,21 +68,17 @@ namespace OurApp.WinUI
             binding?.UpdateSource();
 
             EventValidator validator = ViewModel.validator;
-
-            string value = ViewModel?.Description;
-            //System.Diagnostics.Debug.WriteLine($"Title value: {(value == null ? "NULL" : value)}");
-
             try
             {
                 if (validator.DescriptionValidator(ViewModel.Description))
                 {
-                    DescriptionError.Text = ""; // clear previous error
+                    DescriptionError.Text = "";
                     DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Green);
                 }
             }
             catch (Exception ex)
             {
-                DescriptionError.Text = ex.Message; // clear previous error
+                DescriptionError.Text = ex.Message;
                 DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Red);
             }
 
@@ -93,24 +90,74 @@ namespace OurApp.WinUI
             binding?.UpdateSource();
 
             EventValidator validator = ViewModel.validator;
-
-            string value = ViewModel?.Location;
-            //System.Diagnostics.Debug.WriteLine($"Title value: {(value == null ? "NULL" : value)}");
-
             try
             {
                 if (validator.LocationValidator(ViewModel.Location))
                 {
-                    LocationError.Text = ""; // clear previous error
+                    LocationError.Text = "";
                     LocationBox.BorderBrush = new SolidColorBrush(Colors.Green);
                 }
             }
             catch (Exception ex)
             {
-                LocationError.Text = ex.Message; // clear previous error
+                LocationError.Text = ex.Message;
                 LocationBox.BorderBrush = new SolidColorBrush(Colors.Red);
             }
 
+        }
+
+        private void StartDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            if (!IsLoaded)
+                return;
+
+            if (!StartDateModified)
+            {
+                StartDateModified = true;
+                return;
+            }
+
+            try
+            {
+                EventValidator validator = ViewModel.validator;
+                if (validator.StartDateValidator(ViewModel.StartDate))
+                {
+                    StartDateError.Text = "";
+                    StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
+                }
+            }
+            catch (Exception ex)
+            {
+                StartDateError.Text = ex.Message;
+                StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
+            }
+        }
+
+        private void EndDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            if (!IsLoaded)
+                return;
+
+            if (!EndDateModified)
+            {
+                EndDateModified = true;
+                return;
+            }
+
+            try
+            {
+                EventValidator validator = ViewModel.validator;
+                if (validator.EndDateValidator(ViewModel.StartDate))
+                {
+                    EndDateError.Text = "";
+                    EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
+                }
+            }
+            catch (Exception ex)
+            {
+                EndDateError.Text = ex.Message;
+                EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
+            }
         }
     }
 }

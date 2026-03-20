@@ -12,13 +12,13 @@ namespace OurApp.Core.Models
         private string photo { get; set; }
         private string title { get; set; }
         private string description { get; set; }
-        private string startDate { get; set; }
-        private string endDate { get; set; }
+        private DateTime startDate { get; set; }
+        private DateTime endDate { get; set; }
         private string location { get; set; }
         private int hostID { get; set; }
         private int collaboratorID { get; set; }
 
-        public Event(string photo, string title, string description, string startDate, string endDate, string location, int hostID, int collaboratorID)
+        public Event(string photo, string title, string description, DateTime startDate, DateTime endDate, string location, int hostID, int collaboratorID)
         {
             this.photo = photo;
             this.title = title;
@@ -33,7 +33,7 @@ namespace OurApp.Core.Models
         public override string ToString()
         {
             return "Event: " + photo + " " + title + " " + description + " " +
-                startDate + " " + endDate + " " + location + " " + hostID.ToString() +
+                startDate.ToString() + " " + endDate.ToString() + " " + location + " " + hostID.ToString() +
                 " " + collaboratorID.ToString() + "\n";
         }
     }

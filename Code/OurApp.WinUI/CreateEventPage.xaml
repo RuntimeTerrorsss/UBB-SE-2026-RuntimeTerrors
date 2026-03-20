@@ -42,16 +42,30 @@
                 FontSize="12"
             />
 
-            <TextBox 
-                Header="Enter event starting date:" 
-                PlaceholderText="Start"
-                Text="{Binding StartDate, Mode=TwoWay}"
+            <CalendarDatePicker 
+                x:Name="StartDatePicker"
+                PlaceholderText="Pick a start date" 
+                Header="Start date" 
+                Date="{Binding StartDate, Mode=TwoWay}"
+                DateChanged="StartDatePicker_DateChanged"
+            />
+            <TextBlock 
+                x:Name="StartDateError"
+                Foreground="Red"
+                FontSize="12"
             />
 
-            <TextBox 
-                Header="Enter event ending date:" 
-                PlaceholderText="End"
-                Text="{Binding EndDate, Mode=TwoWay}"
+            <CalendarDatePicker 
+                x:Name="EndDatePicker"
+                PlaceholderText="Pick a end date" 
+                Header="End date" 
+                Date="{Binding EndDate, Mode=TwoWay}"
+                DateChanged="EndDatePicker_DateChanged"
+            />
+            <TextBlock 
+                x:Name="EndDateError"
+                Foreground="Red"
+                FontSize="12"
             />
 
             <TextBox 

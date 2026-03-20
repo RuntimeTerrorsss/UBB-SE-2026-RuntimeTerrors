@@ -17,7 +17,7 @@ namespace OurApp.Core.Services
             this.repository = repo;
         }
 
-        public void AddEvent(string photo, string title, string description, string start, string end, string location)
+        public void AddEvent(string photo, string title, string description, DateTime start, DateTime end, string location)
         {
             Event e = new Event(photo, title, description, start, end, location, 1, 1);
             this.repository.Add(e);

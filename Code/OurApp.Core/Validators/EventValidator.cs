@@ -43,33 +43,41 @@ namespace OurApp.Core.Validators
             return true;
         }
 
-        public bool StartDateValidator(string startDate)
+        public bool StartDateValidator(DateTimeOffset? startDate)
         {
-            if (startDate.Length == 0)
+            if (startDate == null)
             {
                 throw new Exception("Starting date is mandatory");
             }
+            if (startDate < DateTimeOffset.Now)
+            {
+                throw new Exception("Event must start after creation");
+            }
             return true;
         }
 
-        public bool EndDateValidator(string endDate)
+        public bool EndDateValidator(DateTimeOffset? endDate)
         {
-            if (endDate.Length == 0)
+            if (endDate == null)
             {
                 throw new Exception("Ending date is mandatory");
             }
-            return true;
-        }
-
-        public bool DateValidator(string start, string end)
-        {
-            int comparison = String.Compare(start, end, comparisonType: StringComparison.OrdinalIgnoreCase);
-
-            if (comparison > 0) // start > end
+            if (endDate < DateTimeOffset.Now)
             {
-                throw new Exception("Event must begin before ending");
+                throw new Exception("Event must end after creation");
             }
             return true;
         }
+
+        //public bool DateValidator(string start, string end)
+        //{
+        //    int comparison = String.Compare(start, end, comparisonType: StringComparison.OrdinalIgnoreCase);
+
+        //    if (comparison > 0) // start > end
+        //    {
+        //        throw new Exception("Event must begin before ending");
+        //    }
+        //    return true;
+        //}
     }
 }

@@ -26,10 +26,10 @@ namespace OurApp.Core.ViewModels
         private string description;
 
         [ObservableProperty]
-        private string startDate;
+        private DateTimeOffset? startDate = DateTimeOffset.Now;
 
         [ObservableProperty]
-        private string endDate;
+        private DateTimeOffset? endDate = DateTimeOffset.Now;
 
         [ObservableProperty]
         private string location;
@@ -40,7 +40,9 @@ namespace OurApp.Core.ViewModels
         void Tap()
         {
             //System.Diagnostics.Debug.WriteLine(Full);
-            service.AddEvent(Photo, Title, Description, StartDate, EndDate, Location);
+            DateTime start = startDate.Value.DateTime;
+            DateTime end = endDate.Value.DateTime;
+            service.AddEvent(Photo, Title, Description, start, end, Location);
             service.printAll();
         }
     }
