@@ -43,7 +43,7 @@ namespace OurApp.WinUI
             EventValidator validator = ViewModel.validator;
 
             string value = ViewModel?.Title;
-            System.Diagnostics.Debug.WriteLine($"Title value: {(value == null ? "NULL" : value)}");
+            //System.Diagnostics.Debug.WriteLine($"Title value: {(value == null ? "NULL" : value)}");
 
             try
             {
@@ -59,6 +59,58 @@ namespace OurApp.WinUI
                 TitleBox.BorderBrush = new SolidColorBrush(Colors.Red);
             }
             
+        }
+
+        private void Description_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var binding = DescriptionBox.GetBindingExpression(TextBox.TextProperty);
+            binding?.UpdateSource();
+
+            EventValidator validator = ViewModel.validator;
+
+            string value = ViewModel?.Description;
+            //System.Diagnostics.Debug.WriteLine($"Title value: {(value == null ? "NULL" : value)}");
+
+            try
+            {
+                if (validator.DescriptionValidator(ViewModel.Description))
+                {
+                    DescriptionError.Text = ""; // clear previous error
+                    DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Green);
+                }
+            }
+            catch (Exception ex)
+            {
+                DescriptionError.Text = ex.Message; // clear previous error
+                DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Red);
+            }
+
+        }
+
+        private void Location_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var binding = LocationBox.GetBindingExpression(TextBox.TextProperty);
+            binding?.UpdateSource();
+
+            EventValidator validator = ViewModel.validator;
+
+            string value = ViewModel?.Location;
+            //System.Diagnostics.Debug.WriteLine($"Title value: {(value == null ? "NULL" : value)}");
+
+            try
+            {
+                if (validator.LocationValidator(ViewModel.Location))
+                {
+                    LocationError.Text = ""; // clear previous error
+                    LocationBox.BorderBrush = new SolidColorBrush(Colors.Green);
+                }
+            }
+            catch (Exception ex)
+            {
+                LocationError.Text = ex.Message; // clear previous error
+                LocationBox.BorderBrush = new SolidColorBrush(Colors.Red);
+            }
+
         }
     }
 }

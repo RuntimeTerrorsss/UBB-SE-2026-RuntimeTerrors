@@ -18,7 +18,7 @@
 
             <TextBox 
                 x:Name="TitleBox"
-                Header="Enter event title:" 
+                Header="* Enter event title:" 
                 PlaceholderText="Title"
                 Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                 LostFocus="Title_LostFocus"
@@ -30,9 +30,16 @@
             />
 
             <TextBox 
-                Header="Enter event desc:" 
-                PlaceholderText="Desc"
-                Text="{Binding Description, Mode=TwoWay}"
+                x:Name="DescriptionBox"
+                Header="Enter event description:" 
+                PlaceholderText="Description"
+                Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                LostFocus="Description_LostFocus"
+            />
+            <TextBlock 
+                x:Name="DescriptionError"
+                Foreground="Red"
+                FontSize="12"
             />
 
             <TextBox 
@@ -48,9 +55,16 @@
             />
 
             <TextBox 
+                x:Name="LocationBox"
                 Header="Enter your location:" 
                 PlaceholderText="Location"
-                Text="{Binding Location, Mode=TwoWay}"
+                Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                LostFocus="Location_LostFocus"
+            />
+            <TextBlock 
+                x:Name="LocationError"
+                Foreground="Red"
+                FontSize="12"
             />
 
             <Button Content="Create Event" Command="{Binding TapCommand}"></Button>
