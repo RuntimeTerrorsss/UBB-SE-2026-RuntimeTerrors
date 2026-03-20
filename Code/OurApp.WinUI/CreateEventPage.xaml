@@ -9,91 +9,100 @@
     mc:Ignorable="d">
 
     <Grid>
-        <StackPanel Padding="40">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Padding="40">
 
-            <Button Content="Back" Click="NavigateBack_Click"></Button>
-            
-            <TextBox 
-                Header="Enter photo url:" 
-                PlaceholderText="Photo"
-                Text="{Binding Photo, Mode=TwoWay}"
-            />
+                <Button Content="Back" Click="NavigateBack_Click"></Button>
 
-            <TextBox 
-                x:Name="TitleBox"
-                Header="* Enter event title:" 
-                PlaceholderText="Title"
-                Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                LostFocus="Title_LostFocus"
-            />
-            <TextBlock 
-                Foreground="Red"
-                FontSize="12"
-                Text="{Binding TitleError, Mode=OneWay}"
-            />
+                <Button Content="Attach image" Click="AttachImage_Click" />
+                <Image
+                    x:Name="PhotoPreviewImage"
+                    Width="200"
+                    Height="200"
+                    Stretch="UniformToFill"
+                    Margin="0,10,0,5" />
+                <TextBlock
+                    x:Name="PhotoFileNameTextBlock"
+                    FontSize="12"
+                    Foreground="Gray"
+                    Text="No image selected" />
 
-            <TextBox 
-                x:Name="DescriptionBox"
-                Header="Enter event description:" 
-                PlaceholderText="Description"
-                Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                LostFocus="Description_LostFocus"
-            />
-            <TextBlock 
-                Foreground="Red"
-                FontSize="12"
-                Text="{Binding DescriptionError, Mode=OneWay}"
-            />
+                <TextBox 
+                    x:Name="TitleBox"
+                    Header="* Enter event title:" 
+                    PlaceholderText="Title"
+                    Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                    LostFocus="Title_LostFocus"
+                />
+                <TextBlock 
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding TitleError, Mode=OneWay}"
+                />
 
-            <CalendarDatePicker 
-                x:Name="StartDatePicker"
-                PlaceholderText="Pick a start date" 
-                Header="Start date" 
-                Date="{Binding StartDate, Mode=TwoWay}"
-                DateChanged="StartDatePicker_DateChanged"
-            />
-            <TextBlock 
-                Foreground="Red"
-                FontSize="12"
-                Text="{Binding StartDateError, Mode=OneWay}"
-            />
+                <TextBox 
+                    x:Name="DescriptionBox"
+                    Header="Enter event description:" 
+                    PlaceholderText="Description"
+                    Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                    LostFocus="Description_LostFocus"
+                />
+                <TextBlock 
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding DescriptionError, Mode=OneWay}"
+                />
 
-            <CalendarDatePicker 
-                x:Name="EndDatePicker"
-                PlaceholderText="Pick a end date" 
-                Header="End date" 
-                Date="{Binding EndDate, Mode=TwoWay}"
-                DateChanged="EndDatePicker_DateChanged"
-            />
-            <TextBlock 
-                Foreground="Red"
-                FontSize="12"
-                Text="{Binding EndDateError, Mode=OneWay}"
-            />
+                <CalendarDatePicker 
+                    x:Name="StartDatePicker"
+                    PlaceholderText="Pick a start date" 
+                    Header="Start date" 
+                    Date="{Binding StartDate, Mode=TwoWay}"
+                    DateChanged="StartDatePicker_DateChanged"
+                />
+                <TextBlock 
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding StartDateError, Mode=OneWay}"
+                />
 
-            <TextBox 
-                x:Name="LocationBox"
-                Header="Enter your location:" 
-                PlaceholderText="Location"
-                Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                LostFocus="Location_LostFocus"
-            />
-            <TextBlock 
-                Foreground="Red"
-                FontSize="12"
-                Text="{Binding LocationError, Mode=OneWay}"
-            />
+                <CalendarDatePicker 
+                    x:Name="EndDatePicker"
+                    PlaceholderText="Pick a end date" 
+                    Header="End date" 
+                    Date="{Binding EndDate, Mode=TwoWay}"
+                    DateChanged="EndDatePicker_DateChanged"
+                />
+                <TextBlock 
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding EndDateError, Mode=OneWay}"
+                />
 
-            <Button 
-                Content="Create Event" Command="{Binding TapCommand}"  Click="NavigateBack_Click"></Button>
-            <TextBlock
-                Foreground="Red"
-                FontSize="12"
-                Text="{Binding AddError, Mode=OneWay}"
-            />
+                <TextBox 
+                    x:Name="LocationBox"
+                    Header="Enter your location:" 
+                    PlaceholderText="Location"
+                    Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                    LostFocus="Location_LostFocus"
+                />
+                <TextBlock 
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding LocationError, Mode=OneWay}"
+                />
 
-            <Button Content="Cancel" Click="NavigateBack_Click"></Button>
-        </StackPanel>
+                <Button 
+                    Content="Create Event" Command="{Binding TapCommand}"  Click="NavigateBack_Click"></Button>
+                <TextBlock
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding AddError, Mode=OneWay}"
+                />
+
+                <Button Content="Cancel" Click="NavigateBack_Click"></Button>
+            </StackPanel>
+        </ScrollViewer>
 
     </Grid>
 </Page>

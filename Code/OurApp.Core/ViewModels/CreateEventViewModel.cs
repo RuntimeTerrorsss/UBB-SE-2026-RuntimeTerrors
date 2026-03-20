@@ -40,10 +40,12 @@ namespace OurApp.Core.ViewModels
 
         [ObservableProperty] private string addError;
 
+
         public CreateEventViewModel(EventsService service)
         {
             this.service = service;
         }
+
 
         [RelayCommand]
         void Tap()
