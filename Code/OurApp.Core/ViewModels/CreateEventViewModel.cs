@@ -13,7 +13,7 @@ namespace OurApp.Core.ViewModels
 {
     public partial class CreateEventViewModel : ObservableObject
     {
-        EventsService service = new EventsService(new EventsRepo());
+        EventsService service;
         public EventValidator validator = new EventValidator();
 
         [ObservableProperty] private string photo;
@@ -39,6 +39,11 @@ namespace OurApp.Core.ViewModels
         private bool validLocation = false;
 
         [ObservableProperty] private string addError;
+
+        public CreateEventViewModel(EventsService service)
+        {
+            this.service = service;
+        }
 
         [RelayCommand]
         void Tap()

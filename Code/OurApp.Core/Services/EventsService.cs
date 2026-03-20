@@ -3,6 +3,7 @@ using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,11 @@ namespace OurApp.Core.Services
         public void printAll()
         {
             this.repository.printAll();
+        }
+
+        public ObservableCollection<Event> GetAllEvents()
+        {
+            return this.repository.GetAll();
         }
     }
 }

@@ -32,7 +32,8 @@ namespace OurApp.WinUI
         private bool EndDateModified = false;
         public CreateEventPage()
         {
-            ViewModel = new CreateEventViewModel();
+            var mainW = App.MainWin;
+            ViewModel = new CreateEventViewModel(mainW.service);
             this.DataContext = ViewModel;
 
             InitializeComponent();
@@ -44,6 +45,7 @@ namespace OurApp.WinUI
         {
             var mainWindow = App.MainWin;
             mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
+            //mainWindow.RootFrame.GoBack();
         }
 
         private void Title_LostFocus(object sender, RoutedEventArgs e)

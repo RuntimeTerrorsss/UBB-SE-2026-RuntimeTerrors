@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <Grid>
-        <StackPanel Padding="20">
+        <StackPanel Padding="40">
 
             <Button Content="Back" Click="NavigateBack_Click"></Button>
             

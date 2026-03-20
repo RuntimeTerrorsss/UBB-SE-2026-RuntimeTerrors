@@ -1,6 +1,7 @@
 ﻿using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,11 @@ namespace OurApp.Core.Repositories
 {
     public class EventsRepo
     {
-        List<Event> events;
+        ObservableCollection<Event> events;
 
         public EventsRepo() 
         {
-            events = new List<Event>();
+            events = new ObservableCollection<Event>();
         }
 
         public void printAll()
@@ -22,6 +23,11 @@ namespace OurApp.Core.Repositories
             {
                 System.Diagnostics.Debug.WriteLine($"{events[i]} ");
             }
+        }
+
+        public ObservableCollection<Event> GetAll()
+        {
+            return events;
         }
 
         public void Add(Event e)
