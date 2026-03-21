@@ -26,6 +26,8 @@ namespace OurApp.WinUI
         public MainWindow()
         {
             InitializeComponent();
+            PaymentWindow paymentwindow=new PaymentWindow();
+            paymentwindow.Activate();
         }
     }
 }
