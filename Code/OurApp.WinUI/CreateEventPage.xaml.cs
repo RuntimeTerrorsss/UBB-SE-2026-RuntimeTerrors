@@ -90,9 +90,9 @@ namespace OurApp.WinUI
             {
                 popup = new ContentDialog
                 {
-                    Title = "Success!",
-                    Content = "Event created.",
-                    CloseButtonText = "OK",
+                    Title = "YEY!",
+                    Content = "Event created successfully!",
+                    CloseButtonText = "Close",
                     XamlRoot = this.XamlRoot
                 };
             }
@@ -100,9 +100,9 @@ namespace OurApp.WinUI
             {
                 popup = new ContentDialog
                 {
-                    Title = "No!",
-                    Content = "Event not created.",
-                    CloseButtonText = "OK",
+                    Title = "Oops!",
+                    Content = "We’re sorry, an error occurred. The event was not created. Please try again.",
+                    CloseButtonText = "Close",
                     XamlRoot = this.XamlRoot
                 };
             }

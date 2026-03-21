@@ -40,11 +40,9 @@ public sealed partial class OurEventsPage : Page
         System.Diagnostics.Debug.WriteLine("Clicked create");
     }
 
-
-    //protected override void OnNavigatedTo(NavigationEventArgs e)
-    //{
-    //    base.OnNavigatedTo(e);
-
-    //    ViewModel.LoadElements();
-    //}
+    private void EditEvent_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = App.MainWin;
+        mainWindow.RootFrame.Navigate(typeof(CreateEventPage));
+    }
 }
