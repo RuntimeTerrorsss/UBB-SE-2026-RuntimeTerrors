@@ -41,5 +41,10 @@ namespace OurApp.WinUI
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
             RootFrame.Navigate(typeof(OurEventsPage));
         }
+
+        private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(typeof(PastEventsPage));
+        }
     }
 }

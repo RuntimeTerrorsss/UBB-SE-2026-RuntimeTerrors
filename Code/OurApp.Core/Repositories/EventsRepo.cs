@@ -45,12 +45,25 @@ namespace OurApp.Core.Repositories
             ObservableCollection<Event> currentEvents = new ObservableCollection<Event>();
             foreach (Event e in events)
             {
-                if (e.StartDate >= DateTime.Now)
+                if (e.EndDate.Date >= DateTime.Now.Date)
                 {
                     currentEvents.Add(e);
                 }
             }
             return currentEvents;
+        }
+
+        public ObservableCollection<Event> getPastEvents()
+        {
+            ObservableCollection<Event> pastEvents = new ObservableCollection<Event>();
+            foreach (Event e in events)
+            {
+                if (e.EndDate.Date < DateTime.Now.Date)
+                {
+                    pastEvents.Add(e);
+                }
+            }
+            return pastEvents;
         }
     }
 }

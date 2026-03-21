@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="CreateEventPage.xaml" />
     <None Remove="OurEventsPage.xaml" />
+    <None Remove="PastEventsPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PastEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="OurEventsPage.xaml">

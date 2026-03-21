@@ -38,5 +38,10 @@ namespace OurApp.Core.Services
         {
             return this.repository.getCurrentEvents();
         }
+
+        public ObservableCollection<Event> GetPastEvents()
+        {
+            return this.repository.getPastEvents();
+        }
     }
 }

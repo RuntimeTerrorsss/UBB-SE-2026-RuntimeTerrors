@@ -19,7 +19,7 @@
             <AppBarButton Label="Our jobs"/>
             <AppBarButton Label="Past jobs"/>
             <AppBarButton Label="Our events" Click="NavigateToOurEvents_Click"/>
-            <AppBarButton Label="Past events"/>
+            <AppBarButton Label="Past events" Click="NavigateToPastEvents_Click"/>
         </CommandBar>
 
         <Frame x:Name="rootFrame"/>
