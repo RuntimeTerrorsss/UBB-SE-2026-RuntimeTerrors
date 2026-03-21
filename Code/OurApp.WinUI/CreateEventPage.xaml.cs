@@ -47,9 +47,14 @@ namespace OurApp.WinUI
 
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = App.MainWin;
-            mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
-            //mainWindow.RootFrame.GoBack();
+            // because click usually runs before command so we must make it run before
+            ViewModel.TapCommand.Execute(null);
+
+            if (ViewModel.AddError == "")
+            {
+                var mainWindow = App.MainWin;
+                mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
+            }
         }
 
         private async void AttachImage_Click(object sender, RoutedEventArgs e)

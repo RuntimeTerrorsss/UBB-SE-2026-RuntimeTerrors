@@ -38,7 +38,9 @@ namespace OurApp.Core.ViewModels
         [ObservableProperty] private string locationError;
         private bool validLocation = false;
 
-        [ObservableProperty] private string addError;
+        [ObservableProperty] private string addError = "";
+
+
 
 
         public CreateEventViewModel(EventsService service)
@@ -48,7 +50,7 @@ namespace OurApp.Core.ViewModels
 
 
         [RelayCommand]
-        void Tap()
+        public void Tap()
         {
             if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
             {
@@ -61,7 +63,7 @@ namespace OurApp.Core.ViewModels
             DateTime end = endDate.Value.DateTime;
 
             service.AddEvent(Photo, Title, Description, start, end, Location);
-            service.printAll();
+            //service.printAll();
         }
 
 

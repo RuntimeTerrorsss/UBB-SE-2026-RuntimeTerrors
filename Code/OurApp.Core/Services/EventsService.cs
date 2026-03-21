@@ -12,8 +12,8 @@ namespace OurApp.Core.Services
 {
     public class EventsService
     {
-        EventsRepo repository;
-        public EventsService(EventsRepo repo) 
+        IEventsRepo repository;
+        public EventsService(IEventsRepo repo) 
         {
             this.repository = repo;
         }

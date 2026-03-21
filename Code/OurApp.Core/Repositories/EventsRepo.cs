@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Repositories
 {
-    public class EventsRepo
+    public class EventsRepo : IEventsRepo
     {
         ObservableCollection<Event> events;
 

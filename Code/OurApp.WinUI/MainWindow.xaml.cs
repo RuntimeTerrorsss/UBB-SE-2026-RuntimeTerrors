@@ -32,7 +32,7 @@ namespace OurApp.WinUI
         {
             InitializeComponent();
 
-            EventsRepo repo = new EventsRepo();
+            IEventsRepo repo = new EventsRepo();
             service = new EventsService(repo);
         }
 

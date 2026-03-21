@@ -93,7 +93,7 @@
                 />
 
                 <Button 
-                    Content="Create Event" Command="{Binding TapCommand}"  Click="NavigateBack_Click"></Button>
+                    Content="Create Event" Click="NavigateBack_Click"></Button>
                 <TextBlock
                     Foreground="Red"
                     FontSize="12"

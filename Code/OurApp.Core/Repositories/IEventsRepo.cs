@@ -13,5 +13,6 @@ namespace OurApp.Core.Repositories
         ObservableCollection<Event> GetAll();
         void Add(Event e);
         void Remove(Event e);
+        public void printAll();
     }
 }
