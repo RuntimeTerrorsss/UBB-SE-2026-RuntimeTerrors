@@ -61,20 +61,24 @@ namespace OurApp.WinUI
 
             if (result == ContentDialogResult.Primary)
             {
-                var mainWindow = App.MainWin;
-                mainWindow.RootFrame.GoBack();
+                NavigateBack_Click(sender, e);
             }
         }
 
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = App.MainWin;
+            mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
+        }
+
+        private void CreateEvent_Click(object sender, RoutedEventArgs e)
         {
             // because click usually runs before command so we must make it run before
             ViewModel.TapCommand.Execute(null);
 
             if (ViewModel.AddError == "")
             {
-                var mainWindow = App.MainWin;
-                mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
+                NavigateBack_Click(sender, e);
             }
         }
 
