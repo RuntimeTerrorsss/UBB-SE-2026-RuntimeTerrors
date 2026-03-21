@@ -100,7 +100,7 @@
                     Text="{Binding AddError, Mode=OneWay}"
                 />
 
-                <Button Content="Cancel" Click="NavigateBack_Click"></Button>
+                <Button Content="Cancel" Click="CancelChanges_Click"></Button>
             </StackPanel>
         </ScrollViewer>
 

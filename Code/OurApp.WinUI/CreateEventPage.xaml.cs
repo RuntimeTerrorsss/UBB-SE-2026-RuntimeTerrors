@@ -45,6 +45,27 @@ namespace OurApp.WinUI
             IsLoaded = true;
         }
 
+        private async void CancelChanges_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Confirm cancel",
+                Content = "Are you sure you want to cancel the modifications?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = this.XamlRoot 
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                var mainWindow = App.MainWin;
+                mainWindow.RootFrame.GoBack();
+            }
+        }
+
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
             // because click usually runs before command so we must make it run before
