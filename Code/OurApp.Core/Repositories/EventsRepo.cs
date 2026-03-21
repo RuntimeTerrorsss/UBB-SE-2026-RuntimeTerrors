@@ -39,5 +39,18 @@ namespace OurApp.Core.Repositories
         {
             events.Remove(e);
         }
+
+        public ObservableCollection<Event> getCurrentEvents()
+        {
+            ObservableCollection<Event> currentEvents = new ObservableCollection<Event>();
+            foreach (Event e in events)
+            {
+                if (e.StartDate >= DateTime.Now)
+                {
+                    currentEvents.Add(e);
+                }
+            }
+            return currentEvents;
+        }
     }
 }

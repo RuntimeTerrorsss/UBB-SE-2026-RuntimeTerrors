@@ -14,5 +14,6 @@ namespace OurApp.Core.Repositories
         void Add(Event e);
         void Remove(Event e);
         public void printAll();
+        ObservableCollection<Event> getCurrentEvents();
     }
 }

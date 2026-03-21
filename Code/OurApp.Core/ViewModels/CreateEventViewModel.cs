@@ -41,8 +41,6 @@ namespace OurApp.Core.ViewModels
         [ObservableProperty] private string addError = "";
 
 
-
-
         public CreateEventViewModel(EventsService service)
         {
             this.service = service;
@@ -52,7 +50,8 @@ namespace OurApp.Core.ViewModels
         [RelayCommand]
         public void Tap()
         {
-            if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
+            //if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
+            if (!validTitle || !validDescription || !validLocation)
             {
                 AddError = "Please enter valid inputs before creating an event";
                 return;

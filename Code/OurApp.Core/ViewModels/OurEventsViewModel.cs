@@ -19,7 +19,7 @@ namespace OurApp.Core.ViewModels
         public OurEventsViewModel(EventsService service)
         {
             this.service = service;
-            Events = service.GetAllEvents();
+            Events = service.GetCurrentEvents();
         }
 
         //public void LoadElements()
