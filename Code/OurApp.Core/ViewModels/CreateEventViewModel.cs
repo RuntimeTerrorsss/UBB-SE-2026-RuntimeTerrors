@@ -40,6 +40,9 @@ namespace OurApp.Core.ViewModels
 
         [ObservableProperty] private string addError = "";
 
+        public bool validationSuccess => (addError == "");
+        public bool createSuccess = false;
+
 
         public CreateEventViewModel(EventsService service)
         {
@@ -57,12 +60,20 @@ namespace OurApp.Core.ViewModels
                 return;
             }
 
-            AddError = "";
-            DateTime start = startDate.Value.DateTime;
-            DateTime end = endDate.Value.DateTime;
 
-            service.AddEvent(Photo, Title, Description, start, end, Location);
-            //service.printAll();
+            try
+            {
+                AddError = "";
+                DateTime start = startDate.Value.DateTime;
+                DateTime end = endDate.Value.DateTime;
+
+                service.AddEvent(Photo, Title, Description, start, end, Location);
+                createSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                createSuccess = false;
+            }
         }
 
 

@@ -71,15 +71,43 @@ namespace OurApp.WinUI
             mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
         }
 
-        private void CreateEvent_Click(object sender, RoutedEventArgs e)
+        private async void CreateEvent_Click(object sender, RoutedEventArgs e)
         {
             // because click usually runs before command so we must make it run before
             ViewModel.TapCommand.Execute(null);
 
-            if (ViewModel.AddError == "")
+            if (ViewModel.validationSuccess)
             {
                 NavigateBack_Click(sender, e);
             }
+            else
+            {
+                return;
+            }
+
+            ContentDialog popup;
+            if (ViewModel.createSuccess)
+            {
+                popup = new ContentDialog
+                {
+                    Title = "Success!",
+                    Content = "Event created.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.XamlRoot
+                };
+            }
+            else
+            {
+                popup = new ContentDialog
+                {
+                    Title = "No!",
+                    Content = "Event not created.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.XamlRoot
+                };
+            }
+
+            await popup.ShowAsync();
         }
 
         private async void AttachImage_Click(object sender, RoutedEventArgs e)
