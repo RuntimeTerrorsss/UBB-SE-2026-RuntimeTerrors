@@ -25,17 +25,23 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public Frame RootFrame => rootFrame;
+
+        ICompanyService service;
         public MainWindow()
         {
             ICompanyRepo repo = new CompanyRepo();
-            ICompanyService service = new CompanyService(repo);
+            this.service = new CompanyService(repo);
 
             service.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             service.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            //repo.Add(new Core.Models.Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@"));
-            //repo.Add(new Core.Models.Company("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@"));
             service.printAll();
             InitializeComponent();
+        }
+
+        private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(typeof(ViewProfilePage));
         }
     }
 }
