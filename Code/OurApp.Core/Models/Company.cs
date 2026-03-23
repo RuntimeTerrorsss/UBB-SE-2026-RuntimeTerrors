@@ -16,7 +16,7 @@ namespace OurApp.Core.Models
         public string Email { get; set; }
 
         //public List<Job> Jobs { get; set; } = new();
-        //public List<string> Collaborators { get; set; } = new();
+        public List<string> Collaborators { get; set; } = new();
         //public MiniGame MiniGame { get; set; }
 
         public Company( string name, string aboutus, string pfp_url, string logo_url, string location, string email) {
