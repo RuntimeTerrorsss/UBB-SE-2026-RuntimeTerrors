@@ -13,6 +13,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="CreateEventPage.xaml" />
+    <None Remove="EditEventPage.xaml" />
+    <None Remove="OurEventsPage.xaml" />
+    <None Remove="PastEventsPage.xaml" />
     <None Remove="EditProfilePage.xaml" />
     <None Remove="ViewProfilePage.xaml" />
   </ItemGroup>
@@ -40,6 +44,7 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
   </ItemGroup>
@@ -47,11 +52,23 @@
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="EditEventPage.xaml">
     <Page Update="EditProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="PastEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="OurEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="CreateEventPage.xaml">
     <Page Update="ViewProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -15,6 +15,11 @@
 
     <Grid>
         <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" VerticalAlignment="Top">
+            <AppBarButton Label="Profile"/>
+            <AppBarButton Label="Our jobs"/>
+            <AppBarButton Label="Past jobs"/>
+            <AppBarButton Label="Our events" Click="NavigateToOurEvents_Click"/>
+            <AppBarButton Label="Past events" Click="NavigateToPastEvents_Click"/>
             <AppBarButton Label="Profile">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
@@ -31,4 +36,5 @@
 
         <Frame x:Name="rootFrame" Margin="0,30,0,0"/>
     </Grid>
+
 </Window>

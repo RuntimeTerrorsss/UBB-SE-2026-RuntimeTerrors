@@ -5,6 +5,16 @@
     <None Update="App.xaml">
       <SubType>Designer</SubType>
     </None>
+    <Page Update="EditEventPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PastEventsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="OurEventsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="CreateEventPage.xaml">
     <Page Update="EditProfilePage.xaml">
       <SubType>Designer</SubType>
     </Page>
