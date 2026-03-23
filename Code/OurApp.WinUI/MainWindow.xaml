@@ -14,12 +14,12 @@
     </Window.SystemBackdrop>
 
     <Grid>
-        <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
+        <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" VerticalAlignment="Top">
             <AppBarButton Label="Profile">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="View Profile" Click="NavigateToViewProfile_Click"/>
-                        <MenuFlyoutItem Text="Edit Profile"/>
+                        <MenuFlyoutItem Text="Edit Profile" Click="NavigateToEditProfile_Click"/>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
@@ -29,6 +29,6 @@
             <AppBarButton Label="Past events"/>
         </CommandBar>
 
-        <Frame x:Name="rootFrame"/>
+        <Frame x:Name="rootFrame" Margin="0,30,0,0"/>
     </Grid>
 </Window>

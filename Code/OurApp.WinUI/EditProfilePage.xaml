@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="OurApp.WinUI.ViewProfilePage"
+    x:Class="OurApp.WinUI.EditProfilePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:OurApp.WinUI"
@@ -10,7 +10,8 @@
 
     <Grid>
         <StackPanel Padding="40">
-            <TextBlock Text="This is view profile"></TextBlock>
+            <Button Content="Back" Click="NavigateBack_Click"></Button>
+            <TextBlock Text="This is edit profile"></TextBlock>
         </StackPanel>
     </Grid>
 </Page>

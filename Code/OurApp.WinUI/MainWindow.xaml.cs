@@ -43,5 +43,10 @@ namespace OurApp.WinUI
         {
             RootFrame.Navigate(typeof(ViewProfilePage));
         }
+
+        private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate (typeof(EditProfilePage));
+        }
     }
 }
