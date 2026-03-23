@@ -6,10 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
-    <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.7" />
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
 </Project>

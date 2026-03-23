@@ -23,14 +23,14 @@ namespace OurApp.Core.Services
             int done = 0;
             var tasks = new List<string>();
 
-            if (!string.IsNullOrEmpty(company.CompanyImagePath)) done++;
+            if (!string.IsNullOrEmpty(company.ProfilePicturePath)) done++;
             else tasks.Add("Upload company picture");
 
             if (!string.IsNullOrEmpty(company.AboutUs)) done++;
             else tasks.Add("Add company description");
 
-            if (company.Jobs.Count >= 5) done++;
-            else tasks.Add("Post at least 5 jobs");
+            //if (company.Jobs.Count >= 5) done++;
+            //else tasks.Add("Post at least 5 jobs");
 
             if (company.Collaborators.Count >= 2) done++;
             else tasks.Add("Add 2 collaborators");
