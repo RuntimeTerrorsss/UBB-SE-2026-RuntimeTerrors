@@ -39,7 +39,12 @@
                                     <TextBlock Text="{Binding EndDate}" />
                                 </StackPanel>
 
-                                <Button Content="..." Grid.Column="2" VerticalAlignment="Top" Click="EditEvent_Click"/>
+                                <Button 
+                                    Content="..." 
+                                    Grid.Column="2" 
+                                    VerticalAlignment="Top" 
+                                    Click="EditEvent_Click"
+                                    Tag="{Binding}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

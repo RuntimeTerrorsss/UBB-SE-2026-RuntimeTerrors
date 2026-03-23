@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using OurApp.Core.Models;
 using OurApp.Core.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -37,12 +38,14 @@ public sealed partial class OurEventsPage : Page
     {
         var mainWindow = App.MainWin;
         mainWindow.RootFrame.Navigate(typeof(CreateEventPage));
-        System.Diagnostics.Debug.WriteLine("Clicked create");
     }
 
     private void EditEvent_Click(object sender, RoutedEventArgs e)
     {
+        var button = sender as Button;
+        var selectedEvent = button.Tag as Event;
+
         var mainWindow = App.MainWin;
-        mainWindow.RootFrame.Navigate(typeof(CreateEventPage));
+        mainWindow.RootFrame.Navigate(typeof(EditEventPage), selectedEvent);
     }
 }
