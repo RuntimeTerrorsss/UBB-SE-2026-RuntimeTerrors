@@ -10,6 +10,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using OurApp.Core.Repositories;
+using OurApp.Core.Services;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -25,6 +27,14 @@ namespace OurApp.WinUI
     {
         public MainWindow()
         {
+            ICompanyRepo repo = new CompanyRepo();
+            ICompanyService service = new CompanyService(repo);
+
+            service.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            service.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //repo.Add(new Core.Models.Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@"));
+            //repo.Add(new Core.Models.Company("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@"));
+            service.printAll();
             InitializeComponent();
         }
     }
