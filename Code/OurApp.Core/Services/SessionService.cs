@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OurApp.Core.ViewModels
+namespace OurApp.Core.Services
 {
-    internal class Class4
+    internal class SessionService
     {
     }
 }

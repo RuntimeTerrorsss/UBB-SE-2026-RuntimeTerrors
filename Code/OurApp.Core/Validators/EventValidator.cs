@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OurApp.Core.Validators
+{
+    public class EventValidator
+    {
+        public bool TitleValidator(string title)
+        {
+            if (title.Length == 0)
+            {
+                throw new Exception("Title is mandatory");
+            }
+            if (title.Length > 200)
+            {
+                throw new Exception("Title is too long");
+            }
+            return true;
+        }
+
+        public bool DescriptionValidator(string description)
+        {
+            if (description.Length > 2000)
+            {
+                throw new Exception("Description is too long");
+            }
+            return true;
+        }
+
+        public bool LocationValidator(string location)
+        {
+            if (location.Length == 0)
+            {
+                throw new Exception("Location is mandatory");
+            }
+            if (location.Length > 300)
+            {
+                throw new Exception("Location is too long");
+            }
+            return true;
+        }
+
+        public bool StartDateValidator(DateTimeOffset? startDate)
+        {
+            if (startDate == null)
+            {
+                throw new Exception("Starting date is mandatory");
+            }
+            if (startDate < DateTimeOffset.Now)
+            {
+                throw new Exception("Event must start after creation");
+            }
+            return true;
+        }
+
+        public bool EndDateValidator(DateTimeOffset? endDate)
+        {
+            if (endDate == null)
+            {
+                throw new Exception("Ending date is mandatory");
+            }
+            if (endDate < DateTimeOffset.Now)
+            {
+                throw new Exception("Event must end after creation");
+            }
+            return true;
+        }
+
+        public bool DateCronologityValidator(DateTimeOffset? startDate, DateTimeOffset? endDate)
+        {
+            if (startDate > endDate)
+            {
+                throw new Exception("Event must begin before ending");
+            }
+            return true;
+        }
+    }
+}
