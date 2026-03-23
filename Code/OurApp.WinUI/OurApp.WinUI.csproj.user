@@ -11,6 +11,17 @@
       <SubType>Designer</SubType>
     </None>
     <Page Update="GamePage.xaml">
+    <Page Update="EditEventPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PastEventsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="OurEventsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="CreateEventPage.xaml">
+    <Page Update="EditProfilePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <None Update="MainWindow.xaml">
@@ -19,5 +30,8 @@
     <None Update="Package.appxmanifest">
       <SubType>Designer</SubType>
     </None>
+    <Page Update="ViewProfilePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>

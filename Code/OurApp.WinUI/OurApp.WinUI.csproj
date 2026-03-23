@@ -16,6 +16,12 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="GamePage.xaml" />
+    <None Remove="CreateEventPage.xaml" />
+    <None Remove="EditEventPage.xaml" />
+    <None Remove="OurEventsPage.xaml" />
+    <None Remove="PastEventsPage.xaml" />
+    <None Remove="EditProfilePage.xaml" />
+    <None Remove="ViewProfilePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +56,24 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="GamePage.xaml">
+    <Page Update="EditEventPage.xaml">
+    <Page Update="EditProfilePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PastEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="OurEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="CreateEventPage.xaml">
+    <Page Update="ViewProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
