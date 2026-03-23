@@ -11,6 +11,7 @@ namespace OurApp.Core.Services
     public class CompanyService : ICompanyService
     {
         ICompanyRepo CompanyRepo;
+
         public CompanyService(ICompanyRepo repo) 
         {
             CompanyRepo = repo;

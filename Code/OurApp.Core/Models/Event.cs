@@ -9,6 +9,7 @@ namespace OurApp.Core.Models
 {
     public class Event
     {
+        static int Id = 1;
         public string Photo { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -28,6 +29,7 @@ namespace OurApp.Core.Models
             this.Location = location;
             this.HostID = hostID;
             this.CollaboratorID = collaboratorID;
+            Id++;
         }
 
         public override string ToString()
