@@ -29,8 +29,16 @@ namespace OurApp.WinUI
         public Frame RootFrame => rootFrame;
         public EventsService service { get; }
 
+
+        ICompanyService service;
         public MainWindow()
         {
+            ICompanyRepo repo = new CompanyRepo();
+            this.service = new CompanyService(repo);
+
+            service.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            service.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            service.printAll();
             InitializeComponent();
 
             IEventsRepo repo = new EventsRepo();
@@ -57,6 +65,16 @@ namespace OurApp.WinUI
         private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(PastEventsPage));
+        }
+
+        private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(typeof(ViewProfilePage));
+        }
+
+        private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate (typeof(EditProfilePage));
         }
     }
 }

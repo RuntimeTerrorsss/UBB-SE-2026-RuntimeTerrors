@@ -17,6 +17,8 @@
     <None Remove="EditEventPage.xaml" />
     <None Remove="OurEventsPage.xaml" />
     <None Remove="PastEventsPage.xaml" />
+    <None Remove="EditProfilePage.xaml" />
+    <None Remove="ViewProfilePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="EditEventPage.xaml">
+    <Page Update="EditProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -66,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="CreateEventPage.xaml">
+    <Page Update="ViewProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
