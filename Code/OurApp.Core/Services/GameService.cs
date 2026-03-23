@@ -17,7 +17,6 @@ namespace OurApp.Core.Services
 
         public string ShowCoworker()
         {
-            repository.MakeMockScenarios();
             Buddy coworker = repository.Buddy;
             return "Hello! I am " + coworker.Name + ", your future coworker!";
 

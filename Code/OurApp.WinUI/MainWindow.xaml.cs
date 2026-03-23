@@ -2,17 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using OurApp.Core.Repositories;
+using OurApp.Core.Services;
+using OurApp.Core.ViewModels;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using OurApp.Core.Models;
-using OurApp.Core.Repositories;
-using OurApp.Core.Services;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -21,9 +21,6 @@ using Windows.Foundation.Collections;
 
 namespace OurApp.WinUI
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainWindow : Window
     {
         public Frame RootFrame => rootFrame;
@@ -33,6 +30,9 @@ namespace OurApp.WinUI
         ICompanyService service;
         public MainWindow()
         {
+            this.InitializeComponent();
+           
+            RootFrame.Navigate(typeof(GamePage));
             ICompanyRepo repo = new CompanyRepo();
             this.service = new CompanyService(repo);
 
