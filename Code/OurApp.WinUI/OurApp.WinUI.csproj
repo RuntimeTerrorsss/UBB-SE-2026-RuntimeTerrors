@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="EditEventPage.xaml">
+    <Page Update="EditProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
