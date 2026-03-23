@@ -21,7 +21,7 @@ namespace OurApp.Core.ViewModels
 
         [ObservableProperty] private string title;
         [ObservableProperty] private string titleError;
-        private bool validTitle = false;
+        private bool validTitle = true;
 
         [ObservableProperty] private string description;
         [ObservableProperty] private string descriptionError;
@@ -37,7 +37,7 @@ namespace OurApp.Core.ViewModels
 
         [ObservableProperty] private string location;
         [ObservableProperty] private string locationError;
-        private bool validLocation = false;
+        private bool validLocation = true;
 
         [ObservableProperty] private string addError = "";
 
@@ -56,31 +56,31 @@ namespace OurApp.Core.ViewModels
             this.location = selectedEvent.Location;
         }
 
-        //[RelayCommand]
-        //public void Tap()
-        //{
-        //    //if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
-        //    if (!validTitle || !validDescription || !validLocation)
-        //    {
-        //        AddError = "Please enter valid inputs before creating an event";
-        //        return;
-        //    }
+        [RelayCommand] public void Tap()
+        {
+            //if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
+            if (!validTitle || !validDescription || !validLocation)
+            {
+                AddError = "Please enter valid inputs before creating an event";
+                return;
+            }
 
 
-        //    try
-        //    {
-        //        AddError = "";
-        //        DateTime start = startDate.Value.DateTime;
-        //        DateTime end = endDate.Value.DateTime;
+            try
+            {
+                AddError = "";
+                DateTime start = startDate.Value.DateTime;
+                DateTime end = endDate.Value.DateTime;
 
-        //        //service.AddEvent(Photo, Title, Description, start, end, Location);
-        //        createSuccess = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        createSuccess = false;
-        //    }
-        //}
+                service.updateEvent(selectedEvent.Id, Photo, Title, Description, start, end, Location);
+                //service.AddEvent(Photo, Title, Description, start, end, Location);
+                createSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                createSuccess = false;
+            }
+        }
 
 
         public bool ValidateTitle()

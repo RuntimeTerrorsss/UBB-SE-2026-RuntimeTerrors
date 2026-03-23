@@ -24,7 +24,10 @@ namespace OurApp.Core.Services
             this.repository.Add(e);
         }
 
-        //public void updateEvent()
+        public void updateEvent(int id, string photo, string title, string description, DateTime start, DateTime end, string location)
+        {
+            this.repository.Update(id, photo, title, description, start, end, location);
+        }
 
         public void printAll()
         {

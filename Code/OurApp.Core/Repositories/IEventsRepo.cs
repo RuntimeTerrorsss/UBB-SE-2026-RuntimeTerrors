@@ -16,5 +16,7 @@ namespace OurApp.Core.Repositories
         public void printAll();
         ObservableCollection<Event> getCurrentEvents();
         ObservableCollection<Event> getPastEvents();
+        void Update(int id, string photo, string title, string description, DateTime start, DateTime end, string location);
+
     }
 }

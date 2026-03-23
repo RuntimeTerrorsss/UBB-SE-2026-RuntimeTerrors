@@ -50,7 +50,41 @@ namespace OurApp.WinUI
 
         private async void CreateEvent_Click(object sender, RoutedEventArgs e)
         {
+            // because click usually runs before command so we must make it run before
+            ViewModel.TapCommand.Execute(null);
 
+            if (ViewModel.validationSuccess)
+            {
+                NavigateBack_Click(sender, e);
+            }
+            else
+            {
+                return;
+            }
+
+            ContentDialog popup;
+            if (ViewModel.createSuccess)
+            {
+                popup = new ContentDialog
+                {
+                    Title = "YEY!",
+                    Content = "Event created successfully!",
+                    CloseButtonText = "Close",
+                    XamlRoot = this.XamlRoot
+                };
+            }
+            else
+            {
+                popup = new ContentDialog
+                {
+                    Title = "Oops!",
+                    Content = "We’re sorry, an error occurred. The event was not created. Please try again.",
+                    CloseButtonText = "Close",
+                    XamlRoot = this.XamlRoot
+                };
+            }
+
+            await popup.ShowAsync();
         }
 
         private void NavigateBack_Click(object sender, RoutedEventArgs e)

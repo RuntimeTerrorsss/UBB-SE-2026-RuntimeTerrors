@@ -9,7 +9,8 @@ namespace OurApp.Core.Models
 {
     public class Event
     {
-        static int Id = 1;
+        private static int Id_counter = 1;
+        public int Id { get; set; }
         public string Photo { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -21,6 +22,7 @@ namespace OurApp.Core.Models
 
         public Event(string photo, string title, string description, DateTime startDate, DateTime endDate, string location, int hostID, int collaboratorID)
         {
+            this.Id = Id_counter++;
             this.Photo = photo;
             this.Title = title;
             this.Description = description;
@@ -29,7 +31,7 @@ namespace OurApp.Core.Models
             this.Location = location;
             this.HostID = hostID;
             this.CollaboratorID = collaboratorID;
-            Id++;
+            //Id++;
         }
 
         public override string ToString()
