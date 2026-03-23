@@ -8,5 +8,7 @@ namespace OurApp.Core.Services
 {
     public interface ICompanyService
     {
+        void addCompany(string companyName, string aboutUs, string pfpUrl, string logoUrl, string location, string email);
+        void printAll();
     }
 }

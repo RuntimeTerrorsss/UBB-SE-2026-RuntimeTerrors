@@ -5,8 +5,6 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.WindowsAppSDK.Runtime.Packages;
-using OurApp.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,15 +21,25 @@ namespace OurApp.WinUI
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class PastEventsPage : Page
+    public sealed partial class EditProfilePage : Page
     {
-        public PastEventsViewModel ViewModel { get; }
-        public PastEventsPage()
+        public EditProfilePage()
+        {
+            InitializeComponent();
+        }
+
+
+        private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
             var mainW = App.MainWin;
-            InitializeComponent();
-            ViewModel = new PastEventsViewModel(mainW.eventsService);
-            this.DataContext = ViewModel;
+            if (mainW.RootFrame.CanGoBack)
+            {
+                mainW.RootFrame.GoBack();
+            }
+            else
+            {
+                mainW.RootFrame.Navigate(typeof(ViewProfilePage));
+            }
         }
     }
 }

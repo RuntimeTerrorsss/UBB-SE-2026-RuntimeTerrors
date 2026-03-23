@@ -42,10 +42,15 @@ namespace OurApp.WinUI
             var ev = e.Parameter as Event;
 
             var mainW = App.MainWin;
-            ViewModel = new EditEventViewModel(mainW.service, ev);
+            ViewModel = new EditEventViewModel(mainW.eventsService, ev);
             this.DataContext = ViewModel;
 
             System.Diagnostics.Debug.WriteLine(ev);
+        }
+
+        private async void CreateEvent_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
@@ -136,6 +141,42 @@ namespace OurApp.WinUI
                 {
                     EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
                 }
+            }
+        }
+
+        private void Location_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var binding = LocationBox.GetBindingExpression(TextBox.TextProperty);
+            binding?.UpdateSource();
+
+            if (ViewModel.ValidateLocation())
+            {
+                LocationBox.BorderBrush = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                LocationBox.BorderBrush = new SolidColorBrush(Colors.Red);
+            }
+
+        }
+
+        private async void CancelChanges_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Confirm cancel",
+                Content = "Are you sure you want to cancel the modifications?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                NavigateBack_Click(sender, e);
             }
         }
     }

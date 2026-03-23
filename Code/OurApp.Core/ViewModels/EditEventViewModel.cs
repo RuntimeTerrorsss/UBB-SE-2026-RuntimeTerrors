@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OurApp.Core.Models;
 using OurApp.Core.Services;
 using OurApp.Core.Validators;
@@ -52,7 +53,34 @@ namespace OurApp.Core.ViewModels
             this.description = selectedEvent.Description;
             this.startDate = new DateTimeOffset?(selectedEvent.StartDate);
             this.endDate = new DateTimeOffset?(selectedEvent.EndDate);
+            this.location = selectedEvent.Location;
         }
+
+        //[RelayCommand]
+        //public void Tap()
+        //{
+        //    //if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
+        //    if (!validTitle || !validDescription || !validLocation)
+        //    {
+        //        AddError = "Please enter valid inputs before creating an event";
+        //        return;
+        //    }
+
+
+        //    try
+        //    {
+        //        AddError = "";
+        //        DateTime start = startDate.Value.DateTime;
+        //        DateTime end = endDate.Value.DateTime;
+
+        //        //service.AddEvent(Photo, Title, Description, start, end, Location);
+        //        createSuccess = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        createSuccess = false;
+        //    }
+        //}
 
 
         public bool ValidateTitle()
@@ -146,6 +174,25 @@ namespace OurApp.Core.ViewModels
             {
                 EndDateError = ex.Message;
                 validEndDate = false;
+            }
+            return false;
+        }
+
+        public bool ValidateLocation()
+        {
+            try
+            {
+                if (validator.LocationValidator(Location))
+                {
+                    LocationError = "";
+                    validLocation = true;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                LocationError = ex.Message;
+                validLocation = false;
             }
             return false;
         }

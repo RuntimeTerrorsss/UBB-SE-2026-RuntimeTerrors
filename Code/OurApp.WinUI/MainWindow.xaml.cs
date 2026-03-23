@@ -27,13 +27,19 @@ namespace OurApp.WinUI
     public sealed partial class MainWindow : Window
     {
         public Frame RootFrame => rootFrame;
-        public EventsService service { get; }
-
+        public EventsService eventsService { get; }
+        ICompanyService companyService;
         public MainWindow()
         {
+            ICompanyRepo repo = new CompanyRepo();
+            this.companyService = new CompanyService(repo);
+
+            companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            companyService.printAll();
             InitializeComponent();
 
-            IEventsRepo repo = new EventsRepo();
+            IEventsRepo eventsRepo = new EventsRepo();
 
             // hardcode events
             Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, 2);
@@ -41,11 +47,11 @@ namespace OurApp.WinUI
             Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, 2);
             Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, 2);
 
-            repo.Add(ev1);
-            repo.Add(ev2);
-            repo.Add(ev3);
-            repo.Add(ev4);
-            service = new EventsService(repo);
+            eventsRepo.Add(ev1);
+            eventsRepo.Add(ev2);
+            eventsRepo.Add(ev3);
+            eventsRepo.Add(ev4);
+            eventsService = new EventsService(eventsRepo);
         }
 
         private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
@@ -57,6 +63,16 @@ namespace OurApp.WinUI
         private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(PastEventsPage));
+        }
+
+        private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(typeof(ViewProfilePage));
+        }
+
+        private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate (typeof(EditProfilePage));
         }
     }
 }

@@ -64,6 +64,29 @@
                     FontSize="12"
                     Text="{Binding EndDateError, Mode=OneWay}"
                 />
+
+                <TextBox 
+                    x:Name="LocationBox"
+                    Header="Enter your location:" 
+                    PlaceholderText="Location"
+                    Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                    LostFocus="Location_LostFocus"
+                />
+                <TextBlock 
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding LocationError, Mode=OneWay}"
+                />
+
+                <Button 
+                    Content="Create Event" Click="CreateEvent_Click"></Button>
+                <TextBlock
+                    Foreground="Red"
+                    FontSize="12"
+                    Text="{Binding AddError, Mode=OneWay}"
+                />
+
+                <Button Content="Cancel" Click="CancelChanges_Click"></Button>
             </StackPanel>
         </ScrollViewer>
     </Grid>
