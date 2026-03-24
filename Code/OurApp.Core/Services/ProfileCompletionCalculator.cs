@@ -35,22 +35,22 @@ namespace OurApp.Core.Services
             if (company.Collaborators.Count >= 2) done++;
             else tasks.Add("Add 2 collaborators");
 
-            if (IsMiniGameComplete(company)) done++;
-            else tasks.Add("Complete mini-game");
+            //if (IsMiniGameComplete(company)) done++;
+            //else tasks.Add("Complete mini-game");
 
             return ((done * 100) / total, tasks);
         }
 
-        private bool IsMiniGameComplete(Company c)
-        {
-            var g = c.MiniGame;
-            if (g == null) return false;
+        //private bool IsMiniGameComplete(Company c)
+        //{
+        //    var g = c.MiniGame;
+        //    if (g == null) return false;
 
-            return !string.IsNullOrEmpty(g.Struggle1) &&
-                   !string.IsNullOrEmpty(g.Struggle2) &&
-                   g.Responses1.Count == 3 &&
-                   g.Responses2.Count == 3 &&
-                   g.Feedbacks.Count == 3;
-        }
+        //    return !string.IsNullOrEmpty(g.Struggle1) &&
+        //           !string.IsNullOrEmpty(g.Struggle2) &&
+        //           g.Responses1.Count == 3 &&
+        //           g.Responses2.Count == 3 &&
+        //           g.Feedbacks.Count == 3;
+        //}
     }
 }

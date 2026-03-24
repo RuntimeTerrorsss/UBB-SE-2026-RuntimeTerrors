@@ -11,6 +11,8 @@
       <SubType>Designer</SubType>
     </None>
     <Page Update="GamePage.xaml">
+		<SubType>Designer</SubType>
+	</Page>
     <Page Update="EditEventPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -21,6 +23,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="CreateEventPage.xaml">
+		<SubType>Designer</SubType>
+	</Page>
     <Page Update="EditProfilePage.xaml">
       <SubType>Designer</SubType>
     </Page>

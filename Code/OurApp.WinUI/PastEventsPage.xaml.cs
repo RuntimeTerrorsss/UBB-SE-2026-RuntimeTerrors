@@ -30,7 +30,7 @@ namespace OurApp.WinUI
         {
             var mainW = App.MainWin;
             InitializeComponent();
-            ViewModel = new PastEventsViewModel(mainW.service);
+            ViewModel = new PastEventsViewModel(mainW.eventService);
             this.DataContext = ViewModel;
         }
     }

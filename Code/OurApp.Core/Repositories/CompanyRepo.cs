@@ -37,5 +37,8 @@ namespace OurApp.Core.Repositories
         {
             companies.Remove(c);
         }
+        void ICompanyRepo.Load(Company c) {
+        
+        }
     }
 }

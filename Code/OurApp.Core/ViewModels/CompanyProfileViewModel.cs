@@ -16,12 +16,11 @@ namespace App.ViewModels
         [ObservableProperty]
         private int _completionPercentage;
 
-        // ObservableCollection automatically notifies the UI when items are added/removed
         [ObservableProperty]
         private ObservableCollection<string> _remainingTasks = new();
 
         [ObservableProperty]
-        private ObservableCollection<Collaborator> _collaboratorPreview = new();
+        private ObservableCollection<Company> _collaboratorPreview = new();
 
         // 1. Inject your service here
         public CompanyProfileViewModel(ProfileCompletionCalculator calculator)
