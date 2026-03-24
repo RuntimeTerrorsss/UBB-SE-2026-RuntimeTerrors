@@ -1,0 +1,72 @@
+﻿using iss_project.UI.ViewModels.Jobs;
+using System;
+using System.Collections.Generic;
+
+namespace iss_project.UI.Validators
+{
+    public class JobValidator
+    {
+        public List<string> Validate(CreateJobViewModel model)
+        {
+            var errors = new List<string>();
+
+            // Required text fields
+            if (string.IsNullOrWhiteSpace(model.JobTitle))
+                errors.Add("Job title is required.");
+
+            if (string.IsNullOrWhiteSpace(model.IndustryField))
+                errors.Add("Industry field is required.");
+
+            if (string.IsNullOrWhiteSpace(model.JobType))
+                errors.Add("Job type is required.");
+
+            if (string.IsNullOrWhiteSpace(model.ExperienceLevel))
+                errors.Add("Experience level is required.");
+
+            if (string.IsNullOrWhiteSpace(model.JobDescription))
+                errors.Add("Job description is required.");
+
+            if (string.IsNullOrWhiteSpace(model.JobLocation))
+                errors.Add("Job location is required.");
+
+            // Numeric validation
+            if (model.AvailablePositions <= 0)
+                errors.Add("Available positions must be greater than 0.");
+
+            // Dropdown validation (ensure selected value is valid)
+            if (!model.JobTypes.Contains(model.JobType))
+                errors.Add("Invalid job type selected.");
+
+            if (!model.ExperienceLevels.Contains(model.ExperienceLevel))
+                errors.Add("Invalid experience level selected.");
+
+            // Date validation
+            if (model.StartDate.HasValue && model.EndDate.HasValue)
+            {
+                if (model.EndDate < model.StartDate)
+                    errors.Add("End date cannot be earlier than start date.");
+            }
+
+            if (model.Deadline.HasValue)
+            {
+                if (model.Deadline < DateTimeOffset.Now)
+                    errors.Add("Deadline cannot be in the past.");
+            }
+
+            // Financial validation
+            if (model.Salary.HasValue && model.Salary < 0)
+                errors.Add("Salary cannot be negative.");
+
+            if (model.AmountPayed.HasValue && model.AmountPayed < 0)
+                errors.Add("Amount paid cannot be negative.");
+
+            if (model.Salary.HasValue && model.AmountPayed.HasValue)
+            {
+                if (model.AmountPayed > model.Salary)
+                    errors.Add("Amount paid cannot exceed salary.");
+            }
+
+            return errors;
+        }
+    }
+}

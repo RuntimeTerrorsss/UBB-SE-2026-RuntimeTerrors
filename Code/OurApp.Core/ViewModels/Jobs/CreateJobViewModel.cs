@@ -1,9 +1,11 @@
-﻿using iss_project.Code.OurApp.Core.Services;
+﻿using iss_project.Code.OurApp.Core.Models;
+using iss_project.Code.OurApp.Core.Services;
+using iss_project.UI.Validators;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using iss_project.Code.OurApp.Core.Models;
+using System.Linq;
 
 namespace iss_project.UI.ViewModels.Jobs
 {
@@ -52,8 +54,17 @@ namespace iss_project.UI.ViewModels.Jobs
         public ObservableCollection<string> JobTypes { get; set; }
         public ObservableCollection<string> ExperienceLevels { get; set; }
 
-        public async Task CreateJob()
+        public async Task<(bool Success, string Message)> CreateJob()
         {
+            var validator = new JobValidator();
+            var errors = validator.Validate(this);
+
+            if (errors.Any())
+            {
+                var message = string.Join("\n", errors);
+                return (false, message);
+            }
+
             var job = new JobPosting
             {
                 CompanyId = CompanyId,
@@ -73,6 +84,8 @@ namespace iss_project.UI.ViewModels.Jobs
             };
 
             await _jobService.CreateJobAsync(job);
+
+            return (true, "Job created successfully.");
         }
     }
 }

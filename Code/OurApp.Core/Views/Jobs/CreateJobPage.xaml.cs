@@ -16,7 +16,24 @@ namespace iss_project.UI.Views.Jobs
         private async void CreateJob_Click(object sender, RoutedEventArgs e)
         {
             var vm = (CreateJobViewModel)this.DataContext;
-            await vm.CreateJob();
+
+            var result = await vm.CreateJob();
+
+            if (!result.Success)
+            {
+                var dialog = new ContentDialog
+                {
+                    Title = "Validation Errors",
+                    Content = result.Message,
+                    CloseButtonText = "OK",
+                    XamlRoot = this.XamlRoot
+                };
+
+                await dialog.ShowAsync();
+                return;
+            }
+
+            // Success → go back to jobs list
             MainWindow.Instance.ShowJobs();
         }
 
