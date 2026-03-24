@@ -18,7 +18,7 @@
             <StackPanel Padding="40">
 
                 <Button Content="Create Event" Click="CreateEventButton_Click"></Button>
-
+                <Button Content="See Collaborators" Click="SeeCollaboratorsButton_Click"></Button>
 
                 <ListView ItemsSource="{Binding currentEventsCollection}">
                     <ListView.ItemTemplate>

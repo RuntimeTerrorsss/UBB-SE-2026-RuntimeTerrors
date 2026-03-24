@@ -13,6 +13,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="CollaboratorsPage.xaml" />
     <None Remove="CreateEventPage.xaml" />
     <None Remove="EditEventPage.xaml" />
     <None Remove="OurEventsPage.xaml" />
@@ -78,6 +79,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="CollaboratorsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="EditProfilePage.xaml">

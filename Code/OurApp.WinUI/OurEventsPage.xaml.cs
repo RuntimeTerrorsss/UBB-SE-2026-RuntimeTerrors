@@ -64,4 +64,10 @@ public sealed partial class OurEventsPage : Page
         var mainWindow = App.mainWindow;
         mainWindow.RootFrame.Navigate(typeof(EditEventPage), selectedEvent);
     }
+
+    private void SeeCollaboratorsButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = App.mainWindow;
+        mainWindow.RootFrame.Navigate(typeof(CollaboratorsPage));
+    }
 }
