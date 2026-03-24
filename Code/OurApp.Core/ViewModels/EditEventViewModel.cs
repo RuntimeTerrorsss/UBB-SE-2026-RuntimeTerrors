@@ -89,6 +89,11 @@ namespace OurApp.Core.ViewModels
             }
         }
 
+        [RelayCommand] public void DeleteEvent()
+        {
+            eventsService.DeleteEvent(eventToEdit);
+        }
+
 
         /// <summary>
         /// Function that sets some flags, used in the View, if the event title is valid

@@ -54,6 +54,11 @@ namespace OurApp.Core.Services
             this.eventsRepository.UpdateEventToRepo(eventIdToBeUpdated, newEventPhoto, newEventTitle, newEventDescription, newEventStartDate, newEventEndDate, newEventLocation);
         }
 
+        public void DeleteEvent(Event eventToBeRemoved)
+        {
+            this.eventsRepository.RemoveEventFromRepo(eventToBeRemoved);
+        }
+
 
         /// <summary>
         /// Function that returns a collection of all the current events

@@ -266,5 +266,26 @@ namespace OurApp.WinUI
                 NavigateBack_Click(sender, e);
             }
         }
+
+        private async void DeleteEvent_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Confirm delete",
+                Content = "Are you sure you want to delete the event?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                ViewModel.DeleteEventCommand.Execute(null);
+                NavigateBack_Click(sender, e);
+            }
+        }
     }
 }

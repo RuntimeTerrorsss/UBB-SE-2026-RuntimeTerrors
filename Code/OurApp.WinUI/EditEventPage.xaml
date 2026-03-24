@@ -86,7 +86,8 @@
                     Text="{Binding AddError, Mode=OneWay}"
                 />
 
-                <Button Content="Cancel" Click="CancelChanges_Click"></Button>
+                <Button Content="CANCEL" Click="CancelChanges_Click"></Button>
+                <Button Content="DELETE" Click="DeleteEvent_Click"></Button>
             </StackPanel>
         </ScrollViewer>
     </Grid>
