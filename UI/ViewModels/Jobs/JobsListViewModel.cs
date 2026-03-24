@@ -1,0 +1,33 @@
+﻿using iss_project.Application2.Interfaces.Services;
+using iss_project.Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+
+namespace iss_project.UI.ViewModels.Jobs
+{
+    public class JobsListViewModel
+    {
+        private readonly IJobService _jobService;
+
+        public ObservableCollection<JobPosting> Jobs { get; set; }
+
+        public JobsListViewModel()
+        {
+            _jobService = MainWindow.Services.GetService<IJobService>();
+            Jobs = new ObservableCollection<JobPosting>();
+        }
+
+        public async Task LoadJobs()
+        {
+            var jobs = await _jobService.GetCurrentJobsAsync(1); // hardcoded companyId
+
+            Jobs.Clear();
+
+            foreach (var job in jobs)
+            {
+                Jobs.Add(job);
+            }
+        }
+    }
+}
