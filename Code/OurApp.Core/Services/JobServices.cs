@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using iss_project.Application2.Interfaces.Repositories;
-using iss_project.Application2.Interfaces.Services;
-using iss_project.Domain.Entities;
+using iss_project.Code.OurApp.Core.Models;
+using iss_project.Code.OurApp.Core.Repositories;
 
-namespace iss_project.Application2.Services
+namespace iss_project.Code.OurApp.Core.Services
 {
     public class JobService : IJobService
     {

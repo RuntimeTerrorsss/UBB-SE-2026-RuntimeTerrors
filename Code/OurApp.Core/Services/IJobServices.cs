@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using iss_project.Domain.Entities;
+using iss_project.Code.OurApp.Core.Models;
 
-namespace iss_project.Application2.Interfaces.Services
+namespace iss_project.Code.OurApp.Core.Services
 {
     public interface IJobService
     {

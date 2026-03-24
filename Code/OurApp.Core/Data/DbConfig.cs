@@ -1,4 +1,4 @@
-﻿namespace iss_project.Infrastructure.Data
+﻿namespace iss_project.Code.OurApp.Core.Data
 {
     public static class DbConfig
     {

@@ -1,5 +1,5 @@
-﻿using iss_project.Application2.Interfaces.Services;
-using iss_project.Domain.Entities;
+﻿using iss_project.Code.OurApp.Core.Models;
+using iss_project.Code.OurApp.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;

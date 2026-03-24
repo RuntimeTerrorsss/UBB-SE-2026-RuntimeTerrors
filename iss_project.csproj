@@ -11,10 +11,11 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="UI\ViewModels\Jobs\CreateJobPage.xaml" />
-    <None Remove="UI\Views\Jobs\JobsListPage.xaml" />
+    <None Remove="Code\OurApp.Core\ViewModels\Jobs\CreateJobPage.xaml" />
+    <None Remove="Code\OurApp.Core\Views\Jobs\JobsListPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,21 +45,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain\Enums\" />
-    <Folder Include="UI\Helpers\" />
-    <Folder Include="UI\Converters\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="UI\Views\Jobs\JobsListPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="UI\ViewModels\Jobs\CreateJobPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 
   <!--

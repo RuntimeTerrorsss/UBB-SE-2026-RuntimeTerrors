@@ -1,12 +1,12 @@
-﻿using iss_project.Application2.Interfaces.Repositories;
-using iss_project.Application2.Interfaces.Services;
-using iss_project.Application2.Services;
-using iss_project.Infrastructure.Data;
-using iss_project.Infrastructure.Repositories;
+﻿using iss_project.Code.OurApp.Core.Data;
+using iss_project.Code.OurApp.Core.Repositories;
+using iss_project.Code.OurApp.Core.Services;
 using iss_project.UI.Views.Jobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using System;
+using WinRT.Interop;
+using Microsoft.UI.Windowing;
 
 namespace iss_project
 {
@@ -18,6 +18,12 @@ namespace iss_project
         public MainWindow()
         {
             this.InitializeComponent();
+
+            var hwnd = WindowNative.GetWindowHandle(this);
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+            var appWindow = AppWindow.GetFromWindowId(windowId);
+
+            appWindow.Resize(new Windows.Graphics.SizeInt32(1200, 800));
 
             Instance = this;
 

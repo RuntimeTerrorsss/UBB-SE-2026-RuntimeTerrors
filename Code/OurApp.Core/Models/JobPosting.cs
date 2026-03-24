@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace iss_project.Domain.Entities
+namespace iss_project.Code.OurApp.Core.Models
 {
     public class JobPosting
     {
