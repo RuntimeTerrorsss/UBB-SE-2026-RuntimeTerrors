@@ -1,0 +1,31 @@
+<Page
+    x:Class="iss_project.UI.Views.Jobs.CreateJobPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<Grid Padding="20">
+
+		<StackPanel Spacing="10">
+
+			<!-- Navigation buttons -->
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<Button Content="View Jobs" Click="GoToJobs"/>
+			</StackPanel>
+
+			<TextBox Header="Title" Text="{Binding JobTitle, Mode=TwoWay}" />
+			<TextBox Header="Field" Text="{Binding IndustryField, Mode=TwoWay}" />
+			<TextBox Header="Type" Text="{Binding JobType, Mode=TwoWay}" />
+			<TextBox Header="Experience Level" Text="{Binding ExperienceLevel, Mode=TwoWay}" />
+
+			<TextBox Header="Description" Text="{Binding JobDescription, Mode=TwoWay}" />
+			<TextBox Header="Location" Text="{Binding JobLocation, Mode=TwoWay}" />
+
+			<TextBox Header="Available Positions"
+                     Text="{Binding AvailablePositions, Mode=TwoWay}" />
+
+			<Button Content="Create Job" Click="CreateJob_Click"/>
+
+		</StackPanel>
+
+	</Grid>
+</Page>
