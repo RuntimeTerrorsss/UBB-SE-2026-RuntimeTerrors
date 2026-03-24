@@ -36,9 +36,9 @@ namespace OurApp.WinUI
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
-            companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            companyService.printAll();
+            companyService.AddCompany("ndj", "dnis", "dnjs.jpg", "hdjd.png", "sybau", "dj@example.com");
+            companyService.AddCompany("ndj2", "dnis", "dnjs.jpg", "hdjd.png", "sybau", "dj2@example.com");
+            companyService.PrintAll();
             InitializeComponent();
 
             IEventsRepo eventRepo = new EventsRepo();
