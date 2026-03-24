@@ -30,6 +30,10 @@ namespace OurApp.WinUI
         private bool EndDateModified = false;
         private bool IsLoaded = false;
         public EditEventViewModel ViewModel { get; set; }
+
+        /// <summary>
+        /// Edit event page constructor
+        /// </summary>
         public EditEventPage()
         {
             InitializeComponent();
@@ -37,6 +41,12 @@ namespace OurApp.WinUI
             IsLoaded = true;
         }
 
+        /// <summary>
+        /// Function that initializes the edit event view model, only when the user
+        /// gets navigated to this page. The selected event is sent as a parameter
+        /// to the view model
+        /// </summary>
+        /// <param name="e"> selected event to edit </param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             var ev = e.Parameter as Event;
@@ -48,6 +58,13 @@ namespace OurApp.WinUI
             System.Diagnostics.Debug.WriteLine(ev);
         }
 
+
+        /// <summary>
+        /// Function that displays an appropriate ContentDialog, based on the success/
+        /// failure of editing an existing event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CreateEvent_Click(object sender, RoutedEventArgs e)
         {
             // because click usually runs before command so we must make it run before
@@ -87,6 +104,12 @@ namespace OurApp.WinUI
             await popup.ShowAsync();
         }
 
+
+        /// <summary>
+        /// Function that takes the user back to the "Our events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
             var mainW = App.mainWindow;
@@ -94,6 +117,12 @@ namespace OurApp.WinUI
         }
 
 
+        /// <summary>
+        /// Function that controls the border colour of the title textbox based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Title_LostFocus(object sender, RoutedEventArgs e)
         {
             var binding = TitleBox.GetBindingExpression(TextBox.TextProperty);
@@ -109,6 +138,12 @@ namespace OurApp.WinUI
             }
         }
 
+        /// <summary>
+        /// Function that controls the border colour of the description textbox based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Description_LostFocus(object sender, RoutedEventArgs e)
         {
             var binding = DescriptionBox.GetBindingExpression(TextBox.TextProperty);
@@ -124,6 +159,12 @@ namespace OurApp.WinUI
             }
         }
 
+        /// <summary>
+        /// Function that controls the border colour of the start date picker based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void StartDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
             if (!IsLoaded)
@@ -146,6 +187,13 @@ namespace OurApp.WinUI
             }
         }
 
+
+        /// <summary>
+        /// Function that controls the border colour of the end date picker based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void EndDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
             if (!IsLoaded)
@@ -170,6 +218,12 @@ namespace OurApp.WinUI
             }
         }
 
+        /// <summary>
+        /// Function that controls the border colour of the location textbox based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Location_LostFocus(object sender, RoutedEventArgs e)
         {
             var binding = LocationBox.GetBindingExpression(TextBox.TextProperty);
@@ -186,6 +240,13 @@ namespace OurApp.WinUI
 
         }
 
+        /// <summary>
+        /// Function that displays a ContentDialog if the user tries to press the "Cancel"
+        /// button. The ContentDialog shows 2 buttons: Yes and No. If the chosen button
+        /// was "Yes", the user is taken back to the "Our Events" page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CancelChanges_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog dialog = new ContentDialog

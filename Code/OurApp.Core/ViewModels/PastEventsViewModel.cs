@@ -12,9 +12,14 @@ namespace OurApp.Core.ViewModels
 {
     public partial class PastEventsViewModel : ObservableObject
     {
-        EventsService eventsService;
+        private readonly EventsService eventsService;
         public ObservableCollection<Event> pastEventsCollection { get; }
 
+
+        /// <summary>
+        /// Past Events View Model constructor
+        /// </summary>
+        /// <param name="service"> events service </param>
         public PastEventsViewModel(EventsService service)
         {
             this.eventsService = service;

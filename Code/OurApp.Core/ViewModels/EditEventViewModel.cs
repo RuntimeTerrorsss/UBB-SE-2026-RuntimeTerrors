@@ -13,8 +13,8 @@ namespace OurApp.Core.ViewModels
 {
     public partial class EditEventViewModel : ObservableObject
     {
-        EventsService eventsService;
-        Event eventToEdit;
+        private readonly EventsService eventsService;
+        private readonly Event eventToEdit;
         public EventValidator eventValidator = new EventValidator();
 
         [ObservableProperty] private string photo;
@@ -44,6 +44,12 @@ namespace OurApp.Core.ViewModels
         public bool isEverythingValid => (addError == "");
         public bool eventUpdatedSuccessfully = false;
 
+
+        /// <summary>
+        /// Edit Event View Model constructor which sets the textboxes' values to the event's
+        /// </summary>
+        /// <param name="service"> events service </param>
+        /// <param name="selectedEvent"> the selected event to be modified </param>
         public EditEventViewModel(EventsService service, Event selectedEvent)
         {
             this.eventsService = service;
@@ -56,6 +62,10 @@ namespace OurApp.Core.ViewModels
             this.location = selectedEvent.Location;
         }
 
+
+        /// <summary>
+        /// Function that tries to update an event
+        /// </summary>
         [RelayCommand] public void EditEvent()
         {
             if (!titleIsValid || !descriptionIsValid || !startDateIsValid || !endDateIsValid || !locationIsValid)
@@ -80,6 +90,10 @@ namespace OurApp.Core.ViewModels
         }
 
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event title is valid
+        /// </summary>
+        /// <returns> true if the title is valid, false otherwise </returns>
         public bool ValidateTitle()
         {
             try
@@ -99,6 +113,11 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event description is valid
+        /// </summary>
+        /// <returns> true if the description is valid, false otherwise </returns>
         public bool ValidateDescription()
         {
             try
@@ -119,6 +138,10 @@ namespace OurApp.Core.ViewModels
         }
 
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event dates are cronologically valid
+        /// </summary>
+        /// <returns> true if the dates are in cronological order, false otherwise </returns>
         public bool ValidateDatesCronologity()
         {
             try
@@ -142,6 +165,10 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event location is valid
+        /// </summary>
+        /// <returns> true if the location is valid, false otherwise </returns>
         public bool ValidateLocation()
         {
             try

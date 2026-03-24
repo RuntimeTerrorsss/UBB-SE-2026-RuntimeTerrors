@@ -26,6 +26,10 @@ namespace OurApp.WinUI
     public sealed partial class PastEventsPage : Page
     {
         public PastEventsViewModel ViewModel { get; }
+
+        /// <summary>
+        /// Past events page constructor that initializes its view model
+        /// </summary>
         public PastEventsPage()
         {
             var mainW = App.mainWindow;

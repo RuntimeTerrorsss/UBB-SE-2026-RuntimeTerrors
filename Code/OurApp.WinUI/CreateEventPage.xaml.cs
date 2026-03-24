@@ -35,6 +35,10 @@ namespace OurApp.WinUI
         private bool pageIsLoaded = false;
         private bool isStartDateModified = false;
         private bool isEndDateModified = false;
+
+        /// <summary>
+        /// Create event page constructor that initializes its view model
+        /// </summary>
         public CreateEventPage()
         {
             var mainWindow = App.mainWindow;
@@ -45,6 +49,12 @@ namespace OurApp.WinUI
             pageIsLoaded = true;
         }
 
+
+        /// <summary>
+        /// Function that calls the "AddCollaborator" function and displays the error text, if one exists
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddCollaborator_Click(object sender, RoutedEventArgs e)
         {
             var companyName = CollaboratorNameBox.Text?.Trim() ?? "";
@@ -60,6 +70,10 @@ namespace OurApp.WinUI
             }
         }
 
+
+        /// <summary>
+        /// Function that adds a "Collaborator" tag and "Remove" button if a collaborator was added to an event
+        /// </summary>
         private void RenderCollaboratorTags()
         {
             CollaboratorsPanel.Children.Clear();
@@ -90,6 +104,11 @@ namespace OurApp.WinUI
             }
         }
 
+        /// <summary>
+        /// Function that calls the "RemoveCollaborator" function and displays the error message, if one exists
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveCollaborator_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string collaboratorName)
@@ -100,6 +119,13 @@ namespace OurApp.WinUI
             }
         }
 
+        /// <summary>
+        /// Function that displays a ComtentDialog if the user tries to press the "Cancel"
+        /// button. The ContentDialog shows 2 buttons: Yes and No. If the chosen button
+        /// was "Yes", the user is taken back to the "Our Events" page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CancelChanges_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog cancelConfirmationDialog = new ContentDialog
@@ -120,12 +146,24 @@ namespace OurApp.WinUI
             }
         }
 
+
+        /// <summary>
+        /// Function that takes the user back to the "Our events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = App.mainWindow;
             mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
         }
 
+        /// <summary>
+        /// Function that displays an appropriate ContentDialog, based on the success/
+        /// failure of creating a new event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CreateEvent_Click(object sender, RoutedEventArgs e)
         {
             // because click usually runs before command so we must make it run before
@@ -165,6 +203,12 @@ namespace OurApp.WinUI
             await popup.ShowAsync();
         }
 
+        /// <summary>
+        /// Function that allows the user to attach an image and displays the
+        /// photo on the screen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void AttachImage_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker
@@ -212,6 +256,12 @@ namespace OurApp.WinUI
             PhotoPreviewImage.Source = bitmapImage;
         }
 
+        /// <summary>
+        /// Function that controls the border colour of the title textbox based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Title_LostFocus(object sender, RoutedEventArgs e)
         {
             var binding = TitleBox.GetBindingExpression(TextBox.TextProperty);
@@ -227,6 +277,13 @@ namespace OurApp.WinUI
             }
         }
 
+
+        /// <summary>
+        /// Function that controls the border colour of the description textbox based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Description_LostFocus(object sender, RoutedEventArgs e)
         {
             var binding = DescriptionBox.GetBindingExpression(TextBox.TextProperty);
@@ -242,6 +299,13 @@ namespace OurApp.WinUI
             }
         }
 
+
+        /// <summary>
+        /// Function that controls the border colour of the location textbox based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Location_LostFocus(object sender, RoutedEventArgs e)
         {
             var binding = LocationBox.GetBindingExpression(TextBox.TextProperty);
@@ -258,6 +322,13 @@ namespace OurApp.WinUI
 
         }
 
+
+        /// <summary>
+        /// Function that controls the border colour of the start date picker based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void StartDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
             if (!pageIsLoaded)
@@ -279,6 +350,13 @@ namespace OurApp.WinUI
             }
         }
 
+
+        /// <summary>
+        /// Function that controls the border colour of the end date picker based on 
+        /// its valid state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void EndDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
             if (!pageIsLoaded)

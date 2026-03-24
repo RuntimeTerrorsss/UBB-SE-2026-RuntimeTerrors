@@ -16,6 +16,10 @@ namespace OurApp.Core.ViewModels
         EventsService eventsService;
         public ObservableCollection<Event> currentEventsCollection { get; }
 
+        /// <summary>
+        /// Our Events View Model constructor
+        /// </summary>
+        /// <param name="service"> events service </param>
         public OurEventsViewModel(EventsService service)
         {
             this.eventsService = service;

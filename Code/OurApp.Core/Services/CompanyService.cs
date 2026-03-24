@@ -2,6 +2,7 @@ using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace OurApp.Core.Services
             this.CompanyRepo.PrintAll();
         }
 
-        public bool TryGetCompanyByName(string companyName, out Company company)
+        public bool GetCompanyByName(string companyName, out Company company)
         {
             company = null;
 
@@ -37,9 +38,18 @@ namespace OurApp.Core.Services
                 return false;
             }
 
-            company = CompanyRepo
-                .GetAll()
-                .FirstOrDefault(c => string.Equals(c.Name, companyName.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            ObservableCollection<Company> allCompanies = CompanyRepo.GetAll();
+            foreach (Company compan in allCompanies)
+            {
+                if (compan.Name == companyName)
+                {
+                    company = compan;
+                }
+            }
+            //company = CompanyRepo
+            //    .GetAll()
+            //    .FirstOrDefault(c => string.Equals(c.Name, companyName.Trim(), StringComparison.OrdinalIgnoreCase));
 
             return company != null;
         }

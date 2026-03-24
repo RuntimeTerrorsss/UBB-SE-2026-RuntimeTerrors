@@ -13,37 +13,61 @@ namespace OurApp.Core.Services
     public class EventsService
     {
         IEventsRepo eventsRepository;
+
+        /// <summary>
+        /// Events service constructor
+        /// </summary>
+        /// <param name="eventsRepo"> events repository </param>
         public EventsService(IEventsRepo eventsRepo) 
         {
             this.eventsRepository = eventsRepo;
         }
 
+        /// <summary>
+        /// Function that creates a new event
+        /// </summary>
+        /// <param name="eventPhoto"> the generated image path </param>
+        /// <param name="eventTitle"> the event's title </param>
+        /// <param name="eventDescription"> the event's description </param>
+        /// <param name="eventStartDate"> the event's starting date </param>
+        /// <param name="eventEndDate"> the event's ending date </param>
+        /// <param name="eventLocation"> the event's location </param>
+        /// <param name="collaborators"> a list of all the companies collaborating on the event </param>
         public void AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, List<Company> collaborators)
         {
             Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, 1, collaborators ?? new List<Company>());
             this.eventsRepository.AddEventToRepo(eventToBeAdded);
         }
 
+        /// <summary>
+        /// Function that updates the information of an event
+        /// </summary>
+        /// <param name="eventIdToBeUpdated"> the id of the event that's updated </param>
+        /// <param name="newEventPhoto"> the updated photo path </param>
+        /// <param name="newEventTitle"> the updated title of the event </param>
+        /// <param name="newEventDescription"> the updated description of the event </param>
+        /// <param name="newEventStartDate"> the updated starting date of the event </param>
+        /// <param name="newEventEndDate"> the updated ending date of the event </param>
+        /// <param name="newEventLocation"> the updated location of the event </param>
         public void UpdateEvent(int eventIdToBeUpdated, string newEventPhoto, string newEventTitle, string newEventDescription, DateTime newEventStartDate, DateTime newEventEndDate, string newEventLocation)
         {
             this.eventsRepository.UpdateEventToRepo(eventIdToBeUpdated, newEventPhoto, newEventTitle, newEventDescription, newEventStartDate, newEventEndDate, newEventLocation);
         }
 
-        public void printAll()
-        {
-            this.eventsRepository.printAll();
-        }
 
-        //public ObservableCollection<Event> GetAllEvents()
-        //{
-        //    return this.eventsRepository.GetCollectionFromRepo();
-        //}
-
+        /// <summary>
+        /// Function that returns a collection of all the current events
+        /// </summary>
+        /// <returns> ObservableCollection of the current events </returns>
         public ObservableCollection<Event> GetCurrentEvents()
         {
             return this.eventsRepository.getCurrentEventsFromRepo();
         }
 
+        /// <summary>
+        /// Function that returns a collection of all the past events
+        /// </summary>
+        /// <returns> ObservableCollection of the past events </returns>
         public ObservableCollection<Event> GetPastEvents()
         {
             return this.eventsRepository.getPastEventsFromRepo();

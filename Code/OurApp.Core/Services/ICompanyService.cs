@@ -10,6 +10,6 @@ namespace OurApp.Core.Services
     {
         void addCompany(string companyName, string aboutUs, string pfpUrl, string logoUrl, string location, string email);
         void printAll();
-        bool TryGetCompanyByName(string companyName, out Models.Company company);
+        bool GetCompanyByName(string companyName, out Models.Company company);
     }
 }

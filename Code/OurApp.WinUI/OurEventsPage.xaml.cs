@@ -26,6 +26,10 @@ namespace OurApp.WinUI;
 public sealed partial class OurEventsPage : Page
 {
     public OurEventsViewModel ViewModel { get; }
+
+    /// <summary>
+    /// Our events page constructor that initializes its view model
+    /// </summary>
     public OurEventsPage()
     {
         var mainW = App.mainWindow;
@@ -34,12 +38,24 @@ public sealed partial class OurEventsPage : Page
         this.DataContext = ViewModel;
     }
 
+    /// <summary>
+    /// Function that navigates the user to the "Create Event" page when clicking 
+    /// the button "Create Event"
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void CreateEventButton_Click(object sender, RoutedEventArgs e)
     {
         var mainWindow = App.mainWindow;
         mainWindow.RootFrame.Navigate(typeof(CreateEventPage));
     }
 
+    /// <summary>
+    /// Function that navigates the user to the "Edit Event" page when clicking
+    /// the 3-dot button next to the event
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void EditEvent_Click(object sender, RoutedEventArgs e)
     {
         var button = sender as Button;

@@ -34,9 +34,10 @@ namespace OurApp.Core.Repositories
             {
                 sqlConnection.Open();
 
-                string queryToBeRun = @"INSERT INTO events 
-            (event_id, photo, title, description, start_date, end_date, location, host_company_id, posted_at)
-            VALUES (@Id, @Photo, @Title, @Description, @StartDate, @EndDate, @Location, @Host, @CurrentDateTime)";
+                string queryToBeRun = @"
+                    INSERT INTO events 
+                    (event_id, photo, title, description, start_date, end_date, location, host_company_id, posted_at)
+                    VALUES (@Id, @Photo, @Title, @Description, @StartDate, @EndDate, @Location, @Host, @CurrentDateTime)";
 
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
@@ -155,7 +156,16 @@ namespace OurApp.Core.Repositories
         
         }
 
-
+        /// <summary>
+        /// Function that updates the contents of an event.
+        /// </summary>
+        /// <param name="eventIdToBeUpdated"> id of the event that is updated </param>
+        /// <param name="newEventPhoto"> the updated photo url </param>
+        /// <param name="newEventTitle"> the updated title of the event </param>
+        /// <param name="newEventDescription"> the updated description of the event </param>
+        /// <param name="newEventStartDate"> the updated starting date of the event </param>
+        /// <param name="newEventEndDate"> the updated ending date of the event </param>
+        /// <param name="newEventLocation"> the updated location of the event </param>
         public void UpdateEventToRepo(int eventIdToBeUpdated, string newEventPhoto, string newEventTitle, string newEventDescription, DateTime newEventStartDate, DateTime newEventEndDate, string newEventLocation)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))

@@ -14,8 +14,8 @@ namespace OurApp.Core.ViewModels
 {
     public partial class CreateEventViewModel : ObservableObject
     {
-        EventsService eventsService;
-        ICompanyService companyService;
+        private readonly EventsService eventsService;
+        private readonly ICompanyService companyService;
         public EventValidator eventValidator = new EventValidator();
         public List<Company> SelectedCollaborators { get; } = new List<Company>();
 
@@ -47,13 +47,21 @@ namespace OurApp.Core.ViewModels
         public bool eventCreatedSuccessfully = false;
 
 
-        public CreateEventViewModel(EventsService service, ICompanyService companyService)
+        /// <summary>
+        /// Create Event View Model constructor
+        /// </summary>
+        /// <param name="eventsService"> events service </param>
+        /// <param name="companyService"> company service </param>
+        public CreateEventViewModel(EventsService eventsService, ICompanyService companyService)
         {
-            this.eventsService = service;
+            this.eventsService = eventsService;
             this.companyService = companyService;
         }
 
 
+        /// <summary>
+        /// Function that tries to create a new event
+        /// </summary>
         [RelayCommand]
         public void CreateEvent()
         {
@@ -79,6 +87,10 @@ namespace OurApp.Core.ViewModels
         }
 
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event title is valid
+        /// </summary>
+        /// <returns> true if the title is valid, false otherwise </returns>
         public bool ValidateTitle()
         {
             try
@@ -98,6 +110,11 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event description is valid
+        /// </summary>
+        /// <returns> true if the description is valid, false otherwise </returns>
         public bool ValidateDescription()
         {
             try
@@ -117,6 +134,10 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event location is valid
+        /// </summary>
+        /// <returns> true if the location is valid, false otherwise </returns>
         public bool ValidateLocation()
         {
             try
@@ -136,6 +157,10 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event starting date is valid
+        /// </summary>
+        /// <returns> true if the starting date is valid, false otherwise </returns>
         public bool ValidateStartDate()
         {
             try
@@ -155,6 +180,11 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event ending date is valid
+        /// </summary>
+        /// <returns> true if the ending date is valid, false otherwise </returns>
         public bool ValidateEndDate()
         {
             try
@@ -174,6 +204,10 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event dates are cronologically valid
+        /// </summary>
+        /// <returns> true if the dates are valid, false otherwise </returns>
         public bool ValidateDatesCronologity()
         {
             try
@@ -193,6 +227,12 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Function that tries to add a collaborator to the event
+        /// </summary>
+        /// <param name="companyName"> the invited company's name </param>
+        /// <param name="errorMessage"> the error message returned </param>
+        /// <returns> true if the company name exists, false otherwise </returns>
         public bool TryAddCollaboratorByName(string companyName, out string errorMessage)
         {
             errorMessage = "";
@@ -203,7 +243,7 @@ namespace OurApp.Core.ViewModels
                 return false;
             }
 
-            if (!companyService.TryGetCompanyByName(companyName, out var company))
+            if (!companyService.GetCompanyByName(companyName, out var company))
             {
                 errorMessage = "Company was not found.";
                 return false;
@@ -219,15 +259,26 @@ namespace OurApp.Core.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Function that removes a collaborator
+        /// </summary>
+        /// <param name="companyName"> the name of the company to be removed from the collaborators list </param>
         public void RemoveCollaboratorByName(string companyName)
         {
-            var collaborator = SelectedCollaborators
-                .FirstOrDefault(c => string.Equals(c.Name, companyName, StringComparison.OrdinalIgnoreCase));
-
-            if (collaborator != null)
+            foreach (Company selectedCompany in SelectedCollaborators)
             {
-                SelectedCollaborators.Remove(collaborator);
+                if (selectedCompany.Name == companyName)
+                {
+                    SelectedCollaborators.Remove(selectedCompany);
+                }
             }
+            //var collaborator = SelectedCollaborators
+            //    .FirstOrDefault(c => string.Equals(c.Name, companyName, StringComparison.OrdinalIgnoreCase));
+
+            //if (collaborator != null)
+            //{
+            //    SelectedCollaborators.Remove(collaborator);
+            //}
         }
     }
 }

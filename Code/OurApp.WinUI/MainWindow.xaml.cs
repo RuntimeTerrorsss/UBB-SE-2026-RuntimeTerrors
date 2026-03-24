@@ -29,6 +29,10 @@ namespace OurApp.WinUI
         public Frame RootFrame => rootFrame;
         public EventsService eventsService { get; }
         public ICompanyService companyService { get; }
+
+        /// <summary>
+        /// MainWindow constructor that initialize the repositories and services
+        /// </summary>
         public MainWindow()
         {
             string connectionString = "Data Source=DESKTOP-D8Q1P5P\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
@@ -57,22 +61,42 @@ namespace OurApp.WinUI
             eventsService = new EventsService(eventsRepo);
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "Our Events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
             RootFrame.Navigate(typeof(OurEventsPage));
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "Past Events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(PastEventsPage));
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "View Profile" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(ViewProfilePage));
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "Edit Profile" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate (typeof(EditProfilePage));

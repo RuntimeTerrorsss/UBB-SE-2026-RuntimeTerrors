@@ -19,8 +19,18 @@ namespace OurApp.Core.Models
         public string Location { get; set; }
         public int HostID { get; set; }
         public List<Company> Collaborators { get; set; }
-        //public int CollaboratorID { get; set; }
 
+        /// <summary>
+        /// Event constructor
+        /// </summary>
+        /// <param name="eventPhoto"> event photo generated path </param>
+        /// <param name="eventTitle"> event title </param>
+        /// <param name="eventDescription"> event description </param>
+        /// <param name="eventStartDate"> event starting date </param>
+        /// <param name="eventEndDate"> event ending date </param>
+        /// <param name="eventLocation"> event location </param>
+        /// <param name="eventHostID"> id of the company who created the event </param>
+        /// <param name="eventCollaborators"> list of all the companies invited to collaborate on the event </param>
         public Event(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, int eventHostID, List<Company> eventCollaborators)
         {
             this.Id = eventIdCounter++;
@@ -33,6 +43,7 @@ namespace OurApp.Core.Models
             this.HostID = eventHostID;
             this.Collaborators = eventCollaborators;
         }
+
 
         public override string ToString()
         {
