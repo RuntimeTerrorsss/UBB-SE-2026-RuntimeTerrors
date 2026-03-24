@@ -17,6 +17,7 @@ namespace iss_project.UI.Views.Jobs
         {
             var vm = (CreateJobViewModel)this.DataContext;
             await vm.CreateJob();
+            MainWindow.Instance.ShowJobs();
         }
 
         private async void GoBack(object sender, RoutedEventArgs e)

@@ -3,29 +3,58 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-	<Grid Padding="20">
+    <ScrollViewer>
+        <Grid Padding="20">
 
-		<StackPanel Spacing="10">
+            <StackPanel Spacing="10">
 
-			
+                <TextBox Header="Title" Text="{Binding JobTitle, Mode=TwoWay}" />
 
-			<TextBox Header="Title" Text="{Binding JobTitle, Mode=TwoWay}" />
-			<TextBox Header="Field" Text="{Binding IndustryField, Mode=TwoWay}" />
-			<TextBox Header="Type" Text="{Binding JobType, Mode=TwoWay}" />
-			<TextBox Header="Experience Level" Text="{Binding ExperienceLevel, Mode=TwoWay}" />
+                <TextBox Header="Industry Field" Text="{Binding IndustryField, Mode=TwoWay}" />
 
-			<TextBox Header="Description" Text="{Binding JobDescription, Mode=TwoWay}" />
-			<TextBox Header="Location" Text="{Binding JobLocation, Mode=TwoWay}" />
+                <ComboBox Header="Job Type"
+                          ItemsSource="{Binding JobTypes}"
+                          SelectedItem="{Binding JobType, Mode=TwoWay}" />
 
-			<TextBox Header="Available Positions"
-                     Text="{Binding AvailablePositions, Mode=TwoWay}" />
+                <ComboBox Header="Experience Level"
+                          ItemsSource="{Binding ExperienceLevels}"
+                          SelectedItem="{Binding ExperienceLevel, Mode=TwoWay}" />
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button Content="POST" Click="CreateJob_Click"/>
-                <Button Content="Cancel" Click="GoBack"/>
+                <TextBox Header="Description"
+                         Text="{Binding JobDescription, Mode=TwoWay}"
+                         AcceptsReturn="True"
+                         Height="80"/>
+
+                <TextBox Header="Location" Text="{Binding JobLocation, Mode=TwoWay}" />
+
+                <TextBox Header="Available Positions"
+                         Text="{Binding AvailablePositions, Mode=TwoWay}" />
+
+                <!-- Dates -->
+                <DatePicker Header="Start Date"
+                            Date="{Binding StartDate, Mode=TwoWay}" />
+
+                <DatePicker Header="End Date"
+                            Date="{Binding EndDate, Mode=TwoWay}" />
+
+                <DatePicker Header="Deadline"
+                            Date="{Binding Deadline, Mode=TwoWay}" />
+
+                <!-- Financial -->
+                <TextBox Header="Salary"
+                         Text="{Binding Salary, Mode=TwoWay}" />
+
+                <TextBox Header="Amount Payed"
+                         Text="{Binding AmountPayed, Mode=TwoWay}" />
+
+                <!-- Buttons -->
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Content="POST" Click="CreateJob_Click"/>
+                    <Button Content="Cancel" Click="GoBack"/>
+                </StackPanel>
+
             </StackPanel>
 
-        </StackPanel>
-
-	</Grid>
+        </Grid>
+    </ScrollViewer>
 </Page>
