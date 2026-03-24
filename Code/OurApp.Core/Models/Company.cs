@@ -8,6 +8,7 @@ namespace OurApp.Core.Models
 {
     public class Company
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string AboutUs { get; set; }
         public string ProfilePicturePath { get; set; }
@@ -19,7 +20,8 @@ namespace OurApp.Core.Models
         //public List<string> Collaborators { get; set; } = new();
         //public MiniGame MiniGame { get; set; }
 
-        public Company( string name, string aboutus, string pfp_url, string logo_url, string location, string email) {
+        public Company(int id, string name, string aboutus, string pfp_url, string logo_url, string location, string email) {
+            this.Id = id;
             this.Name = name;
             this.AboutUs = aboutus;
             this.ProfilePicturePath = pfp_url;

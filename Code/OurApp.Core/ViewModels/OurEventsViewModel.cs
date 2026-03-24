@@ -14,16 +14,18 @@ namespace OurApp.Core.ViewModels
     public partial class OurEventsViewModel : ObservableObject
     {
         EventsService eventsService;
+        SessionService sessionService;
         public ObservableCollection<Event> currentEventsCollection { get; }
 
         /// <summary>
         /// Our Events View Model constructor
         /// </summary>
         /// <param name="service"> events service </param>
-        public OurEventsViewModel(EventsService service)
+        public OurEventsViewModel(EventsService service, SessionService sessionService)
         {
             this.eventsService = service;
-            currentEventsCollection = service.GetCurrentEvents();
+            this.sessionService = sessionService;
+            currentEventsCollection = service.GetCurrentEvents(sessionService.loggedInUser.Id);
         }
     }
 }

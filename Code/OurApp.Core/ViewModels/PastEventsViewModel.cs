@@ -13,6 +13,7 @@ namespace OurApp.Core.ViewModels
     public partial class PastEventsViewModel : ObservableObject
     {
         private readonly EventsService eventsService;
+        SessionService sessionService;
         public ObservableCollection<Event> pastEventsCollection { get; }
 
 
@@ -20,10 +21,11 @@ namespace OurApp.Core.ViewModels
         /// Past Events View Model constructor
         /// </summary>
         /// <param name="service"> events service </param>
-        public PastEventsViewModel(EventsService service)
+        public PastEventsViewModel(EventsService service, SessionService sessionService)
         {
             this.eventsService = service;
-            pastEventsCollection = service.GetPastEvents();
+            this.sessionService = sessionService;
+            pastEventsCollection = service.GetPastEvents(sessionService.loggedInUser.Id);
         }
     }
 }

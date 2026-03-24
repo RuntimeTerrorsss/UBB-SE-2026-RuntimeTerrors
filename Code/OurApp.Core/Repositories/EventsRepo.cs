@@ -48,7 +48,7 @@ namespace OurApp.Core.Repositories
                 sqlCommand.Parameters.AddWithValue("@StartDate", eventToBeAdded.StartDate);
                 sqlCommand.Parameters.AddWithValue("@EndDate", eventToBeAdded.EndDate);
                 sqlCommand.Parameters.AddWithValue("@Location", eventToBeAdded.Location);
-                sqlCommand.Parameters.AddWithValue("@Host", 1);
+                sqlCommand.Parameters.AddWithValue("@Host", eventToBeAdded.HostID);
                 sqlCommand.Parameters.AddWithValue("@CurrentDateTime", DateTime.Now);
 
                 sqlCommand.ExecuteNonQuery();
@@ -75,7 +75,7 @@ namespace OurApp.Core.Repositories
         /// whose ending date has not exceeded the current date
         /// </summary>
         /// <returns> ObservableCollection of current events </returns>
-        public ObservableCollection<Event> getCurrentEventsFromRepo()
+        public ObservableCollection<Event> getCurrentEventsFromRepo(int loggedInUser)
         {
             var currentEvents = new ObservableCollection<Event>();
 
@@ -83,10 +83,11 @@ namespace OurApp.Core.Repositories
             {
                 sqlConnection.Open();
 
-                string queryToBeRun = "SELECT * FROM events WHERE end_date >= @TodaysDate";
+                string queryToBeRun = "SELECT * FROM events WHERE host_company_id = @HostID and end_date >= @TodaysDate";
 
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
+                sqlCommand.Parameters.AddWithValue("@HostID", loggedInUser);
                 sqlCommand.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
 
                 SqlDataReader reader = sqlCommand.ExecuteReader();
@@ -117,7 +118,7 @@ namespace OurApp.Core.Repositories
         /// whose ending date has exceeded the current date
         /// </summary>
         /// <returns> ObservableCollection of past events </returns>
-        public ObservableCollection<Event> getPastEventsFromRepo()
+        public ObservableCollection<Event> getPastEventsFromRepo(int loggedInUser)
         {
             var pastEvents = new ObservableCollection<Event>();
 
@@ -125,11 +126,12 @@ namespace OurApp.Core.Repositories
             {
                 sqlConnection.Open();
 
-                string queryToBeRun = "SELECT * FROM events WHERE end_date < @TodaysDate";
+                string queryToBeRun = "SELECT * FROM events WHERE host_company_id = @HostID and end_date < @TodaysDate";
 
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
 
+                sqlCommand.Parameters.AddWithValue("@HostID", loggedInUser);
                 sqlCommand.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
 
                 SqlDataReader reader = sqlCommand.ExecuteReader();

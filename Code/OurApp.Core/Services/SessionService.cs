@@ -9,7 +9,7 @@ namespace OurApp.Core.Services
 {
     public class SessionService
     {
-        private Company loggedInUser;
+        public Company loggedInUser { get; }
 
         public SessionService(Company user)
         {

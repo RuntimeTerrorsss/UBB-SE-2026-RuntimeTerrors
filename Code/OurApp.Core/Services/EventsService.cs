@@ -33,9 +33,9 @@ namespace OurApp.Core.Services
         /// <param name="eventEndDate"> the event's ending date </param>
         /// <param name="eventLocation"> the event's location </param>
         /// <param name="collaborators"> a list of all the companies collaborating on the event </param>
-        public void AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, List<Company> collaborators)
+        public void AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, int hostId, List<Company> collaborators)
         {
-            Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, 1, collaborators ?? new List<Company>());
+            Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, hostId, collaborators ?? new List<Company>());
             this.eventsRepository.AddEventToRepo(eventToBeAdded);
         }
 
@@ -59,18 +59,18 @@ namespace OurApp.Core.Services
         /// Function that returns a collection of all the current events
         /// </summary>
         /// <returns> ObservableCollection of the current events </returns>
-        public ObservableCollection<Event> GetCurrentEvents()
+        public ObservableCollection<Event> GetCurrentEvents(int loggedInUserID)
         {
-            return this.eventsRepository.getCurrentEventsFromRepo();
+            return this.eventsRepository.getCurrentEventsFromRepo(loggedInUserID);
         }
 
         /// <summary>
         /// Function that returns a collection of all the past events
         /// </summary>
         /// <returns> ObservableCollection of the past events </returns>
-        public ObservableCollection<Event> GetPastEvents()
+        public ObservableCollection<Event> GetPastEvents(int loggedInUserID)
         {
-            return this.eventsRepository.getPastEventsFromRepo();
+            return this.eventsRepository.getPastEventsFromRepo(loggedInUserID);
         }
     }
 }

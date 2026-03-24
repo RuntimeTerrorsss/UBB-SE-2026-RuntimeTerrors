@@ -40,7 +40,7 @@ namespace OurApp.WinUI
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
-            Company c1 = new Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            Company c1 = new Company(1, "ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             companyService.printAll();

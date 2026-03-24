@@ -18,6 +18,8 @@ namespace OurApp.Core.ViewModels
     {
         private readonly EventsService eventsService;
         private readonly ICompanyService companyService;
+        private readonly SessionService sessionService;
+
         public EventValidator eventValidator = new EventValidator();
         public List<Company> SelectedCollaborators { get; } = new List<Company>();
 
@@ -54,19 +56,29 @@ namespace OurApp.Core.ViewModels
         /// </summary>
         /// <param name="eventsService"> events service </param>
         /// <param name="companyService"> company service </param>
-        public CreateEventViewModel(EventsService eventsService, ICompanyService companyService)
+        /// <param name="sessionService"> session service </param>
+        public CreateEventViewModel(EventsService eventsService, ICompanyService companyService, SessionService sessionService)
         {
             this.eventsService = eventsService;
             this.companyService = companyService;
+            this.sessionService = sessionService;
         }
 
 
+        /// <summary>
+        /// Function that sends an email to a company
+        /// </summary>
+        /// <param name="destinationCompany"> company to send email to </param>
         private void SendMailToCompany(Company destinationCompany)
         {
             System.Diagnostics.Debug.WriteLine($"Sending email to {destinationCompany.Name}");
             System.Diagnostics.Debug.WriteLine($"{destinationCompany.Name} receives invitation\n");
         }
 
+        /// <summary>
+        /// Function that sends the invitations to all the selected companies, 
+        /// after the user creates the event
+        /// </summary>
         private void SendInvitations()
         {
             foreach (Company invitedCompany in this.SelectedCollaborators)
@@ -94,7 +106,8 @@ namespace OurApp.Core.ViewModels
                 DateTime eventStartDateTime = startDate.Value.DateTime;
                 DateTime eventEndDateTime = endDate.Value.DateTime;
 
-                eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, SelectedCollaborators.ToList());
+                int hostId = sessionService.loggedInUser.Id;
+                eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, hostId, SelectedCollaborators.ToList());
                 eventCreatedSuccessfully = true;
 
                 SendInvitations();

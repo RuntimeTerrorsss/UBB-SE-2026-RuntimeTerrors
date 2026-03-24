@@ -20,7 +20,7 @@ namespace OurApp.Core.Services
 
         public void addCompany(string companyName, string aboutUs, string pfpUrl, string logoUrl, string location, string email)
         {
-            Company companyToBeAdded = new Company(companyName, aboutUs, pfpUrl, logoUrl, location, email);
+            Company companyToBeAdded = new Company(1, companyName, aboutUs, pfpUrl, logoUrl, location, email);
             this.CompanyRepo.Add(companyToBeAdded);
         }
 

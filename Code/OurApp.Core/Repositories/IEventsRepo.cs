@@ -12,8 +12,8 @@ namespace OurApp.Core.Repositories
     {
         void AddEventToRepo(Event e);
         void RemoveEventFromRepo(Event e);
-        ObservableCollection<Event> getCurrentEventsFromRepo();
-        ObservableCollection<Event> getPastEventsFromRepo();
+        ObservableCollection<Event> getCurrentEventsFromRepo(int loggedInUser);
+        ObservableCollection<Event> getPastEventsFromRepo(int loggedInUser);
         void UpdateEventToRepo(int id, string photo, string title, string description, DateTime start, DateTime end, string location);
 
     }
