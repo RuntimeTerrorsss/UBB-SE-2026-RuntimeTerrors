@@ -6,6 +6,14 @@ namespace OurApp.Core.Services
 {
     public class ProfileCompletionCalculator
     {
+        //Company has:
+        //    this.Name = name;
+        //    this.AboutUs = aboutus;
+        //    this.Pfp_url = pfp_url;
+        //    this.Logo_url = logo_url;
+        //    this.Location = location;
+        //    this.Email = email;
+
         public (int percentage, List<string> remainingTasks) Calculate(Company company)
         {
             int total = 5;

@@ -75,7 +75,7 @@ namespace OurApp.Core.Repositories
                          c.scen2_answer3, c.scen2_reaction1, c.scen2_reaction2, c.scen2_reaction3,
                          (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id) AS posted_jobs_count,
                          (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id) AS collaborators_count
-                  FROM companies;",
+                  FROM companies AS c;",
                 conn);
 
             using var reader = cmd.ExecuteReader();

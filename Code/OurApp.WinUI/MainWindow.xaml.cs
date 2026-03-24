@@ -6,7 +6,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
-using OurApp.Core.ViewModels;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
@@ -36,10 +35,8 @@ namespace OurApp.WinUI
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
-            companyService.AddCompany("ndj", "dnis", "dnjs.jpg", "hdjd.png", "sybau", "dj@example.com");
-            companyService.AddCompany("ndj2", "dnis", "dnjs.jpg", "hdjd.png", "sybau", "dj2@example.com");
+            companyService.AddCompany("Acme Corp", "We build things.", "profile.jpg", "logo.png", "Cluj", "hello@acme.test");
             companyService.PrintAll();
-            InitializeComponent();
 
             IEventsRepo eventRepo = new EventsRepo();
 
@@ -69,12 +66,12 @@ namespace OurApp.WinUI
 
         private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
         {
-            RootFrame.Navigate(typeof(ViewProfilePage));
+            RootFrame.Navigate(typeof(ViewProfilePage), 1);
         }
 
         private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
         {
-            RootFrame.Navigate (typeof(EditProfilePage));
+            RootFrame.Navigate(typeof(EditProfilePage), 1);
         }
     }
 }
