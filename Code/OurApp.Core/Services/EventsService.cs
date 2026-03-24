@@ -34,10 +34,10 @@ namespace OurApp.Core.Services
             this.eventsRepository.printAll();
         }
 
-        public ObservableCollection<Event> GetAllEvents()
-        {
-            return this.eventsRepository.GetCollectionFromRepo();
-        }
+        //public ObservableCollection<Event> GetAllEvents()
+        //{
+        //    return this.eventsRepository.GetCollectionFromRepo();
+        //}
 
         public ObservableCollection<Event> GetCurrentEvents()
         {

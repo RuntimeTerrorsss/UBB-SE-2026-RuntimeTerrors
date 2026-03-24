@@ -118,43 +118,6 @@ namespace OurApp.Core.ViewModels
             return false;
         }
 
-        public bool ValidateStartDate()
-        {
-            try
-            {
-                if (eventValidator.IsEventStartDateValid(StartDate))
-                {
-                    StartDateError = "";
-                    startDateIsValid = true;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                StartDateError = ex.Message;
-                startDateIsValid = false;
-            }
-            return false;
-        }
-
-        public bool ValidateEndDate()
-        {
-            try
-            {
-                if (eventValidator.IsEventEndDateValid(EndDate))
-                {
-                    EndDateError = "";
-                    endDateIsValid = true;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                EndDateError = ex.Message;
-                endDateIsValid = false;
-            }
-            return false;
-        }
 
         public bool ValidateDatesCronologity()
         {
@@ -165,6 +128,7 @@ namespace OurApp.Core.ViewModels
                     StartDateError = "";
                     EndDateError = "";
                     endDateIsValid = true;
+                    startDateIsValid = true;
                     return true;
                 }
             }
@@ -173,6 +137,7 @@ namespace OurApp.Core.ViewModels
                 StartDateError = ex.Message;
                 EndDateError = ex.Message;
                 endDateIsValid = false;
+                startDateIsValid = false;
             }
             return false;
         }

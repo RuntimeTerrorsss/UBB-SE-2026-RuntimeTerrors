@@ -9,7 +9,7 @@ namespace OurApp.Core.Models
 {
     public class Event
     {
-        private static int eventIdCounter = 1;
+        private static int eventIdCounter = 8;
         public int Id { get; set; }
         public string Photo { get; set; }
         public string Title { get; set; }

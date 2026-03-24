@@ -135,14 +135,6 @@ namespace OurApp.WinUI
                 return;
             }
 
-            if (ViewModel.ValidateStartDate())
-            {
-                StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
-            }
-            else
-            {
-                StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
-            }
 
             if (ViewModel.ValidateDatesCronologity())
             {
@@ -163,15 +155,6 @@ namespace OurApp.WinUI
             {
                 EndDateModified = true;
                 return;
-            }
-
-            if (ViewModel.ValidateEndDate())
-            {
-                EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
-            }
-            else
-            {
-                EndDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
             }
 
             if (StartDateModified)

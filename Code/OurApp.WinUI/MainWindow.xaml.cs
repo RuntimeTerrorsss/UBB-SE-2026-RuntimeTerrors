@@ -31,6 +31,7 @@ namespace OurApp.WinUI
         ICompanyService companyService;
         public MainWindow()
         {
+            string connectionString = "Data Source=DESKTOP-D8Q1P5P\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
@@ -39,20 +40,20 @@ namespace OurApp.WinUI
             companyService.printAll();
             InitializeComponent();
 
-            IEventsRepo eventsRepo = new EventsRepo();
+            IEventsRepo eventsRepo = new EventsRepo(connectionString);
 
             // hardcode events
-            Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
-            Event ev2 = new Event("", "Event2", "This is another event. You should attend.", new DateTime(2026, 3, 21, 14, 0, 0), new DateTime(2026, 3, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
-            Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, new List<Company>());
-            Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, new List<Company>());
+            //Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            //Event ev2 = new Event("", "Event2", "This is another event. You should attend.", new DateTime(2026, 3, 21, 14, 0, 0), new DateTime(2026, 3, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            //Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, new List<Company>());
+            //Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, new List<Company>());
 
-            eventsRepo.AddEventToRepo(ev1);
-            eventsRepo.AddEventToRepo(ev2);
-            eventsRepo.AddEventToRepo(ev3);
-            eventsRepo.AddEventToRepo(ev4);
+            //eventsRepo.AddEventToRepo(ev1);
+            //eventsRepo.AddEventToRepo(ev2);
+            //eventsRepo.AddEventToRepo(ev3);
+            //eventsRepo.AddEventToRepo(ev4);
 
-            eventsRepo.printAll();
+            //eventsRepo.printAll();
             eventsService = new EventsService(eventsRepo);
         }
 

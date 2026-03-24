@@ -10,7 +10,7 @@ namespace OurApp.Core.Repositories
 {
     public interface IEventsRepo
     {
-        ObservableCollection<Event> GetCollectionFromRepo();
+        //ObservableCollection<Event> GetCollectionFromRepo();
         void AddEventToRepo(Event e);
         void RemoveEventFromRepo(Event e);
         public void printAll();
