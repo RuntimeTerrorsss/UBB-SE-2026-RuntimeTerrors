@@ -29,6 +29,7 @@ namespace OurApp.WinUI
         public Frame RootFrame => rootFrame;
         public EventsService eventsService { get; }
         public ICompanyService companyService { get; }
+        public SessionService sessionService { get; }
 
         /// <summary>
         /// MainWindow constructor that initialize the repositories and services
@@ -39,6 +40,7 @@ namespace OurApp.WinUI
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
+            Company c1 = new Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             companyService.printAll();
@@ -59,6 +61,8 @@ namespace OurApp.WinUI
 
             //eventsRepo.printAll();
             eventsService = new EventsService(eventsRepo);
+            sessionService = new SessionService(c1); // hardcode user = c1
+
         }
 
         /// <summary>

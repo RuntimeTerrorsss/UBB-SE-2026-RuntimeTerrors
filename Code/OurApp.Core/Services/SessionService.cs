@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OurApp.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,13 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Services
 {
-    internal class SessionService
+    public class SessionService
     {
+        private Company loggedInUser;
+
+        public SessionService(Company user)
+        {
+            this.loggedInUser = user;
+        }
     }
 }

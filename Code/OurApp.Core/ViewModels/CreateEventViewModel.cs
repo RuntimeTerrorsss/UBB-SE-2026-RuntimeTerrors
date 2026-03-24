@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
 
 namespace OurApp.Core.ViewModels
 {
@@ -59,6 +61,21 @@ namespace OurApp.Core.ViewModels
         }
 
 
+        private void SendMailToCompany(Company destinationCompany)
+        {
+            System.Diagnostics.Debug.WriteLine($"Sending email to {destinationCompany.Name}");
+            System.Diagnostics.Debug.WriteLine($"{destinationCompany.Name} receives invitation\n");
+        }
+
+        private void SendInvitations()
+        {
+            foreach (Company invitedCompany in this.SelectedCollaborators)
+            {
+                this.SendMailToCompany(invitedCompany);
+            }
+        }
+
+
         /// <summary>
         /// Function that tries to create a new event
         /// </summary>
@@ -79,6 +96,8 @@ namespace OurApp.Core.ViewModels
 
                 eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, SelectedCollaborators.ToList());
                 eventCreatedSuccessfully = true;
+
+                SendInvitations();
             }
             catch (Exception exception)
             {
