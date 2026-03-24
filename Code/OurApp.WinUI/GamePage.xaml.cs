@@ -30,7 +30,7 @@ namespace OurApp.WinUI
 
         public GamePage()
         {
-            var repo = new MockRepository();
+            var repo = new MockGameRepository();
             var service = new GameService(repo);
             ViewModel = new GameViewModel(service);
 

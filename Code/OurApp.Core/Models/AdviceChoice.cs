@@ -8,8 +8,8 @@ namespace OurApp.Core.Models
 {
     public class AdviceChoice
     {
-        public string Advice { get; set; }
-        public string Feedback {  get; set; }
+        public string Advice { get; private set; }
+        public string Feedback {  get; private set; }
 
 
         public AdviceChoice(string advice, string feedback)

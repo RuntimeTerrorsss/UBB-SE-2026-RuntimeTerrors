@@ -56,10 +56,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="GamePage.xaml">
-	      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="EditEventPage.xaml">
-	      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="EditProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -77,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="CreateEventPage.xaml">
-	      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="ViewProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>

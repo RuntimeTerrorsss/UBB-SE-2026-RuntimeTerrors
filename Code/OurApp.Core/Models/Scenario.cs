@@ -1,42 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OurApp.Core.Models
 {
     public class Scenario
     {
-        public string Text { get; set; }
-        public List<AdviceChoice> AdviceChoices { get; set; }
+        public string Description { get; private set; }
 
-        public Scenario(string text)
+        private List<AdviceChoice> choices;
+        public IReadOnlyList<AdviceChoice> AdviceChoices => choices;
+
+        public Scenario(string description)
         {
-            this.Text = text;
-            AdviceChoices = new List<AdviceChoice>();
+            Description = description;
+            choices = new List<AdviceChoice>();
         }
 
         public void AddChoice(AdviceChoice choice)
         {
-            this.AdviceChoices.Add(choice);
+            choices.Add(choice);
         }
 
-        public List<string> ShowAdvices()
+        public List<string> GetAdviceTexts()
         {
-            List<string> choices = new List<string>();
+            List<string> adviceTexts = new List<string>();
 
-            for(int i = 0; i < this.AdviceChoices.Count; i++)
+            for (int i = 0; i < choices.Count; i++)
             {
-                choices.Add(AdviceChoices[i].Advice);
+                adviceTexts.Add(choices[i].Advice);
             }
 
-            return choices;
-        }
-        public string ChooseAdvice(int num)
-        {
-            return AdviceChoices[num].IsChosen();
+            return adviceTexts;
         }
 
+        public string SelectChoice(int index)
+        {
+            if (index < 0 || index >= choices.Count)
+                throw new ArgumentOutOfRangeException(nameof(index), "Invalid choice index");
+
+            return choices[index].IsChosen();
+        }
     }
 }

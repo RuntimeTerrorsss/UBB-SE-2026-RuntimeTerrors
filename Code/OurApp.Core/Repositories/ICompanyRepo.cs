@@ -14,7 +14,6 @@ namespace OurApp.Core.Repositories
         ObservableCollection<Company> GetAll();
         void Add(Company c);
         void Remove(Company c);
-        void Load(Company c);
 
     }
 }

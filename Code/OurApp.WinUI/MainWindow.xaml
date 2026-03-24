@@ -8,12 +8,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Office Wellbeing Game">
-
+    
     <Window.SystemBackdrop>
         <MicaBackdrop Kind="BaseAlt" />
     </Window.SystemBackdrop>
     <Grid>
         <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" VerticalAlignment="Top">
+            <AppBarButton Label="Profile"/>
+            <AppBarButton Label="Our jobs"/>
+            <AppBarButton Label="Past jobs"/>
+            <AppBarButton Label="Our events" Click="NavigateToOurEvents_Click"/>
+            <AppBarButton Label="Past events" Click="NavigateToPastEvents_Click"/>
             <AppBarButton Label="Profile">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
@@ -24,8 +29,8 @@
             </AppBarButton>
             <AppBarButton Label="Our jobs"/>
             <AppBarButton Label="Past jobs"/>
-            <AppBarButton Label="Our events" Click="NavigateToOurEvents_Click"/>
-            <AppBarButton Label="Past events" Click="NavigateToPastEvents_Click"/>
+            <AppBarButton Label="Our events"/>
+            <AppBarButton Label="Past events"/>
         </CommandBar>
 
         <Frame x:Name="rootFrame" Margin="0,30,0,0"/>

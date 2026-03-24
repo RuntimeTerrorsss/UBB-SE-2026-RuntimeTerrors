@@ -54,7 +54,7 @@ namespace OurApp.WinUI
                 PrimaryButtonText = "Yes",
                 CloseButtonText = "No",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.XamlRoot 
+                XamlRoot = this.XamlRoot
             };
 
             var result = await dialog.ShowAsync();
@@ -101,7 +101,7 @@ namespace OurApp.WinUI
                 popup = new ContentDialog
                 {
                     Title = "Oops!",
-                    Content = "We’re sorry, an error occurred. The event was not created. Please try again.",
+                    Content = "We?re sorry, an error occurred. The event was not created. Please try again.",
                     CloseButtonText = "Close",
                     XamlRoot = this.XamlRoot
                 };
@@ -183,7 +183,7 @@ namespace OurApp.WinUI
             }
             else
             {
-                DescriptionBox.BorderBrush= new SolidColorBrush(Colors.Red);
+                DescriptionBox.BorderBrush = new SolidColorBrush(Colors.Red);
             }
         }
 

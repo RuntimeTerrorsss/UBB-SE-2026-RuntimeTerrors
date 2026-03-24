@@ -31,7 +31,7 @@ namespace OurApp.WinUI
         public MainWindow()
         {
             this.InitializeComponent();
-           
+
             RootFrame.Navigate(typeof(GamePage));
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
@@ -74,7 +74,7 @@ namespace OurApp.WinUI
 
         private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
         {
-            RootFrame.Navigate (typeof(EditProfilePage));
+            RootFrame.Navigate(typeof(EditProfilePage));
         }
     }
 }
