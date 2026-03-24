@@ -42,7 +42,7 @@ namespace OurApp.WinUI
             var ev = e.Parameter as Event;
 
             var mainW = App.MainWin;
-            ViewModel = new EditEventViewModel(mainW.service, ev);
+            ViewModel = new EditEventViewModel(mainW.eventService, ev);
             this.DataContext = ViewModel;
 
             System.Diagnostics.Debug.WriteLine(ev);

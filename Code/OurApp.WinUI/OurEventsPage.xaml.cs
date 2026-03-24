@@ -30,7 +30,7 @@ public sealed partial class OurEventsPage : Page
     {
         var mainW = App.MainWin;
         InitializeComponent();
-        ViewModel = new OurEventsViewModel(mainW.service);
+        ViewModel = new OurEventsViewModel(mainW.eventService);
         this.DataContext = ViewModel;
     }
 

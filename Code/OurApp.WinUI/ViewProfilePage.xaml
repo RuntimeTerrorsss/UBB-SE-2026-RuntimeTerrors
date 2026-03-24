@@ -10,7 +10,45 @@
 
     <Grid>
         <StackPanel Padding="40">
-            <TextBlock Text="This is view profile"></TextBlock>
+            <StackPanel Padding="20">
+
+                <!-- Company Name -->
+                <TextBlock Text="{Binding Company.Name}" 
+               FontSize="28" FontWeight="Bold"/>
+
+                <!-- Edit Button -->
+                <Button Content="Edit Profile"
+            Command="{Binding EditProfileCommand}" />
+
+                <!-- Statistics -->
+                <StackPanel Margin="0,20,0,0">
+
+                    <TextBlock Text="Profile Completion"/>
+
+                    <ProgressBar Value="{Binding ProfileCompletion}"
+                     Maximum="100"
+                     Height="20"/>
+
+                    <ItemsControl ItemsSource="{Binding RemainingTasks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </StackPanel>
+
+                <!-- Collaborators Preview -->
+                <ItemsControl ItemsSource="{Binding Company.Collaborators}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

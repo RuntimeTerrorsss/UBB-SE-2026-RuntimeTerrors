@@ -24,24 +24,24 @@ namespace OurApp.WinUI
     public sealed partial class MainWindow : Window
     {
         public Frame RootFrame => rootFrame;
-        public EventsService service { get; }
+        public EventsService eventService { get; }
 
 
-        ICompanyService service;
+        ICompanyService companyService;
         public MainWindow()
         {
             this.InitializeComponent();
            
             RootFrame.Navigate(typeof(GamePage));
             ICompanyRepo repo = new CompanyRepo();
-            this.service = new CompanyService(repo);
+            this.companyService = new CompanyService(repo);
 
-            service.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            service.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            service.printAll();
+            companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            companyService.printAll();
             InitializeComponent();
 
-            IEventsRepo repo = new EventsRepo();
+            IEventsRepo eventRepo = new EventsRepo();
 
             // hardcode events
             Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, 2);
@@ -49,11 +49,11 @@ namespace OurApp.WinUI
             Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, 2);
             Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, 2);
 
-            repo.Add(ev1);
-            repo.Add(ev2);
-            repo.Add(ev3);
-            repo.Add(ev4);
-            service = new EventsService(repo);
+            eventRepo.Add(ev1);
+            eventRepo.Add(ev2);
+            eventRepo.Add(ev3);
+            eventRepo.Add(ev4);
+            eventService = new EventsService(eventRepo);
         }
 
         private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
