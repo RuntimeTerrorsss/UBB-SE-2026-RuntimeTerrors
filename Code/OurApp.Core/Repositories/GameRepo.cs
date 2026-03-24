@@ -1,26 +1,29 @@
 using OurApp.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OurApp.Core.Repositories
 {
-     public class GameRepo
+    public class GameRepo : IGameRepo
     {
-            public Game GetGameById(int id)
-            {
-                // aici vei face query în DB
-                // SELECT ...
-                return new Game();
-            }
+        public Game GetGameById(int id)
+        {
+            // DB: SELECT ...
+            _ = id;
+            return new Game();
+        }
 
-            public void SaveGame(Game game)
-            {
-                // INSERT / UPDATE în DB
-            }
+        public void SaveGame(Game game)
+        {
+            // DB: INSERT / UPDATE
+            _ = game;
+        }
+
+        public Game Get() => GetGameById(0);
+
+        public void Save(Game game)
+        {
+            if (game == null) throw new ArgumentNullException(nameof(game));
+            SaveGame(game);
         }
     }
+}

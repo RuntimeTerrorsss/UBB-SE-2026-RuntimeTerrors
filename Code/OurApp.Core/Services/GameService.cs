@@ -15,30 +15,52 @@ namespace OurApp.Core.Services
             _repository = repository;
         }
 
+        private Game LoadedGame()
+        {
+            var game = _repository.Get();
+            if (game == null)
+                throw new InvalidOperationException("No game is available from the repository.");
+            return game;
+        }
+
+        public void Save(Game game)
+        {
+            if (game == null) throw new ArgumentNullException(nameof(game));
+            _repository.Save(game);
+        }
+
         public string ShowCoworker()
         {
-            Buddy coworker = _repository.Buddy;
-            return coworker.Introduction;
+            return LoadedGame().Buddy.Introduction;
         }
-         
+
         public string ShowScenarioText(int number)
         {
-            return _repository.GetScenario(number).Description;
+            var game = LoadedGame();
+            if (number < 0 || number >= game.Scenarios.Count)
+                throw new ArgumentOutOfRangeException(nameof(number));
+            return game.Scenarios[number].Description;
         }
 
         public List<string> ShowChoices(int number)
         {
-            return _repository.GetScenario(number).GetAdviceTexts();
+            var game = LoadedGame();
+            if (number < 0 || number >= game.Scenarios.Count)
+                throw new ArgumentOutOfRangeException(nameof(number));
+            return game.Scenarios[number].GetAdviceTexts();
         }
 
         public string ChoiceMade(int numberScenario, int numberAdvice)
         {
-            return _repository.GetScenario(numberScenario).SelectChoice(numberAdvice);
+            var game = LoadedGame();
+            if (numberScenario < 0 || numberScenario >= game.Scenarios.Count)
+                throw new ArgumentOutOfRangeException(nameof(numberScenario));
+            return game.Scenarios[numberScenario].SelectChoice(numberAdvice);
         }
 
         public string ShowConclusion()
         {
-            return _repository.GetConclusion();
+            return LoadedGame().Conclusion;
         }
 
         public Game CreateGameFromInput(

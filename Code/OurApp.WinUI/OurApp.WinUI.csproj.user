@@ -6,4 +6,9 @@
   <PropertyGroup>
     <ActiveDebugProfile>OurApp.WinUI (Unpackaged)</ActiveDebugProfile>
   </PropertyGroup>
+  <ItemGroup>
+    <Page Update="EditGame.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>
