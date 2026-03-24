@@ -43,6 +43,7 @@ namespace OurApp.Core.ViewModels
 
         public bool isEverythingValid => (addError == "");
         public bool eventUpdatedSuccessfully = false;
+        public bool eventDeletedSuccessfully = false;
 
 
         /// <summary>
@@ -91,7 +92,15 @@ namespace OurApp.Core.ViewModels
 
         [RelayCommand] public void DeleteEvent()
         {
-            eventsService.DeleteEvent(eventToEdit);
+            try
+            {
+                eventsService.DeleteEvent(eventToEdit);
+                eventDeletedSuccessfully = true;
+            }
+            catch (Exception)
+            {
+                eventDeletedSuccessfully = false;
+            }
         }
 
 

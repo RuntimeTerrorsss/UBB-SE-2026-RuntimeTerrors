@@ -286,6 +286,34 @@ namespace OurApp.WinUI
                 ViewModel.DeleteEventCommand.Execute(null);
                 NavigateBack_Click(sender, e);
             }
+            else
+            {
+                return;
+            }
+
+            ContentDialog popup;
+            if (ViewModel.eventDeletedSuccessfully)
+            {
+                popup = new ContentDialog
+                {
+                    Title = "YEY!",
+                    Content = "Event deleted successfully!",
+                    CloseButtonText = "Close",
+                    XamlRoot = this.XamlRoot
+                };
+            }
+            else
+            {
+                popup = new ContentDialog
+                {
+                    Title = "Oops!",
+                    Content = "We’re sorry, an error occurred. The event was not deleted. Please try again.",
+                    CloseButtonText = "Close",
+                    XamlRoot = this.XamlRoot
+                };
+            }
+
+            await popup.ShowAsync();
         }
     }
 }
