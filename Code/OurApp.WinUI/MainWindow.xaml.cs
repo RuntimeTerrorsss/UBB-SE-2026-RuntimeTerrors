@@ -28,7 +28,7 @@ namespace OurApp.WinUI
     {
         public Frame RootFrame => rootFrame;
         public EventsService eventsService { get; }
-        ICompanyService companyService;
+        public ICompanyService companyService { get; }
         public MainWindow()
         {
             string connectionString = "Data Source=DESKTOP-D8Q1P5P\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";

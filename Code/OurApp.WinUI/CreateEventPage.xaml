@@ -92,6 +92,26 @@
                     Text="{Binding LocationError, Mode=OneWay}"
                 />
 
+                <TextBox
+                    x:Name="CollaboratorNameBox"
+                    Header="Add collaborators (company name):"
+                    PlaceholderText="Enter company name"
+                    Margin="0,8,0,0" />
+                <Button
+                    Content="Add collaborator"
+                    Click="AddCollaborator_Click"
+                    Margin="0,6,0,0" />
+                <TextBlock
+                    x:Name="CollaboratorErrorTextBlock"
+                    Foreground="Red"
+                    FontSize="12"
+                    Margin="0,4,0,0" />
+                <StackPanel
+                    x:Name="CollaboratorsPanel"
+                    Margin="0,8,0,12"
+                    Orientation="Horizontal"
+                    Spacing="8" />
+
                 <Button 
                     Content="Create Event" Click="CreateEvent_Click"></Button>
                 <TextBlock

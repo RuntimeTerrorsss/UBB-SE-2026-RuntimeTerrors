@@ -13,64 +13,54 @@ namespace OurApp.Core.Repositories
 {
     public class EventsRepo : IEventsRepo
     {
-        ObservableCollection<Event> eventsCollection;
         private string connectionString {  get; set; }
 
+        /// <summary>
+        /// Event repository constructor
+        /// </summary>
+        /// <param name="connectionString"> database conection string </param>
         public EventsRepo(string connectionString) 
         {
-            eventsCollection = new ObservableCollection<Event>();
             this.connectionString = connectionString;
         }
 
-        public void printAll()
-        {
-            for (int i = 0; i < eventsCollection.Count; i++)
-            {
-                System.Diagnostics.Debug.WriteLine($"{eventsCollection[i]} ");
-            }
-        }
-
-        //public ObservableCollection<Event> GetCollectionFromRepo()
-        //{
-        //    return eventsCollection;
-        //}
-
+        /// <summary>
+        /// Function that inserts an event into the database repository
+        /// </summary>
+        /// <param name="eventToBeAdded"> event to be inserted into the database </param>
         public void AddEventToRepo(Event eventToBeAdded)
         {
-            //eventsCollection.Add(eventToBeAdded);
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                conn.Open();
+                sqlConnection.Open();
 
-                string query = @"INSERT INTO events 
+                string queryToBeRun = @"INSERT INTO events 
             (event_id, photo, title, description, start_date, end_date, location, host_company_id, posted_at)
             VALUES (@Id, @Photo, @Title, @Description, @StartDate, @EndDate, @Location, @Host, @CurrentDateTime)";
 
-                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
-                cmd.Parameters.AddWithValue("@Id", eventToBeAdded.Id);
-                cmd.Parameters.AddWithValue("@Photo", eventToBeAdded.Photo ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
-                cmd.Parameters.AddWithValue("@Description", eventToBeAdded.Description ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@StartDate", eventToBeAdded.StartDate);
-                cmd.Parameters.AddWithValue("@EndDate", eventToBeAdded.EndDate);
-                cmd.Parameters.AddWithValue("@Location", eventToBeAdded.Location);
-                cmd.Parameters.AddWithValue("@Host", 1);
-                cmd.Parameters.AddWithValue("@CurrentDateTime", DateTime.Now);
+                sqlCommand.Parameters.AddWithValue("@Id", eventToBeAdded.Id);
+                sqlCommand.Parameters.AddWithValue("@Photo", eventToBeAdded.Photo ?? (object)DBNull.Value);
+                sqlCommand.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
+                sqlCommand.Parameters.AddWithValue("@Description", eventToBeAdded.Description ?? (object)DBNull.Value);
+                sqlCommand.Parameters.AddWithValue("@StartDate", eventToBeAdded.StartDate);
+                sqlCommand.Parameters.AddWithValue("@EndDate", eventToBeAdded.EndDate);
+                sqlCommand.Parameters.AddWithValue("@Location", eventToBeAdded.Location);
+                sqlCommand.Parameters.AddWithValue("@Host", 1);
+                sqlCommand.Parameters.AddWithValue("@CurrentDateTime", DateTime.Now);
 
-                cmd.ExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
         }
 
         public void RemoveEventFromRepo(Event eventToBeRemoved)
         {
-            //eventsCollection.Remove(eventToBeRemoved);
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                string query = "DELETE FROM events WHERE event_d = @Id";
+                string query = "DELETE FROM events WHERE event_id = @Id";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", eventToBeRemoved.Id);
@@ -79,41 +69,30 @@ namespace OurApp.Core.Repositories
             }
         }
 
+        /// <summary>
+        /// Function that returns a collection of all the current events, 
+        /// whose ending date has not exceeded the current date
+        /// </summary>
+        /// <returns> ObservableCollection of current events </returns>
         public ObservableCollection<Event> getCurrentEventsFromRepo()
         {
-            //ObservableCollection<Event> currentEvents = new ObservableCollection<Event>();
+            var currentEvents = new ObservableCollection<Event>();
 
-            //foreach (Event @event in eventsCollection)
-            //{
-            //    DateTime eventEndDate = @event.EndDate;
-            //    DateTime todaysDate = DateTime.Now;
-
-            //    if (eventEndDate.Date >= todaysDate.Date)
-            //    {
-            //        currentEvents.Add(@event);
-            //    }
-            //}
-
-            //return currentEvents;
-
-            var events = new ObservableCollection<Event>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                conn.Open();
+                sqlConnection.Open();
 
-                string query = "SELECT * FROM events WHERE end_date >= @TodaysDate";
+                string queryToBeRun = "SELECT * FROM events WHERE end_date >= @TodaysDate";
 
-                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
+                sqlCommand.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
 
-                cmd.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
-
-                SqlDataReader reader = cmd.ExecuteReader();
+                SqlDataReader reader = sqlCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    events.Add(new Event(
+                    currentEvents.Add(new Event(
                         reader["photo"].ToString(),
                         reader["title"].ToString(),
                         reader["description"].ToString(),
@@ -121,7 +100,7 @@ namespace OurApp.Core.Repositories
                         (DateTime)reader["end_date"],
                         reader["location"].ToString(),
                         1,
-                        new List<Company>() // adjust if needed
+                        new List<Company>()
                     )
                     {
                         Id = (int)reader["event_id"]
@@ -129,44 +108,34 @@ namespace OurApp.Core.Repositories
                 }
             }
 
-            return events;
+            return currentEvents;
         }
 
+        /// <summary>
+        /// Function that returns a collection of all the past events, 
+        /// whose ending date has exceeded the current date
+        /// </summary>
+        /// <returns> ObservableCollection of past events </returns>
         public ObservableCollection<Event> getPastEventsFromRepo()
         {
-            //ObservableCollection<Event> pastEvents = new ObservableCollection<Event>();
+            var pastEvents = new ObservableCollection<Event>();
 
-            //foreach (Event @event in eventsCollection)
-            //{
-            //    DateTime eventEndDate = @event.EndDate;
-            //    DateTime todaysDate = DateTime.Now;
-
-            //    if (eventEndDate.Date < todaysDate.Date)
-            //    {
-            //        pastEvents.Add(@event);
-            //    }
-            //}
-
-            //return pastEvents;
-
-            var events = new ObservableCollection<Event>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                conn.Open();
+                sqlConnection.Open();
 
-                string query = "SELECT * FROM events WHERE end_date < @TodaysDate";
+                string queryToBeRun = "SELECT * FROM events WHERE end_date < @TodaysDate";
 
-                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
 
-                cmd.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
+                sqlCommand.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
 
-                SqlDataReader reader = cmd.ExecuteReader();
+                SqlDataReader reader = sqlCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    events.Add(new Event(
+                    pastEvents.Add(new Event(
                         reader["photo"].ToString(),
                         reader["title"].ToString(),
                         reader["description"].ToString(),
@@ -174,7 +143,7 @@ namespace OurApp.Core.Repositories
                         (DateTime)reader["end_date"],
                         reader["location"].ToString(),
                         1, 
-                        new List<Company>() // adjust if needed
+                        new List<Company>()
                     )
                     {
                         Id = (int)reader["event_id"]
@@ -182,53 +151,39 @@ namespace OurApp.Core.Repositories
                 }
             }
 
-            return events;
+            return pastEvents;
         
         }
 
 
         public void UpdateEventToRepo(int eventIdToBeUpdated, string newEventPhoto, string newEventTitle, string newEventDescription, DateTime newEventStartDate, DateTime newEventEndDate, string newEventLocation)
         {
-            //foreach (Event @event in eventsCollection)
-            //{
-            //    if (@event.Id == eventIdToBeUpdated)
-            //    {
-            //        @event.Photo = newEventPhoto;
-            //        @event.Title = newEventTitle;
-            //        @event.Description = newEventDescription;
-            //        @event.StartDate = newEventStartDate;
-            //        @event.EndDate = newEventEndDate;
-            //        @event.Location = newEventLocation;
-            //        return;
-            //    }
-            //}
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                conn.Open();
+                sqlConnection.Open();
 
-                string query = @"UPDATE events SET 
-            photo=@Photo,
-            title=@Title,
-            description=@Description,
-            start_date=@StartDate,
-            end_date=@EndDate,
-            location=@Location,
-            posted_at=@PostedAt
-            WHERE event_id=@Id";
+                string queryToBeRun = @"UPDATE events SET 
+                                photo=@Photo,
+                                title=@Title,
+                                description=@Description,
+                                start_date=@StartDate,
+                                end_date=@EndDate,
+                                location=@Location,
+                                posted_at=@PostedAt
+                                WHERE event_id=@Id";
 
-                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
-                cmd.Parameters.AddWithValue("@Photo", newEventPhoto ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@Title", newEventTitle);
-                cmd.Parameters.AddWithValue("@Description", newEventDescription ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@StartDate", newEventStartDate);
-                cmd.Parameters.AddWithValue("@EndDate", newEventEndDate);
-                cmd.Parameters.AddWithValue("@Location", newEventLocation);
-                cmd.Parameters.AddWithValue("@PostedAt", DateTime.Now);
-                cmd.Parameters.AddWithValue("@Id", eventIdToBeUpdated);
+                sqlCommand.Parameters.AddWithValue("@Photo", newEventPhoto ?? (object)DBNull.Value);
+                sqlCommand.Parameters.AddWithValue("@Title", newEventTitle);
+                sqlCommand.Parameters.AddWithValue("@Description", newEventDescription ?? (object)DBNull.Value);
+                sqlCommand.Parameters.AddWithValue("@StartDate", newEventStartDate);
+                sqlCommand.Parameters.AddWithValue("@EndDate", newEventEndDate);
+                sqlCommand.Parameters.AddWithValue("@Location", newEventLocation);
+                sqlCommand.Parameters.AddWithValue("@PostedAt", DateTime.Now);
+                sqlCommand.Parameters.AddWithValue("@Id", eventIdToBeUpdated);
 
-                cmd.ExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
         }
     }

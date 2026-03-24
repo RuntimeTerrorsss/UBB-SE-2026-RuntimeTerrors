@@ -1,4 +1,4 @@
-﻿using OurApp.Core.Models;
+using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -26,6 +26,22 @@ namespace OurApp.Core.Services
         public void printAll()
         {
             this.CompanyRepo.PrintAll();
+        }
+
+        public bool TryGetCompanyByName(string companyName, out Company company)
+        {
+            company = null;
+
+            if (string.IsNullOrWhiteSpace(companyName))
+            {
+                return false;
+            }
+
+            company = CompanyRepo
+                .GetAll()
+                .FirstOrDefault(c => string.Equals(c.Name, companyName.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            return company != null;
         }
     }
 }

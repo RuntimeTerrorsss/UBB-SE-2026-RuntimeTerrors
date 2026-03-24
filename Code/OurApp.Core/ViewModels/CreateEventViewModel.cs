@@ -1,5 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
 using OurApp.Core.Validators;
@@ -14,7 +15,9 @@ namespace OurApp.Core.ViewModels
     public partial class CreateEventViewModel : ObservableObject
     {
         EventsService eventsService;
+        ICompanyService companyService;
         public EventValidator eventValidator = new EventValidator();
+        public List<Company> SelectedCollaborators { get; } = new List<Company>();
 
         [ObservableProperty] private string photo;
 
@@ -44,9 +47,10 @@ namespace OurApp.Core.ViewModels
         public bool eventCreatedSuccessfully = false;
 
 
-        public CreateEventViewModel(EventsService service)
+        public CreateEventViewModel(EventsService service, ICompanyService companyService)
         {
             this.eventsService = service;
+            this.companyService = companyService;
         }
 
 
@@ -65,7 +69,7 @@ namespace OurApp.Core.ViewModels
                 DateTime eventStartDateTime = startDate.Value.DateTime;
                 DateTime eventEndDateTime = endDate.Value.DateTime;
 
-                eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location);
+                eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, SelectedCollaborators.ToList());
                 eventCreatedSuccessfully = true;
             }
             catch (Exception exception)
@@ -187,6 +191,43 @@ namespace OurApp.Core.ViewModels
                 endDateIsValid = false;
             }
             return false;
+        }
+
+        public bool TryAddCollaboratorByName(string companyName, out string errorMessage)
+        {
+            errorMessage = "";
+
+            if (string.IsNullOrWhiteSpace(companyName))
+            {
+                errorMessage = "Please enter a company name.";
+                return false;
+            }
+
+            if (!companyService.TryGetCompanyByName(companyName, out var company))
+            {
+                errorMessage = "Company was not found.";
+                return false;
+            }
+
+            if (SelectedCollaborators.Any(c => string.Equals(c.Name, company.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                errorMessage = "Company is already added as a collaborator.";
+                return false;
+            }
+
+            SelectedCollaborators.Add(company);
+            return true;
+        }
+
+        public void RemoveCollaboratorByName(string companyName)
+        {
+            var collaborator = SelectedCollaborators
+                .FirstOrDefault(c => string.Equals(c.Name, companyName, StringComparison.OrdinalIgnoreCase));
+
+            if (collaborator != null)
+            {
+                SelectedCollaborators.Remove(collaborator);
+            }
         }
     }
 }

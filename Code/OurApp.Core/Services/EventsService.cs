@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using System;
@@ -18,9 +18,9 @@ namespace OurApp.Core.Services
             this.eventsRepository = eventsRepo;
         }
 
-        public void AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation)
+        public void AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, List<Company> collaborators)
         {
-            Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, 1, new List<Company>());
+            Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, 1, collaborators ?? new List<Company>());
             this.eventsRepository.AddEventToRepo(eventToBeAdded);
         }
 

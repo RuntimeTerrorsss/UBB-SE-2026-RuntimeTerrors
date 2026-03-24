@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
+using OurApp.Core.Models;
 using OurApp.Core.Validators;
 using OurApp.Core.ViewModels;
 using System;
@@ -37,11 +38,66 @@ namespace OurApp.WinUI
         public CreateEventPage()
         {
             var mainWindow = App.mainWindow;
-            createEventViewModel = new CreateEventViewModel(mainWindow.eventsService);
+            createEventViewModel = new CreateEventViewModel(mainWindow.eventsService, mainWindow.companyService);
             this.DataContext = createEventViewModel;
 
             InitializeComponent();
             pageIsLoaded = true;
+        }
+
+        private void AddCollaborator_Click(object sender, RoutedEventArgs e)
+        {
+            var companyName = CollaboratorNameBox.Text?.Trim() ?? "";
+            if (createEventViewModel.TryAddCollaboratorByName(companyName, out var errorMessage))
+            {
+                CollaboratorNameBox.Text = "";
+                CollaboratorErrorTextBlock.Text = "";
+                RenderCollaboratorTags();
+            }
+            else
+            {
+                CollaboratorErrorTextBlock.Text = errorMessage;
+            }
+        }
+
+        private void RenderCollaboratorTags()
+        {
+            CollaboratorsPanel.Children.Clear();
+
+            foreach (var collaborator in createEventViewModel.SelectedCollaborators)
+            {
+                var removeButton = new Button
+                {
+                    Content = "x",
+                    Tag = collaborator.Name,
+                    Padding = new Thickness(6, 0, 6, 0),
+                    MinWidth = 28
+                };
+                removeButton.Click += RemoveCollaborator_Click;
+
+                var chip = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 6,
+                    Background = new SolidColorBrush(Colors.LightGray),
+                    Padding = new Thickness(8, 4, 8, 4)
+                };
+
+                chip.Children.Add(new TextBlock { Text = collaborator.Name, VerticalAlignment = VerticalAlignment.Center });
+                chip.Children.Add(removeButton);
+
+                CollaboratorsPanel.Children.Add(chip);
+            }
+        }
+
+        private void RemoveCollaborator_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string collaboratorName)
+            {
+                createEventViewModel.RemoveCollaboratorByName(collaboratorName);
+                CollaboratorErrorTextBlock.Text = "";
+                RenderCollaboratorTags();
+            }
         }
 
         private async void CancelChanges_Click(object sender, RoutedEventArgs e)
@@ -100,7 +156,7 @@ namespace OurApp.WinUI
                 popup = new ContentDialog
                 {
                     Title = "Oops!",
-                    Content = "We’re sorry, an error occurred. The event was not created. Please try again.",
+                    Content = "We're sorry, an error occurred. The event was not created. Please try again.",
                     CloseButtonText = "Close",
                     XamlRoot = this.XamlRoot
                 };
