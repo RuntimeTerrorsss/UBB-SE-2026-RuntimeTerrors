@@ -9,12 +9,7 @@
                     VerticalAlignment="Center"
                     Spacing="15">
 
-            <Button Content="Add Job"
-                    Width="200"
-                    Height="50"
-                    Click="GoToAddJob"/>
-
-            <Button Content="View Jobs"
+            <Button Content="View Current Jobs"
                     Width="200"
                     Height="50"
                     Click="GoToJobsList"/>

@@ -21,7 +21,7 @@
                      Text="{Binding AvailablePositions, Mode=TwoWay}" />
 
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button Content="Create Job" Click="CreateJob_Click"/>
+                <Button Content="POST" Click="CreateJob_Click"/>
                 <Button Content="Cancel" Click="GoBack"/>
             </StackPanel>
 

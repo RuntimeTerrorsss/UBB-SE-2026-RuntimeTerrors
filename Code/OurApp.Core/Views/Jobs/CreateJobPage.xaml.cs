@@ -24,7 +24,7 @@ namespace iss_project.UI.Views.Jobs
             var dialog = new ContentDialog
             {
                 Title = "Confirm Action",
-                Content = "Are you sure you want to cancel?",
+                Content = "Are you sure you want to cancel the modifications?",
                 PrimaryButtonText = "Yes",
                 CloseButtonText = "No",
                 DefaultButton = ContentDialogButton.Close,
@@ -36,7 +36,7 @@ namespace iss_project.UI.Views.Jobs
 
             if (result == ContentDialogResult.Primary)
             {
-                MainWindow.Instance.ShowMain();
+                MainWindow.Instance.ShowJobs();
             }
             
         }
