@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml;
 using System;
 using WinRT.Interop;
 using Microsoft.UI.Windowing;
+using iss_project.UI.Views;
 
 namespace iss_project
 {
@@ -35,7 +36,7 @@ namespace iss_project
 
             Services = services.BuildServiceProvider();
 
-            ShowCreateJob();
+            ShowMain();
         }
 
         public void ShowCreateJob()
@@ -46,6 +47,11 @@ namespace iss_project
         public void ShowJobs()
         {
             this.Content = new JobsListPage();
+        }
+
+        public void ShowMain()
+        {
+            this.Content = new MainPage();
         }
     }
 }

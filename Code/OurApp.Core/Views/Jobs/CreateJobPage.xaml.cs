@@ -1,6 +1,7 @@
 ﻿using iss_project.UI.ViewModels.Jobs;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
 
 namespace iss_project.UI.Views.Jobs
 {
@@ -18,11 +19,27 @@ namespace iss_project.UI.Views.Jobs
             await vm.CreateJob();
         }
 
-        private void GoToJobs(object sender, RoutedEventArgs e)
+        private async void GoBack(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.ShowJobs();
-        }
+            var dialog = new ContentDialog
+            {
+                Title = "Confirm Action",
+                Content = "Are you sure you want to cancel?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = this.XamlRoot
+            };
 
+        
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                MainWindow.Instance.ShowMain();
+            }
+            
+        }
 
     }
 }

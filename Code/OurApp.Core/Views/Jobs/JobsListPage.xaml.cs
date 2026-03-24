@@ -20,9 +20,9 @@ namespace iss_project.UI.Views.Jobs
             };
         }
 
-        private void GoToCreate(object sender, RoutedEventArgs e)
+        private void GoBack(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.ShowCreateJob();
+            MainWindow.Instance.ShowMain();
         }
     }
 }

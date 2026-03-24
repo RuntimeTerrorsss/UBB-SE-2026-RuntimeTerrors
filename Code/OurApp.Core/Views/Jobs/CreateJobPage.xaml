@@ -7,10 +7,7 @@
 
 		<StackPanel Spacing="10">
 
-			<!-- Navigation buttons -->
-			<StackPanel Orientation="Horizontal" Spacing="10">
-				<Button Content="View Jobs" Click="GoToJobs"/>
-			</StackPanel>
+			
 
 			<TextBox Header="Title" Text="{Binding JobTitle, Mode=TwoWay}" />
 			<TextBox Header="Field" Text="{Binding IndustryField, Mode=TwoWay}" />
@@ -23,9 +20,12 @@
 			<TextBox Header="Available Positions"
                      Text="{Binding AvailablePositions, Mode=TwoWay}" />
 
-			<Button Content="Create Job" Click="CreateJob_Click"/>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="Create Job" Click="CreateJob_Click"/>
+                <Button Content="Cancel" Click="GoBack"/>
+            </StackPanel>
 
-		</StackPanel>
+        </StackPanel>
 
 	</Grid>
 </Page>
