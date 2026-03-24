@@ -13,66 +13,64 @@ namespace OurApp.Core.ViewModels
 {
     public partial class CreateEventViewModel : ObservableObject
     {
-        EventsService service;
-        public EventValidator validator = new EventValidator();
+        EventsService eventsService;
+        public EventValidator eventValidator = new EventValidator();
 
         [ObservableProperty] private string photo;
 
         [ObservableProperty] private string title;
         [ObservableProperty] private string titleError;
-        private bool validTitle = false;
+        private bool titleIsValid = false;
 
         [ObservableProperty] private string description;
         [ObservableProperty] private string descriptionError;
-        private bool validDescription = true;
+        private bool descriptionIsValid = true;
 
         [ObservableProperty] private DateTimeOffset? startDate = DateTimeOffset.Now;
         [ObservableProperty] private string startDateError;
-        private bool validStartDate = true;
+        private bool startDateIsValid = true;
 
         [ObservableProperty] private DateTimeOffset? endDate = DateTimeOffset.Now;
         [ObservableProperty] private string endDateError;
-        private bool validEndDate = true;
+        private bool endDateIsValid = true;
 
         [ObservableProperty] private string location;
         [ObservableProperty] private string locationError;
-        private bool validLocation = false;
+        private bool locationIsValid = false;
 
         [ObservableProperty] private string addError = "";
 
-        public bool validationSuccess => (addError == "");
-        public bool createSuccess = false;
+        public bool isEverythingValid => (addError == "");
+        public bool eventCreatedSuccessfully = false;
 
 
         public CreateEventViewModel(EventsService service)
         {
-            this.service = service;
+            this.eventsService = service;
         }
 
 
         [RelayCommand]
-        public void Tap()
+        public void CreateEvent()
         {
-            //if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
-            if (!validTitle || !validDescription || !validLocation)
+            if (!titleIsValid || !descriptionIsValid || !startDateIsValid || !endDateIsValid || !locationIsValid)
             {
                 AddError = "Please enter valid inputs before creating an event";
                 return;
             }
 
-
             try
             {
                 AddError = "";
-                DateTime start = startDate.Value.DateTime;
-                DateTime end = endDate.Value.DateTime;
+                DateTime eventStartDateTime = startDate.Value.DateTime;
+                DateTime eventEndDateTime = endDate.Value.DateTime;
 
-                service.AddEvent(Photo, Title, Description, start, end, Location);
-                createSuccess = true;
+                eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location);
+                eventCreatedSuccessfully = true;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                createSuccess = false;
+                eventCreatedSuccessfully = false;
             }
         }
 
@@ -81,17 +79,17 @@ namespace OurApp.Core.ViewModels
         {
             try
             {
-                if (validator.TitleValidator(Title))
+                if (eventValidator.IsEventTitleValid(Title))
                 {
                     TitleError = "";
-                    validTitle = true;
+                    titleIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 TitleError = ex.Message;
-                validTitle = false;
+                titleIsValid = false;
             }
             return false;
         }
@@ -100,17 +98,17 @@ namespace OurApp.Core.ViewModels
         {
             try
             {
-                if (validator.DescriptionValidator(Description))
+                if (eventValidator.IsEventDescriptionValid(Description))
                 {
                     DescriptionError = "";
-                    validDescription = true;
+                    descriptionIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 DescriptionError = ex.Message;
-                validDescription = false;
+                descriptionIsValid = false;
             }
             return false;
         }
@@ -119,17 +117,17 @@ namespace OurApp.Core.ViewModels
         {
             try
             {
-                if (validator.LocationValidator(Location))
+                if (eventValidator.IsEventLocationValid(Location))
                 {
                     LocationError = "";
-                    validLocation = true;
+                    locationIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 LocationError = ex.Message;
-                validLocation = false;
+                locationIsValid = false;
             }
             return false;
         }
@@ -138,17 +136,17 @@ namespace OurApp.Core.ViewModels
         {
             try
             {
-                if (validator.StartDateValidator(StartDate))
+                if (eventValidator.IsEventStartDateValid(StartDate))
                 {
                     StartDateError = "";
-                    validStartDate = true;
+                    startDateIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 StartDateError = ex.Message;
-                validStartDate = false;
+                startDateIsValid = false;
             }
             return false;
         }
@@ -157,17 +155,17 @@ namespace OurApp.Core.ViewModels
         {
             try
             {
-                if (validator.EndDateValidator(EndDate))
+                if (eventValidator.IsEventEndDateValid(EndDate))
                 {
                     EndDateError = "";
-                    validEndDate = true;
+                    endDateIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 EndDateError = ex.Message;
-                validEndDate = false;
+                endDateIsValid = false;
             }
             return false;
         }
@@ -176,17 +174,17 @@ namespace OurApp.Core.ViewModels
         {
             try
             {
-                if (validator.DateCronologityValidator(StartDate, EndDate))
+                if (eventValidator.AreEventDatesCronologicallyValid(StartDate, EndDate))
                 {
                     EndDateError = "";
-                    validEndDate = true;
+                    endDateIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 EndDateError = ex.Message;
-                validEndDate = false;
+                endDateIsValid = false;
             }
             return false;
         }

@@ -41,7 +41,7 @@ namespace OurApp.WinUI
         {
             var ev = e.Parameter as Event;
 
-            var mainW = App.MainWin;
+            var mainW = App.mainWindow;
             ViewModel = new EditEventViewModel(mainW.eventsService, ev);
             this.DataContext = ViewModel;
 
@@ -51,9 +51,9 @@ namespace OurApp.WinUI
         private async void CreateEvent_Click(object sender, RoutedEventArgs e)
         {
             // because click usually runs before command so we must make it run before
-            ViewModel.TapCommand.Execute(null);
+            ViewModel.EditEventCommand.Execute(null);
 
-            if (ViewModel.validationSuccess)
+            if (ViewModel.isEverythingValid)
             {
                 NavigateBack_Click(sender, e);
             }
@@ -63,7 +63,7 @@ namespace OurApp.WinUI
             }
 
             ContentDialog popup;
-            if (ViewModel.createSuccess)
+            if (ViewModel.eventUpdatedSuccessfully)
             {
                 popup = new ContentDialog
                 {
@@ -89,7 +89,7 @@ namespace OurApp.WinUI
 
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
-            var mainW = App.MainWin;
+            var mainW = App.mainWindow;
             mainW.RootFrame.Navigate(typeof(OurEventsPage));
         }
 
@@ -136,6 +136,15 @@ namespace OurApp.WinUI
             }
 
             if (ViewModel.ValidateStartDate())
+            {
+                StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Red);
+            }
+
+            if (ViewModel.ValidateDatesCronologity())
             {
                 StartDatePicker.BorderBrush = new SolidColorBrush(Colors.Green);
             }

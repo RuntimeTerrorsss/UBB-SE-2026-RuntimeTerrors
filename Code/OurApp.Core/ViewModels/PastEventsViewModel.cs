@@ -12,13 +12,13 @@ namespace OurApp.Core.ViewModels
 {
     public partial class PastEventsViewModel : ObservableObject
     {
-        EventsService service;
-        public ObservableCollection<Event> Events { get; }
+        EventsService eventsService;
+        public ObservableCollection<Event> pastEventsCollection { get; }
 
         public PastEventsViewModel(EventsService service)
         {
-            this.service = service;
-            Events = service.GetPastEvents();
+            this.eventsService = service;
+            pastEventsCollection = service.GetPastEvents();
         }
     }
 }

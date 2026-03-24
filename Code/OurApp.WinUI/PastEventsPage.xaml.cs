@@ -28,7 +28,7 @@ namespace OurApp.WinUI
         public PastEventsViewModel ViewModel { get; }
         public PastEventsPage()
         {
-            var mainW = App.MainWin;
+            var mainW = App.mainWindow;
             InitializeComponent();
             ViewModel = new PastEventsViewModel(mainW.eventsService);
             this.DataContext = ViewModel;

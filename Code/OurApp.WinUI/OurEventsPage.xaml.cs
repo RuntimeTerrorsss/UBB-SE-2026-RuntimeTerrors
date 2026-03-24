@@ -28,7 +28,7 @@ public sealed partial class OurEventsPage : Page
     public OurEventsViewModel ViewModel { get; }
     public OurEventsPage()
     {
-        var mainW = App.MainWin;
+        var mainW = App.mainWindow;
         InitializeComponent();
         ViewModel = new OurEventsViewModel(mainW.eventsService);
         this.DataContext = ViewModel;
@@ -36,7 +36,7 @@ public sealed partial class OurEventsPage : Page
 
     private void CreateEventButton_Click(object sender, RoutedEventArgs e)
     {
-        var mainWindow = App.MainWin;
+        var mainWindow = App.mainWindow;
         mainWindow.RootFrame.Navigate(typeof(CreateEventPage));
     }
 
@@ -45,7 +45,7 @@ public sealed partial class OurEventsPage : Page
         var button = sender as Button;
         var selectedEvent = button.Tag as Event;
 
-        var mainWindow = App.MainWin;
+        var mainWindow = App.mainWindow;
         mainWindow.RootFrame.Navigate(typeof(EditEventPage), selectedEvent);
     }
 }

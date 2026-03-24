@@ -79,7 +79,7 @@
                 />
 
                 <Button 
-                    Content="Create Event" Click="CreateEvent_Click"></Button>
+                    Content="SAVE" Click="CreateEvent_Click"></Button>
                 <TextBlock
                     Foreground="Red"
                     FontSize="12"

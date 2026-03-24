@@ -42,15 +42,17 @@ namespace OurApp.WinUI
             IEventsRepo eventsRepo = new EventsRepo();
 
             // hardcode events
-            Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, 2);
-            Event ev2 = new Event("", "Event2", "This is another event. You should attend.", new DateTime(2026, 3, 21, 14, 0, 0), new DateTime(2026, 3, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, 2);
-            Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, 2);
-            Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, 2);
+            Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            Event ev2 = new Event("", "Event2", "This is another event. You should attend.", new DateTime(2026, 3, 21, 14, 0, 0), new DateTime(2026, 3, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, new List<Company>());
+            Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, new List<Company>());
 
-            eventsRepo.Add(ev1);
-            eventsRepo.Add(ev2);
-            eventsRepo.Add(ev3);
-            eventsRepo.Add(ev4);
+            eventsRepo.AddEventToRepo(ev1);
+            eventsRepo.AddEventToRepo(ev2);
+            eventsRepo.AddEventToRepo(ev3);
+            eventsRepo.AddEventToRepo(ev4);
+
+            eventsRepo.printAll();
             eventsService = new EventsService(eventsRepo);
         }
 

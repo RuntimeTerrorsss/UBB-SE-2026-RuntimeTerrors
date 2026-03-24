@@ -12,41 +12,41 @@ namespace OurApp.Core.Services
 {
     public class EventsService
     {
-        IEventsRepo repository;
-        public EventsService(IEventsRepo repo) 
+        IEventsRepo eventsRepository;
+        public EventsService(IEventsRepo eventsRepo) 
         {
-            this.repository = repo;
+            this.eventsRepository = eventsRepo;
         }
 
-        public void AddEvent(string photo, string title, string description, DateTime start, DateTime end, string location)
+        public void AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation)
         {
-            Event e = new Event(photo, title, description, start, end, location, 1, 1);
-            this.repository.Add(e);
+            Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, 1, new List<Company>());
+            this.eventsRepository.AddEventToRepo(eventToBeAdded);
         }
 
-        public void updateEvent(int id, string photo, string title, string description, DateTime start, DateTime end, string location)
+        public void UpdateEvent(int eventIdToBeUpdated, string newEventPhoto, string newEventTitle, string newEventDescription, DateTime newEventStartDate, DateTime newEventEndDate, string newEventLocation)
         {
-            this.repository.Update(id, photo, title, description, start, end, location);
+            this.eventsRepository.UpdateEventToRepo(eventIdToBeUpdated, newEventPhoto, newEventTitle, newEventDescription, newEventStartDate, newEventEndDate, newEventLocation);
         }
 
         public void printAll()
         {
-            this.repository.printAll();
+            this.eventsRepository.printAll();
         }
 
         public ObservableCollection<Event> GetAllEvents()
         {
-            return this.repository.GetAll();
+            return this.eventsRepository.GetCollectionFromRepo();
         }
 
         public ObservableCollection<Event> GetCurrentEvents()
         {
-            return this.repository.getCurrentEvents();
+            return this.eventsRepository.getCurrentEventsFromRepo();
         }
 
         public ObservableCollection<Event> GetPastEvents()
         {
-            return this.repository.getPastEvents();
+            return this.eventsRepository.getPastEventsFromRepo();
         }
     }
 }

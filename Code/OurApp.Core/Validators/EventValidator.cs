@@ -8,70 +8,70 @@ namespace OurApp.Core.Validators
 {
     public class EventValidator
     {
-        public bool TitleValidator(string title)
+        public bool IsEventTitleValid(string eventTitle)
         {
-            if (title.Length == 0)
+            if (eventTitle.Length == 0)
             {
                 throw new Exception("Title is mandatory");
             }
-            if (title.Length > 200)
+            if (eventTitle.Length > 200)
             {
                 throw new Exception("Title is too long");
             }
             return true;
         }
 
-        public bool DescriptionValidator(string description)
+        public bool IsEventDescriptionValid(string eventDescription)
         {
-            if (description.Length > 2000)
+            if (eventDescription.Length > 2000)
             {
                 throw new Exception("Description is too long");
             }
             return true;
         }
 
-        public bool LocationValidator(string location)
+        public bool IsEventLocationValid(string eventLocation)
         {
-            if (location.Length == 0)
+            if (eventLocation.Length == 0)
             {
                 throw new Exception("Location is mandatory");
             }
-            if (location.Length > 300)
+            if (eventLocation.Length > 300)
             {
                 throw new Exception("Location is too long");
             }
             return true;
         }
 
-        public bool StartDateValidator(DateTimeOffset? startDate)
+        public bool IsEventStartDateValid(DateTimeOffset? eventStartDate)
         {
-            if (startDate == null)
+            if (eventStartDate == null)
             {
                 throw new Exception("Starting date is mandatory");
             }
-            if (startDate < DateTimeOffset.Now)
+            if (eventStartDate < DateTimeOffset.Now)
             {
                 throw new Exception("Event must start after creation");
             }
             return true;
         }
 
-        public bool EndDateValidator(DateTimeOffset? endDate)
+        public bool IsEventEndDateValid(DateTimeOffset? eventEndDate)
         {
-            if (endDate == null)
+            if (eventEndDate == null)
             {
                 throw new Exception("Ending date is mandatory");
             }
-            if (endDate < DateTimeOffset.Now)
+            if (eventEndDate < DateTimeOffset.Now)
             {
                 throw new Exception("Event must end after creation");
             }
             return true;
         }
 
-        public bool DateCronologityValidator(DateTimeOffset? startDate, DateTimeOffset? endDate)
+        public bool AreEventDatesCronologicallyValid(DateTimeOffset? eventStartDate, DateTimeOffset? eventEndDate)
         {
-            if (startDate > endDate)
+            if (eventStartDate > eventEndDate)
             {
                 throw new Exception("Event must begin before ending");
             }

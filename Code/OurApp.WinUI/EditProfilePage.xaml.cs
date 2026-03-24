@@ -31,7 +31,7 @@ namespace OurApp.WinUI
 
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
-            var mainW = App.MainWin;
+            var mainW = App.mainWindow;
             if (mainW.RootFrame.CanGoBack)
             {
                 mainW.RootFrame.GoBack();

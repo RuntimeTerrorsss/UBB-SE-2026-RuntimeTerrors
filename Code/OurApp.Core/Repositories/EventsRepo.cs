@@ -11,75 +11,85 @@ namespace OurApp.Core.Repositories
 {
     public class EventsRepo : IEventsRepo
     {
-        ObservableCollection<Event> events;
+        ObservableCollection<Event> eventsCollection;
 
         public EventsRepo() 
         {
-            events = new ObservableCollection<Event>();
+            eventsCollection = new ObservableCollection<Event>();
         }
 
         public void printAll()
         {
-            for (int i = 0; i < events.Count; i++)
+            for (int i = 0; i < eventsCollection.Count; i++)
             {
-                System.Diagnostics.Debug.WriteLine($"{events[i]} ");
+                System.Diagnostics.Debug.WriteLine($"{eventsCollection[i]} ");
             }
         }
 
-        public ObservableCollection<Event> GetAll()
+        public ObservableCollection<Event> GetCollectionFromRepo()
         {
-            return events;
+            return eventsCollection;
         }
 
-        public void Add(Event e)
+        public void AddEventToRepo(Event eventToBeAdded)
         {
-            events.Add(e);
+            eventsCollection.Add(eventToBeAdded);
         }
 
-        public void Remove(Event e)
+        public void RemoveEventFromRepo(Event eventToBeRemoved)
         {
-            events.Remove(e);
+            eventsCollection.Remove(eventToBeRemoved);
         }
 
-        public ObservableCollection<Event> getCurrentEvents()
+        public ObservableCollection<Event> getCurrentEventsFromRepo()
         {
             ObservableCollection<Event> currentEvents = new ObservableCollection<Event>();
-            foreach (Event e in events)
+
+            foreach (Event @event in eventsCollection)
             {
-                if (e.EndDate.Date >= DateTime.Now.Date)
+                DateTime eventEndDate = @event.EndDate;
+                DateTime todaysDate = DateTime.Now;
+
+                if (eventEndDate.Date >= todaysDate.Date)
                 {
-                    currentEvents.Add(e);
+                    currentEvents.Add(@event);
                 }
             }
+
             return currentEvents;
         }
 
-        public ObservableCollection<Event> getPastEvents()
+        public ObservableCollection<Event> getPastEventsFromRepo()
         {
             ObservableCollection<Event> pastEvents = new ObservableCollection<Event>();
-            foreach (Event e in events)
+
+            foreach (Event @event in eventsCollection)
             {
-                if (e.EndDate.Date < DateTime.Now.Date)
+                DateTime eventEndDate = @event.EndDate;
+                DateTime todaysDate = DateTime.Now;
+
+                if (eventEndDate.Date < todaysDate.Date)
                 {
-                    pastEvents.Add(e);
+                    pastEvents.Add(@event);
                 }
             }
+
             return pastEvents;
         }
 
 
-        public void Update(int id, string photo, string title, string description, DateTime start, DateTime end, string location)
+        public void UpdateEventToRepo(int eventIdToBeUpdated, string newEventPhoto, string newEventTitle, string newEventDescription, DateTime newEventStartDate, DateTime newEventEndDate, string newEventLocation)
         {
-            foreach (Event e in events)
+            foreach (Event @event in eventsCollection)
             {
-                if (e.Id == id)
+                if (@event.Id == eventIdToBeUpdated)
                 {
-                    e.Photo = photo;
-                    e.Title = title;
-                    e.Description = description;
-                    e.StartDate = start;
-                    e.EndDate = end;
-                    e.Location = location;
+                    @event.Photo = newEventPhoto;
+                    @event.Title = newEventTitle;
+                    @event.Description = newEventDescription;
+                    @event.StartDate = newEventStartDate;
+                    @event.EndDate = newEventEndDate;
+                    @event.Location = newEventLocation;
                     return;
                 }
             }
