@@ -6,12 +6,21 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace iss_project.UI.ViewModels.Jobs
 {
-    public class CreateJobViewModel
+    public class CreateJobViewModel : INotifyPropertyChanged
     {
         private readonly IJobService _jobService;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
         public CreateJobViewModel()
         {
@@ -65,27 +74,61 @@ namespace iss_project.UI.ViewModels.Jobs
                 return (false, message);
             }
 
-            var job = new JobPosting
+            try
             {
-                CompanyId = CompanyId,
-                JobTitle = JobTitle,
-                IndustryField = IndustryField,
-                JobType = JobType,
-                ExperienceLevel = ExperienceLevel,
-                JobDescription = JobDescription,
-                JobLocation = JobLocation,
-                AvailablePositions = AvailablePositions,
-                PostedAt = DateTime.Now,
-                StartDate = StartDate?.DateTime,
-                EndDate = EndDate?.DateTime,
-                Deadline = Deadline?.DateTime,
-                Salary = Salary,
-                AmountPayed = AmountPayed
-            };
 
-            await _jobService.CreateJobAsync(job);
+                var job = new JobPosting
+                {
+                    CompanyId = CompanyId,
+                    JobTitle = JobTitle,
+                    IndustryField = IndustryField,
+                    JobType = JobType,
+                    ExperienceLevel = ExperienceLevel,
+                    JobDescription = JobDescription,
+                    JobLocation = JobLocation,
+                    AvailablePositions = AvailablePositions,
+                    PostedAt = DateTime.Now,
+                    StartDate = StartDate?.DateTime,
+                    EndDate = EndDate?.DateTime,
 
-            return (true, "Job created successfully.");
+                    Deadline = UseAutomaticExpiration && ExpirationDays.HasValue
+        ? DateTime.Now.AddDays(ExpirationDays.Value)
+        : Deadline?.DateTime,
+
+                    Salary = Salary,
+                    AmountPayed = AmountPayed
+                };
+
+                await _jobService.CreateJobAsync(job);
+
+                return (true, "Job created successfully");
+            }
+            catch
+            {
+                return (false, "We're sorry, an error occurred. The job was not created. Please try again.");
+            }
+        }
+
+        private bool _useAutomaticExpiration;
+        public bool UseAutomaticExpiration
+        {
+            get => _useAutomaticExpiration;
+            set
+            {
+                _useAutomaticExpiration = value;
+                OnPropertyChanged(); // 🔥 this notifies UI
+            }
+        }
+
+        private int? _expirationDays;
+        public int? ExpirationDays
+        {
+            get => _expirationDays;
+            set
+            {
+                _expirationDays = value;
+                OnPropertyChanged(); // 🔥 this notifies UI
+            }
         }
     }
 }

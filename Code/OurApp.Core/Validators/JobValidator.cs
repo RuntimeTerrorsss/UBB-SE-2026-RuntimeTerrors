@@ -43,14 +43,20 @@ namespace iss_project.UI.Validators
             // Date validation
             if (model.StartDate.HasValue && model.EndDate.HasValue)
             {
-                if (model.EndDate < model.StartDate)
-                    errors.Add("End date cannot be earlier than start date.");
+                if (model.EndDate <= model.StartDate)
+                    errors.Add("End date must be after start date.");
             }
 
             if (model.Deadline.HasValue)
             {
                 if (model.Deadline < DateTimeOffset.Now)
                     errors.Add("Deadline cannot be in the past.");
+            }
+
+            if (model.StartDate.HasValue)
+            {
+                if (model.StartDate < DateTimeOffset.Now)
+                    errors.Add("Start date must be in the future.");
             }
 
             // Financial validation
@@ -64,6 +70,12 @@ namespace iss_project.UI.Validators
             {
                 if (model.AmountPayed > model.Salary)
                     errors.Add("Amount paid cannot exceed salary.");
+            }
+
+            if (model.UseAutomaticExpiration)
+            {
+                if (!model.ExpirationDays.HasValue || model.ExpirationDays <= 0)
+                    errors.Add("Expiration days must be greater than 0 when automatic expiration is enabled.");
             }
 
             return errors;

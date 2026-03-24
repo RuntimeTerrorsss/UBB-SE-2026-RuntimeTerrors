@@ -1,7 +1,12 @@
 <Page
     x:Class="iss_project.UI.Views.Jobs.CreateJobPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:iss_project.UI.Converters">
+
+    <Page.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Page.Resources>
 
     <ScrollViewer>
         <Grid Padding="20">
@@ -38,14 +43,22 @@
                             Date="{Binding EndDate, Mode=TwoWay}" />
 
                 <DatePicker Header="Deadline"
-                            Date="{Binding Deadline, Mode=TwoWay}" />
-
+            Date="{Binding Deadline, Mode=TwoWay}"
+            IsEnabled="{Binding UseAutomaticExpiration, Converter={StaticResource InverseBooleanConverter}}" />
+                    
                 <!-- Financial -->
                 <TextBox Header="Salary"
                          Text="{Binding Salary, Mode=TwoWay}" />
 
                 <TextBox Header="Amount Payed"
                          Text="{Binding AmountPayed, Mode=TwoWay}" />
+
+                <CheckBox Content="Select automatic expiration date"
+          IsChecked="{Binding UseAutomaticExpiration, Mode=TwoWay}" />
+
+                <TextBox Header="Expiration Days"
+         Text="{Binding ExpirationDays, Mode=TwoWay}"
+         IsEnabled="{Binding UseAutomaticExpiration}" />
 
                 <!-- Buttons -->
                 <StackPanel Orientation="Horizontal" Spacing="10">

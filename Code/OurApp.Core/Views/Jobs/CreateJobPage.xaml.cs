@@ -19,22 +19,20 @@ namespace iss_project.UI.Views.Jobs
 
             var result = await vm.CreateJob();
 
-            if (!result.Success)
+            var dialog = new ContentDialog
             {
-                var dialog = new ContentDialog
-                {
-                    Title = "Validation Errors",
-                    Content = result.Message,
-                    CloseButtonText = "OK",
-                    XamlRoot = this.XamlRoot
-                };
+                Title = result.Success ? "Success" : "Error",
+                Content = result.Message,
+                CloseButtonText = "OK",
+                XamlRoot = this.XamlRoot
+            };
 
-                await dialog.ShowAsync();
-                return;
+            await dialog.ShowAsync();
+
+            if (result.Success)
+            {
+                MainWindow.Instance.ShowJobs();
             }
-
-            // Success → go back to jobs list
-            MainWindow.Instance.ShowJobs();
         }
 
         private async void GoBack(object sender, RoutedEventArgs e)
