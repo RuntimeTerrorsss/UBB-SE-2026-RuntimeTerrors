@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Models
 {
-    internal class Company
+    public class Company
     {
         public string Name { get; set; }
         public string AboutUs { get; set; }

@@ -10,6 +10,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using OurApp.Core.Repositories;
+using OurApp.Core.Services;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -23,9 +25,26 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public Frame RootFrame => rootFrame;
+        public EventsService service { get; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            IEventsRepo repo = new EventsRepo();
+            service = new EventsService(repo);
+        }
+
+        private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Clicked to nav");
+            RootFrame.Navigate(typeof(OurEventsPage));
+        }
+
+        private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(typeof(PastEventsPage));
         }
     }
 }
