@@ -12,6 +12,8 @@ namespace OurApp.Core.Services
         void UpdateAppTestGrade(int applicantId, decimal grade);
         void UpdateCompanyTestGrade(int applicantId, decimal grade);
         void UpdateInterviewGrade(int applicantId, decimal grade);
+        void UpdateApplicant(Applicant applicant);
+        void RemoveApplicant(int applicantId);
         
         decimal? ScanCvXml(string xmlPath);
     }

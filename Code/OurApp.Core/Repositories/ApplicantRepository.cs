@@ -10,8 +10,8 @@ namespace OurApp.Core.Repositories
         private static readonly List<Applicant> _applicants = new List<Applicant>
         {
             // Seed data
-            new Applicant { ApplicantId = 1, Job = new JobPosting{ JobId = 1 }, User = new User(1, "Alice", "alice@test.com"), ApplicationStatus = "Pending", AppliedAt = DateTime.Now.AddDays(-2), CvFileUrl = "demo_cv.xml" },
-            new Applicant { ApplicantId = 2, Job = new JobPosting{ JobId = 1 }, User = new User(2, "Bob", "bob@test.com"), ApplicationStatus = "Pending", AppliedAt = DateTime.Now.AddDays(-1), CvFileUrl = "demo_cv.xml" }
+            new Applicant { ApplicantId = 1, Job = new JobPosting{ JobId = 2 }, User = new User(1, "Alice", "alice@test.com"), AppliedAt = DateTime.Now.AddDays(-2), CvFileUrl = "demo_cv.xml" },
+            new Applicant { ApplicantId = 2, Job = new JobPosting{ JobId = 1 }, User = new User(2, "Bob", "bob@test.com"), AppliedAt = DateTime.Now.AddDays(-1), CvFileUrl = "demo_cv.xml" }
         };
 
         private int _nextId = 3;
@@ -47,6 +47,15 @@ namespace OurApp.Core.Repositories
                 existing.InterviewGrade = applicant.InterviewGrade;
                 existing.ApplicationStatus = applicant.ApplicationStatus;
                 existing.CvFileUrl = applicant.CvFileUrl;
+            }
+        }
+
+        public void RemoveApplicant(int applicantId)
+        {
+            var applicant = GetApplicantById(applicantId);
+            if (applicant != null)
+            {
+                _applicants.Remove(applicant);
             }
         }
     }

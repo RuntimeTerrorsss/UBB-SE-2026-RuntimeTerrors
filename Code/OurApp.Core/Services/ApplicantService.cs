@@ -243,6 +243,17 @@ namespace OurApp.Core.Services
             return totalGrade;
         }
 
+        public void UpdateApplicant(Applicant applicant)
+        {
+            EvaluateApplicantStatus(applicant);
+            _repository.UpdateApplicant(applicant);
+        }
+
+        public void RemoveApplicant(int applicantId)
+        {
+            _repository.RemoveApplicant(applicantId);
+        }
+
         private void EvaluateApplicantStatus(Applicant applicant)
         {
             List<decimal> nonNullGrades = new List<decimal>();
@@ -256,7 +267,7 @@ namespace OurApp.Core.Services
             {
                 if (grade < PassIndividual)
                 {
-                    applicant.ApplicationStatus = "Failed";
+                    applicant.ApplicationStatus = "Rejected";
                     return;
                 }
             }
@@ -272,13 +283,15 @@ namespace OurApp.Core.Services
                 
                 if (average < PassCollective)
                 {
-                    applicant.ApplicationStatus = "Failed";
+                    applicant.ApplicationStatus = "Rejected";
                     return;
                 }
             }
 
+            if (nonNullGrades.Count == 4 && string.IsNullOrEmpty(applicant.ApplicationStatus))
+            {
                 applicant.ApplicationStatus = "On Hold";
-            
+            }
         }
     }
 }

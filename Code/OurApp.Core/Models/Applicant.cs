@@ -15,8 +15,8 @@ namespace OurApp.Core.Models
         public decimal? CompanyTestGrade { get; set; }
         public decimal? InterviewGrade { get; set; }
 
-        //"Pending", "Failed", "On Hold", "Accepted", "Recommended"
-        public string ApplicationStatus { get; set; } = "Pending";
+        //"Failed", "On Hold", "Accepted", "Recommended"
+        public string ApplicationStatus { get; set; } = null;
         public DateTime AppliedAt { get; set; }
     }
 }
