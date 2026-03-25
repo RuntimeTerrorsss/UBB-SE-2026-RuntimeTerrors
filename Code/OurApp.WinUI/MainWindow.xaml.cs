@@ -33,7 +33,7 @@ namespace OurApp.WinUI
             this.InitializeComponent();
 
             IGameRepo game_repo = new GameMemoryRepo();
-            this. gameService = new GameService(game_repo);
+            this.gameService = new GameService(game_repo);
 
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
@@ -56,10 +56,16 @@ namespace OurApp.WinUI
             eventService = new EventsService(eventRepo);
         }
 
+        private void NavigateToEditGame_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Clicked to editgame");
+            RootFrame.Navigate(typeof(EditGame), gameService);
+        }
+
         private void NavigateToGamePage_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
-            RootFrame.Navigate(typeof(GamePage));
+            RootFrame.Navigate(typeof(GamePage), gameService);
         }
 
         private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)

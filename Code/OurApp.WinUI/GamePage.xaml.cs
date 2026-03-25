@@ -30,21 +30,19 @@ namespace OurApp.WinUI
         public GameViewModel ViewModel { get; set; }
         public Frame GameFrame => gameFrame;
 
-        public GameService service;
+        public GameService gameService;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            gameService = (GameService)e.Parameter;
+            ViewModel = new GameViewModel(gameService);
+            DataContext = ViewModel;
+        }
 
         public GamePage()
         {
-            var repo = new GameMemoryRepo();
-            var service = new GameService(repo);
-            ViewModel = new GameViewModel(service);
-
             this.InitializeComponent();
-        }
-
-        private void NavigateToEditGame_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Clicked to editgame");
-            this.Frame.Navigate(typeof(EditGame));
         }
 
         private void OnStartGameClick(object sender, RoutedEventArgs e)

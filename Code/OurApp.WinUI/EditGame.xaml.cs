@@ -27,11 +27,19 @@ namespace OurApp.WinUI
     {
         public EditGameViewModel ViewModel { get; private set; }
 
-        public EditGame(GameService service)
+        public GameService gameService;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            gameService = (GameService)e.Parameter;
+            ViewModel = new EditGameViewModel(gameService);
+            DataContext = ViewModel;
+        }
+
+        public EditGame()
         {
             InitializeComponent();
-            ViewModel = new EditGameViewModel(service);
-            DataContext = ViewModel;
         }
     }
 }

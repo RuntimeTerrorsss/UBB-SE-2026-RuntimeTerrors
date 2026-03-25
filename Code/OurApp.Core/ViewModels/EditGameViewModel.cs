@@ -33,11 +33,9 @@ namespace OurApp.Core.ViewModels
 
         public EditGameViewModel(GameService service)
         {
-            // Temporary in-memory repo so the page works without DB wiring.
-            // When your real DB repo implements IGameRepo, you can swap this.
+          
             _service = service;
 
-            // Seed with the same structure your `GameViewModel` expects (2 scenarios).
             for (int i = 0; i < 2; i++)
             {
                 var s = new ScenarioInput
@@ -45,7 +43,6 @@ namespace OurApp.Core.ViewModels
                     ScenarioText = string.Empty
                 };
 
-                // Seed with 2 advice choices (your `GameViewModel` UI shows 2 choices pages).
                 s.Choices.Add(new AdviceChoiceInput());
                 s.Choices.Add(new AdviceChoiceInput());
                 Scenarios.Add(s);
@@ -73,6 +70,7 @@ namespace OurApp.Core.ViewModels
                             .ToList()
                     ))
                     .ToList();
+
 
                 var game = _service.CreateGameFromInput(
                     buddyId: buddyId,
