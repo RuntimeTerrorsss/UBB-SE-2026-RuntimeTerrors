@@ -14,11 +14,10 @@ public class Game
 
     public Game()
     {
-        Buddy = new Buddy(0, "Default", "Default");
+        Buddy = new Buddy(0, string.Empty, string.Empty);
         scenarios = new List<Scenario>();
-        scenarios.Add(new Scenario("ksjdck"));
-        scenarios.Add(new Scenario("Default"));
         Conclusion = string.Empty;
+        IsPublished = false;
     }
 
     public Game(Buddy buddy, IEnumerable<Scenario> scenarioList, string conclusion, bool isPublished = false)
@@ -35,6 +34,11 @@ public class Game
     }
 
     public void Publish()
+    {
+        IsPublished = true;
+    }
+
+    public void Unpublish()
     {
         IsPublished = true;
     }

@@ -45,6 +45,7 @@ namespace OurApp.Core.ViewModels
 
                 s.Choices.Add(new AdviceChoiceInput());
                 s.Choices.Add(new AdviceChoiceInput());
+                s.Choices.Add(new AdviceChoiceInput());
                 Scenarios.Add(s);
             }
 

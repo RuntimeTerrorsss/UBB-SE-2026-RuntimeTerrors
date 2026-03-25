@@ -37,7 +37,7 @@ namespace OurApp.Core.Services
         public string ShowScenarioText(int number)
         {
             var game = LoadedGame();
-            if (number < 0 || number >= game.Scenarios.Count)
+            if (number < 0 || number != 0 && number >= game.Scenarios.Count)
                 throw new ArgumentOutOfRangeException(nameof(number));
             return game.Scenarios[number].Description;
         }
@@ -69,7 +69,7 @@ namespace OurApp.Core.Services
             string buddyIntroduction,
             IReadOnlyList<(string scenarioText, IReadOnlyList<(string advice, string feedback)> choices)> scenarios,
             string conclusion,
-            bool publish = false)
+            bool publish = true)
         {
             var buddy = new Buddy(buddyId, buddyName, buddyIntroduction);
 
@@ -89,16 +89,14 @@ namespace OurApp.Core.Services
             return new Game(buddy, builtScenarios, conclusion, publish);
         }
 
-        public Game PublishGame(Game existingGame)
+        public void PublishGame(Game existingGame)
         {
-            if (existingGame == null) throw new ArgumentNullException(nameof(existingGame));
-            return new Game(existingGame.Buddy, existingGame.Scenarios, existingGame.Conclusion, isPublished: true);
+            existingGame.Publish();
         }
 
-        public Game UnpublishGame(Game existingGame)
+        public void UnpublishGame(Game existingGame)
         {
-            if (existingGame == null) throw new ArgumentNullException(nameof(existingGame));
-            return new Game(existingGame.Buddy, existingGame.Scenarios, existingGame.Conclusion, isPublished: false);
+            existingGame.Unpublish();
         }
 
     }

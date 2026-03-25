@@ -1,76 +1,59 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OurApp.Core.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.Security.Cryptography.X509Certificates;
 
 namespace OurApp.Core.ViewModels
 {
-    public class GameViewModel : ObservableObject
+    public partial class GameViewModel : ObservableObject
     {
         private readonly GameService _gameService;
+        private readonly Action? _exitApplication;
 
+        private int _currentScenarioIndex;
+
+        [ObservableProperty]
         private GameState _currentState = GameState.Start;
-        public GameState CurrentState
+
+        partial void OnCurrentStateChanged(GameState value)
         {
-            get => _currentState;
-            set
-            {
-                if (SetProperty(ref _currentState, value))
-                {
-
-                    OnPropertyChanged(nameof(IsStartVisible));
-                    OnPropertyChanged(nameof(IsChoice1Visible));
-                    OnPropertyChanged(nameof(IsReaction1Visible));
-                    OnPropertyChanged(nameof(IsChoice2Visible));
-                    OnPropertyChanged(nameof(IsReaction2Visible));
-                    OnPropertyChanged(nameof(IsConclusionVisible));
-
-                    OnPropertyChanged(nameof(IsChoiceActive));
-                    OnPropertyChanged(nameof(IsReactionActive));
-                }
-            }
+            OnPropertyChanged(nameof(IsStartVisible));
+            OnPropertyChanged(nameof(IsChoice1Visible));
+            OnPropertyChanged(nameof(IsReaction1Visible));
+            OnPropertyChanged(nameof(IsChoice2Visible));
+            OnPropertyChanged(nameof(IsReaction2Visible));
+            OnPropertyChanged(nameof(IsConclusionVisible));
+            OnPropertyChanged(nameof(IsChoiceActive));
+            OnPropertyChanged(nameof(IsReactionActive));
         }
-
-        public bool IsStartVisible => CurrentState == GameState.Start ? true : false;
-        public bool IsChoice1Visible => CurrentState == GameState.Choices1 ? true : false;
-        public bool IsReaction1Visible => CurrentState == GameState.Reaction1 ? true : false;
-        public bool IsChoice2Visible => CurrentState == GameState.Choices2 ? true : false;
-        public bool IsReaction2Visible => CurrentState == GameState.Reaction2 ? true : false;
-        public bool IsConclusionVisible => CurrentState == GameState.Conclusion ? true : false;
+        
+        public bool IsStartVisible => CurrentState == GameState.Start;
+        public bool IsChoice1Visible => CurrentState == GameState.Choices1;
+        public bool IsReaction1Visible => CurrentState == GameState.Reaction1;
+        public bool IsChoice2Visible => CurrentState == GameState.Choices2;
+        public bool IsReaction2Visible => CurrentState == GameState.Reaction2;
+        public bool IsConclusionVisible => CurrentState == GameState.Conclusion;
 
         public bool IsChoiceActive => IsChoice1Visible || IsChoice2Visible;
         public bool IsReactionActive => IsReaction1Visible || IsReaction2Visible;
 
+        [ObservableProperty]
+        private string _welcomeMessage = string.Empty;
 
-        private int _currentScenarioIndex = 0;
+        [ObservableProperty]
+        private string _currentQuestion = string.Empty;
 
-        public string WelcomeMessage { get; set; }
+        [ObservableProperty]
+        private List<string>? _currentChoices;
 
-        private string _currentQuestion;
-        public string CurrentQuestion {
-            get => _currentQuestion;
-            set => SetProperty(ref _currentQuestion, value);
-        }
+        [ObservableProperty]
+        private string _feedback = string.Empty;
 
-        private List<string> _currentChoices;
-        public List<string> CurrentChoices { 
-            get =>_currentChoices; 
-            set => SetProperty(ref _currentChoices, value); 
-        }
-
-        private string _feedback;
-        public string Feedback {
-            get => _feedback;
-            set => SetProperty(ref _feedback, value);
-        }
-
-        public GameViewModel(GameService gameService)
+        public GameViewModel(GameService gameService, Action? exitApplication = null)
         {
             _gameService = gameService;
+            _exitApplication = exitApplication;
             WelcomeMessage = _gameService.ShowCoworker();
             UpdateScenario();
         }
@@ -84,22 +67,28 @@ namespace OurApp.Core.ViewModels
             }
         }
 
-
-        public void StartGame()
+        [RelayCommand]
+        private void StartGame()
         {
             CurrentState = GameState.Choices1;
         }
 
-        public void OnChoiceSelected(int adviceIndex)
+        [RelayCommand]
+        private void SelectChoice(string? choiceText)
         {
-            if (adviceIndex < 0) return;
+            if (string.IsNullOrEmpty(choiceText) || CurrentChoices == null)
+                return;
+
+            int adviceIndex = CurrentChoices.IndexOf(choiceText);
+            if (adviceIndex < 0)
+                return;
 
             Feedback = _gameService.ChoiceMade(_currentScenarioIndex, adviceIndex);
-
             CurrentState = _currentScenarioIndex == 0 ? GameState.Reaction1 : GameState.Reaction2;
         }
 
-        public void GoToNextStep()
+        [RelayCommand]
+        private void GoToNextStep()
         {
             _currentScenarioIndex++;
 
@@ -114,6 +103,11 @@ namespace OurApp.Core.ViewModels
                 CurrentState = GameState.Conclusion;
             }
         }
+
+        [RelayCommand]
+        private void Exit()
+        {
+            _exitApplication?.Invoke();
+        }
     }
 }
-    
