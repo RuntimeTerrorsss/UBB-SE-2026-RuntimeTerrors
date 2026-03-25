@@ -30,6 +30,7 @@ namespace OurApp.WinUI
         public EventsService eventsService { get; }
         public ICompanyService companyService { get; }
         public SessionService sessionService { get; }
+        public CollaboratorsService collabsService { get; }
 
         /// <summary>
         /// MainWindow constructor that initialize the repositories and services
@@ -39,6 +40,9 @@ namespace OurApp.WinUI
             string connectionString = "Data Source=DESKTOP-D8Q1P5P\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
+
+            CollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
+            this.collabsService = new CollaboratorsService(collabRepo);
 
             Company c1 = new Company(1, "ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
             companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");

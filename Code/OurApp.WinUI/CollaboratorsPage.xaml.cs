@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using OurApp.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,9 +24,13 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class CollaboratorsPage : Page
     {
+        public CollaboratorsViewModel ViewModel { get; }
         public CollaboratorsPage()
         {
+            var mainW = App.mainWindow;
             InitializeComponent();
+            ViewModel = new CollaboratorsViewModel(mainW.collabsService, mainW.sessionService);
+            this.DataContext = ViewModel;
         }
     }
 }
