@@ -36,5 +36,32 @@ namespace OurApp.Core.Repositories
         {
             companies.Remove(c);
         }
+
+
+        /// <summary>
+        /// Function that searches a company by name and returns it
+        /// </summary>
+        /// <param name="companyName"> the name of the company being searched </param>
+        /// <returns> the company if found, else null </returns>
+        public Company? GetCompanyByName(string companyName)
+        {
+            Company company = null;
+
+            if (string.IsNullOrWhiteSpace(companyName))
+            {
+                return null;
+            }
+
+
+            foreach (Company compan in companies)
+            {
+                if (compan.Name == companyName)
+                {
+                    company = compan;
+                }
+            }
+
+            return company;
+        }
     }
 }

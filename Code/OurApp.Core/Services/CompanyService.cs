@@ -29,29 +29,14 @@ namespace OurApp.Core.Services
             this.CompanyRepo.PrintAll();
         }
 
-        public bool GetCompanyByName(string companyName, out Company company)
+        /// <summary>
+        /// Function that searches a company by name and returns it
+        /// </summary>
+        /// <param name="companyName"> the name of the company being searched </param>
+        /// <returns> the company if found, else null </returns>
+        public Company? GetCompanyByName(string companyName)
         {
-            company = null;
-
-            if (string.IsNullOrWhiteSpace(companyName))
-            {
-                return false;
-            }
-
-
-            ObservableCollection<Company> allCompanies = CompanyRepo.GetAll();
-            foreach (Company compan in allCompanies)
-            {
-                if (compan.Name == companyName)
-                {
-                    company = compan;
-                }
-            }
-            //company = CompanyRepo
-            //    .GetAll()
-            //    .FirstOrDefault(c => string.Equals(c.Name, companyName.Trim(), StringComparison.OrdinalIgnoreCase));
-
-            return company != null;
+            return this.CompanyRepo.GetCompanyByName(companyName);
         }
     }
 }

@@ -14,29 +14,31 @@
         <converters:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
     </Page.Resources>
     <Grid>
-        <ListView ItemsSource="{Binding pastEventsCollection}" Margin="0, 40, 0, 0">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:Event">
-                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="0,0,0,10" Padding="10">
-                        <Grid ColumnDefinitions="80,*">
-                            <Border Width="60" Height="60" CornerRadius="5">
-                                <Image
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ListView ItemsSource="{Binding pastEventsCollection}" Margin="0, 40, 0, 0">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Event">
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="0,0,0,10" Padding="10">
+                            <Grid ColumnDefinitions="80,*">
+                                <Border Width="60" Height="60" CornerRadius="5">
+                                    <Image
                                         Source="{Binding Photo, Converter={StaticResource Base64ToImageSourceConverter}}"
                                         Width="60"
                                         Height="60"
                                         Stretch="UniformToFill" />
-                            </Border>
-                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16"/>
-                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
-                                <TextBlock Text="{Binding Location}" FontStyle="Italic"/>
-                                <TextBlock Text="{Binding StartDate}" />
-                                <TextBlock Text="{Binding EndDate}" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16"/>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Location}" FontStyle="Italic"/>
+                                    <TextBlock Text="{Binding StartDate}" />
+                                    <TextBlock Text="{Binding EndDate}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
     </Grid>
 </Page>

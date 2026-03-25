@@ -25,6 +25,29 @@ namespace OurApp.Core.Repositories
         }
 
         /// <summary>
+        /// Function that returns the event id with the maximum value out of the database
+        /// </summary>
+        /// <returns></returns>
+        public int GetMaxEventId()
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+
+                string query = "SELECT MAX(event_id) FROM events";
+
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+
+                object result = sqlCommand.ExecuteScalar();
+
+                if (result == DBNull.Value || result == null)
+                    return 0;
+
+                return Convert.ToInt32(result);
+            }
+        }
+
+        /// <summary>
         /// Function that inserts an event into the database repository
         /// </summary>
         /// <param name="eventToBeAdded"> event to be inserted into the database </param>
@@ -41,7 +64,7 @@ namespace OurApp.Core.Repositories
 
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
-                sqlCommand.Parameters.AddWithValue("@Id", eventToBeAdded.Id);
+                sqlCommand.Parameters.AddWithValue("@Id", GetMaxEventId() + 1);
                 sqlCommand.Parameters.AddWithValue("@Photo", eventToBeAdded.Photo ?? (object)DBNull.Value);
                 sqlCommand.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
                 sqlCommand.Parameters.AddWithValue("@Description", eventToBeAdded.Description ?? (object)DBNull.Value);

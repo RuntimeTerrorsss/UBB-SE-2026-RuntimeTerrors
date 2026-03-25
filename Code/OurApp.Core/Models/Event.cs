@@ -9,7 +9,6 @@ namespace OurApp.Core.Models
 {
     public class Event
     {
-        private static int eventIdCounter = 8;
         public int Id { get; set; }
         public string Photo { get; set; }
         public string Title { get; set; }
@@ -33,7 +32,6 @@ namespace OurApp.Core.Models
         /// <param name="eventCollaborators"> list of all the companies invited to collaborate on the event </param>
         public Event(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, int eventHostID, List<Company> eventCollaborators)
         {
-            this.Id = eventIdCounter++;
             this.Photo = eventPhoto;
             this.Title = eventTitle;
             this.Description = eventDescription;

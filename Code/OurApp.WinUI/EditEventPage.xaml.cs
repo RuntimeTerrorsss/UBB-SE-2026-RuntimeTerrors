@@ -65,7 +65,7 @@ namespace OurApp.WinUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void CreateEvent_Click(object sender, RoutedEventArgs e)
+        private async void SaveEvent_Click(object sender, RoutedEventArgs e)
         {
             // because click usually runs before command so we must make it run before
             ViewModel.EditEventCommand.Execute(null);
@@ -85,7 +85,7 @@ namespace OurApp.WinUI
                 popup = new ContentDialog
                 {
                     Title = "YEY!",
-                    Content = "Event created successfully!",
+                    Content = "Event saved successfully!",
                     CloseButtonText = "Close",
                     XamlRoot = this.XamlRoot
                 };
@@ -95,7 +95,7 @@ namespace OurApp.WinUI
                 popup = new ContentDialog
                 {
                     Title = "Oops!",
-                    Content = "We’re sorry, an error occurred. The event was not created. Please try again.",
+                    Content = "We’re sorry, an error occurred. The event was not saved. Please try again.",
                     CloseButtonText = "Close",
                     XamlRoot = this.XamlRoot
                 };

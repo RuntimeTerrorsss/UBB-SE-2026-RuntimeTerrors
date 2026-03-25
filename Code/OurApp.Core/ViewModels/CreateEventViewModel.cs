@@ -275,7 +275,8 @@ namespace OurApp.Core.ViewModels
                 return false;
             }
 
-            if (!companyService.GetCompanyByName(companyName, out var company))
+            Company? company = companyService.GetCompanyByName(companyName);
+            if (company == null)
             {
                 errorMessage = "Company was not found.";
                 return false;

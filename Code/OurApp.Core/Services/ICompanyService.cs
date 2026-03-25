@@ -1,3 +1,4 @@
+using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace OurApp.Core.Services
     {
         void addCompany(string companyName, string aboutUs, string pfpUrl, string logoUrl, string location, string email);
         void printAll();
-        bool GetCompanyByName(string companyName, out Models.Company company);
+        Company? GetCompanyByName(string companyName);
     }
 }
