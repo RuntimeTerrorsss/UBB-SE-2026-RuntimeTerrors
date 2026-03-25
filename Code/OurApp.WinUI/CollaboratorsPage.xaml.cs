@@ -32,5 +32,11 @@ namespace OurApp.WinUI
             ViewModel = new CollaboratorsViewModel(mainW.collabsService, mainW.sessionService);
             this.DataContext = ViewModel;
         }
+
+        private void NavigateBack_Click(object sender, RoutedEventArgs e)
+        {
+            var mainW = App.mainWindow;
+            mainW.RootFrame.Navigate(typeof(OurEventsPage));
+        }
     }
 }

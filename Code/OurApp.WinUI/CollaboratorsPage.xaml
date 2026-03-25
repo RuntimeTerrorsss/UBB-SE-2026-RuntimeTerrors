@@ -12,6 +12,8 @@
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Padding="40">
+                <Button Content="Back" Click="NavigateBack_Click"></Button>
+                
                 <ListView ItemsSource="{Binding allCollaborators}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:Company">
