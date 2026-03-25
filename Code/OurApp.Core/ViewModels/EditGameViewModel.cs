@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
+using OurApp.Core.Validators;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,7 @@ namespace OurApp.Core.ViewModels
     public partial class EditGameViewModel : ObservableObject
     {
         private readonly GameService _service;
+        private readonly GameValidator _gameValidator = new GameValidator();
 
         public ObservableCollection<ScenarioInput> Scenarios { get; } = new ObservableCollection<ScenarioInput>();
 
@@ -33,15 +35,11 @@ namespace OurApp.Core.ViewModels
 
         public EditGameViewModel(GameService service)
         {
-          
             _service = service;
 
             for (int i = 0; i < 2; i++)
             {
-                var s = new ScenarioInput
-                {
-                    ScenarioText = string.Empty
-                };
+                var s = new ScenarioInput();
 
                 s.Choices.Add(new AdviceChoiceInput());
                 s.Choices.Add(new AdviceChoiceInput());
@@ -49,7 +47,33 @@ namespace OurApp.Core.ViewModels
                 Scenarios.Add(s);
             }
 
+            ApplyLoadedGame(_service.GetStoredGame());
             StatusMessage = string.Empty;
+        }
+
+        private void ApplyLoadedGame(Game game)
+        {
+            if (game == null)
+                return;
+
+            BuddyIdText = game.Buddy.Id.ToString();
+            BuddyName = game.Buddy.Name ?? string.Empty;
+            BuddyIntroduction = game.Buddy.Introduction ?? string.Empty;
+            Conclusion = game.Conclusion ?? string.Empty;
+
+            for (int i = 0; i < Scenarios.Count && i < game.Scenarios.Count; i++)
+            {
+                var scenarioVm = Scenarios[i];
+                var scenarioModel = game.Scenarios[i];
+                scenarioVm.ScenarioText = scenarioModel.Description ?? string.Empty;
+
+                var adviceChoices = scenarioModel.AdviceChoices;
+                for (int j = 0; j < scenarioVm.Choices.Count && j < adviceChoices.Count; j++)
+                {
+                    scenarioVm.Choices[j].Advice = adviceChoices[j].Advice ?? string.Empty;
+                    scenarioVm.Choices[j].Feedback = adviceChoices[j].Feedback ?? string.Empty;
+                }
+            }
         }
 
         [RelayCommand]
@@ -72,13 +96,14 @@ namespace OurApp.Core.ViewModels
                     ))
                     .ToList();
 
+                _gameValidator.ValidateForActivation(scenarioTuples, Conclusion ?? string.Empty);
 
                 var game = _service.CreateGameFromInput(
                     buddyId: buddyId,
                     buddyName: BuddyName,
                     buddyIntroduction: BuddyIntroduction,
                     scenarios: scenarioTuples,
-                    conclusion: Conclusion,
+                    conclusion: Conclusion ?? string.Empty,
                     publish: false);
 
                 _service.Save(game);

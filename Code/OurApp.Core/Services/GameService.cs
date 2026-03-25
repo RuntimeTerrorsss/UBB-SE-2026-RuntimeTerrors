@@ -29,6 +29,11 @@ namespace OurApp.Core.Services
             _repository.Save(game);
         }
 
+        public Game GetStoredGame()
+        {
+            return _repository.Get() ?? new Game();
+        }
+
         public string ShowCoworker()
         {
             return LoadedGame().Buddy.Introduction;
