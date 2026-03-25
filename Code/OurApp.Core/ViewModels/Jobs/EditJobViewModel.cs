@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using iss_project.UI.Validators;
 
 namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
 {
@@ -28,7 +29,7 @@ namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
         }
         public EditJobViewModel(JobPosting job)
         {
-            System.Diagnostics.Debug.WriteLine($"JobType from DB: {job.JobType}");
+            _jobService = MainWindow.Services.GetService<IJobService>();
 
             Job = job;
 
@@ -42,9 +43,9 @@ namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
                 "Internship", "Entry", "Mid","Senior", "Director","Junior"
             };
 
-            // Normalize values to match dropdown EXACTLY
-            Job.JobType = Job.JobType?.Trim().ToLower();
-            Job.ExperienceLevel = Job.ExperienceLevel?.Trim().ToLower();
+            
+            //Job.JobType = Job.JobType?.Trim().ToLower();
+            //Job.ExperienceLevel = Job.ExperienceLevel?.Trim().ToLower();
         }
 
         public string JobType
@@ -67,9 +68,25 @@ namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
             }
         }
 
-        public async Task UpdateJob()
+        public async Task<(bool Success, string Message)> UpdateJob()
         {
-            await _jobService.UpdateJobAsync(Job);
+            var validator = new JobValidator();
+            var errors = validator.Validate(this);
+
+            if (errors.Count > 0)
+            {
+                return (false, string.Join("\n", errors));
+            }
+
+            try
+            {
+                await _jobService.UpdateJobAsync(Job);
+                return (true, "Job updated successfully");
+            }
+            catch
+            {
+                return (false, "We’re sorry, an error occurred. The job was not updated.");
+            }
         }
     }
 }

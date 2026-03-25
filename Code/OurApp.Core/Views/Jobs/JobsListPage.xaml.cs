@@ -45,11 +45,10 @@ namespace iss_project.UI.Views.Jobs
         private async void DeleteJob_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuFlyoutItem;
-            var job = menuItem?.Tag as JobPosting;
+            var job = (JobPosting)menuItem?.Tag;
 
-            if (job == null) return;
-
-            var dialog = new ContentDialog
+            // Confirm dialog
+            var confirmDialog = new ContentDialog
             {
                 Title = "Confirm Delete",
                 Content = "Are you sure you want to delete this job?",
@@ -58,13 +57,24 @@ namespace iss_project.UI.Views.Jobs
                 XamlRoot = this.XamlRoot
             };
 
-            var result = await dialog.ShowAsync();
+            var confirmResult = await confirmDialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary)
+            if (confirmResult != ContentDialogResult.Primary)
+                return;
+
+            // Call ViewModel
+            var result = await ViewModel.DeleteJob(job.JobId);
+
+            // Result dialog
+            var resultDialog = new ContentDialog
             {
-                await ViewModel.DeleteJob(job.JobId);
-                await ViewModel.LoadJobs();
-            }
+                Title = result.Success ? "Success" : "Error",
+                Content = result.Message,
+                CloseButtonText = "OK",
+                XamlRoot = this.XamlRoot
+            };
+
+            await resultDialog.ShowAsync();
         }
     }
 }

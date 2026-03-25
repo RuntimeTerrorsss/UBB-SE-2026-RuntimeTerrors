@@ -30,14 +30,21 @@ namespace iss_project.UI.ViewModels.Jobs
                 Jobs.Add(job);
             }
         }
-        public async Task DeleteJob(int jobId)
+        public async Task<(bool Success, string Message)> DeleteJob(int jobId)
         {
-            await _jobService.DeleteJobAsync(jobId);
-
-            var job = Jobs.FirstOrDefault(j => j.JobId == jobId);
-            if (job != null)
+            try
             {
-                Jobs.Remove(job);
+                await _jobService.DeleteJobAsync(jobId);
+
+                var job = Jobs.FirstOrDefault(j => j.JobId == jobId);
+                if (job != null)
+                    Jobs.Remove(job);
+
+                return (true, "Job deleted successfully");
+            }
+            catch
+            {
+                return (false, "We’re sorry, an error occurred. The job was not deleted. Please try again.");
             }
         }
     }

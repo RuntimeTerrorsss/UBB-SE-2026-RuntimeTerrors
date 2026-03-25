@@ -76,7 +76,6 @@ namespace iss_project.UI.ViewModels.Jobs
 
             try
             {
-
                 var job = new JobPosting
                 {
                     CompanyId = CompanyId,

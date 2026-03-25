@@ -22,19 +22,24 @@ namespace iss_project.UI.Views.Jobs
 
             try
             {
-                await ViewModel.UpdateJob();
+                var vm = (EditJobViewModel)this.DataContext;
+
+                var result = await vm.UpdateJob();
 
                 var dialog = new ContentDialog
                 {
-                    Title = "Success",
-                    Content = "Job updated successfully",
+                    Title = result.Success ? "Success" : "Error",
+                    Content = result.Message,
                     CloseButtonText = "OK",
                     XamlRoot = this.XamlRoot
                 };
 
                 await dialog.ShowAsync();
 
-                MainWindow.Instance.ShowJobs();
+                if (result.Success)
+                {
+                    MainWindow.Instance.ShowJobs();
+                }
             }
             catch
             {
@@ -50,9 +55,25 @@ namespace iss_project.UI.Views.Jobs
             }
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        private async void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.ShowJobs();
+            var dialog = new ContentDialog
+            {
+                Title = "Confirm Action",
+                Content = "Are you sure you want to cancel the modifications?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = this.XamlRoot
+            };
+
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                MainWindow.Instance.ShowJobs();
+            }
         }
     }
 }
