@@ -55,6 +55,10 @@ namespace OurApp.Core.Repositories
             }
         }
 
+        /// <summary>
+        /// Function that removes an event from the database
+        /// </summary>
+        /// <param name="eventToBeRemoved"> the event selected to be removed </param>
         public void RemoveEventFromRepo(Event eventToBeRemoved)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))

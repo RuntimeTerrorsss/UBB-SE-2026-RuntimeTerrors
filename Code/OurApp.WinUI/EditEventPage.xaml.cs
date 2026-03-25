@@ -267,6 +267,15 @@ namespace OurApp.WinUI
             }
         }
 
+        /// <summary>
+        /// Function that displays a ContentDialog if the user tries to press the "Delete"
+        /// button. The ContentDialog shows 2 buttons: Yes and No. If the chosen button
+        /// was "Yes", the user is taken back to the "Our Events" page and the event gets 
+        /// deleted and an appropriate ContentDialog gets displayed, based on the success/
+        /// failure of deleting the event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void DeleteEvent_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog dialog = new ContentDialog

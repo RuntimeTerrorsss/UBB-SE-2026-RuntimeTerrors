@@ -32,9 +32,9 @@ public sealed partial class OurEventsPage : Page
     /// </summary>
     public OurEventsPage()
     {
-        var mainW = App.mainWindow;
+        var mainWindow = App.mainWindow;
         InitializeComponent();
-        ViewModel = new OurEventsViewModel(mainW.eventsService, mainW.sessionService);
+        ViewModel = new OurEventsViewModel(mainWindow.eventsService, mainWindow.sessionService);
         this.DataContext = ViewModel;
     }
 
@@ -65,6 +65,12 @@ public sealed partial class OurEventsPage : Page
         mainWindow.RootFrame.Navigate(typeof(EditEventPage), selectedEvent);
     }
 
+    /// <summary>
+    /// Function that navigates the user to the "Collaborators" page when clicking the
+    /// "See Collaborators" button
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void SeeCollaboratorsButton_Click(object sender, RoutedEventArgs e)
     {
         var mainWindow = App.mainWindow;

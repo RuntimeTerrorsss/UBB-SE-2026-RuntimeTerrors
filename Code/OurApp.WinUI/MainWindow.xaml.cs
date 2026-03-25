@@ -27,10 +27,10 @@ namespace OurApp.WinUI
     public sealed partial class MainWindow : Window
     {
         public Frame RootFrame => rootFrame;
-        public EventsService eventsService { get; }
+        public IEventsService eventsService { get; }
         public ICompanyService companyService { get; }
         public SessionService sessionService { get; }
-        public CollaboratorsService collabsService { get; }
+        public ICollaboratorsService collabsService { get; }
 
         /// <summary>
         /// MainWindow constructor that initialize the repositories and services
@@ -41,7 +41,7 @@ namespace OurApp.WinUI
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
-            CollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
+            ICollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
             this.collabsService = new CollaboratorsService(collabRepo);
 
             Company c1 = new Company(1, "ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");

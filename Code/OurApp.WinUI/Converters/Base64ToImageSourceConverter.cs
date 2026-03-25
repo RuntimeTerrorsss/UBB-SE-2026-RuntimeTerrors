@@ -9,6 +9,14 @@ namespace OurApp.WinUI.Converters
 {
     public sealed class Base64ToImageSourceConverter : IValueConverter
     {
+        /// <summary>
+        /// Function that converts an image to a bitmapImage
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="language"></param>
+        /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is not string base64 || string.IsNullOrWhiteSpace(base64))

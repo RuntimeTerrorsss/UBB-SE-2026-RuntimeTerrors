@@ -11,15 +11,24 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Repositories
 {
-    public class CollaboratorsRepo
+    public class CollaboratorsRepo : ICollaboratorsRepo
     {
         private string connectionString { get; set; }
 
+        /// <summary>
+        /// Collaborators repository constructor
+        /// </summary>
+        /// <param name="connection"> database connection string </param>
         public CollaboratorsRepo(string connection)
         {
             this.connectionString = connection;
         }
 
+        /// <summary>
+        /// Function that adds a collaborator to the collaborators table
+        /// </summary>
+        /// <param name="eventOfCollaboration"> the event that the invited company is collaborating on </param>
+        /// <param name="collaboratorToBeAdded"> the company that has been invited to collaborate </param>
         public void AddCollaboratorToRepo(Event eventOfCollaboration, Company collaboratorToBeAdded)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
@@ -39,9 +48,15 @@ namespace OurApp.Core.Repositories
             }
         }
 
-        public List<Company> GetAllCollaborators(int e)
+
+        /// <summary>
+        /// Function that returns a list of all the collaborators of the user company
+        /// </summary>
+        /// <param name="loggedInCompanyId"></param>
+        /// <returns></returns>
+        public List<Company> GetAllCollaborators(int loggedInCompanyId)
         {
-            var collabs = new List<Company>();
+            var usersCollaborators = new List<Company>();
 
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
@@ -52,13 +67,13 @@ namespace OurApp.Core.Repositories
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
 
-                sqlCommand.Parameters.AddWithValue("@HostID", e);
+                sqlCommand.Parameters.AddWithValue("@HostID", loggedInCompanyId);
 
                 SqlDataReader reader = sqlCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    collabs.Add(new Company(
+                    usersCollaborators.Add(new Company(
                         (int)reader["company_id"],
                         reader["company_name"].ToString(),
                         "",
@@ -71,7 +86,7 @@ namespace OurApp.Core.Repositories
                 }
             }
 
-            return collabs;
+            return usersCollaborators;
         }
     }
 }

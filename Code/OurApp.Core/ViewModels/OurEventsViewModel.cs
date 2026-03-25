@@ -13,19 +13,21 @@ namespace OurApp.Core.ViewModels
 {
     public partial class OurEventsViewModel : ObservableObject
     {
-        EventsService eventsService;
+        IEventsService eventsService;
         SessionService sessionService;
         public ObservableCollection<Event> currentEventsCollection { get; }
 
         /// <summary>
         /// Our Events View Model constructor
         /// </summary>
-        /// <param name="service"> events service </param>
-        public OurEventsViewModel(EventsService service, SessionService sessionService)
+        /// <param name="eventsService"> events service </param>
+        /// <param name="sessionService"> session service - the logged in user </param>
+        public OurEventsViewModel(IEventsService eventsService, SessionService sessionService)
         {
-            this.eventsService = service;
+            this.eventsService = eventsService;
             this.sessionService = sessionService;
-            currentEventsCollection = service.GetCurrentEvents(sessionService.loggedInUser.Id);
+
+            currentEventsCollection = eventsService.GetCurrentEvents(sessionService.loggedInUser.Id);
         }
     }
 }

@@ -32,9 +32,9 @@ namespace OurApp.WinUI
         /// </summary>
         public PastEventsPage()
         {
-            var mainW = App.mainWindow;
+            var mainWindow = App.mainWindow;
             InitializeComponent();
-            ViewModel = new PastEventsViewModel(mainW.eventsService, mainW.sessionService);
+            ViewModel = new PastEventsViewModel(mainWindow.eventsService, mainWindow.sessionService);
             this.DataContext = ViewModel;
         }
     }

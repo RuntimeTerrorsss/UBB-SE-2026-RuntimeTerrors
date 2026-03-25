@@ -16,7 +16,7 @@ namespace OurApp.Core.ViewModels
 {
     public partial class CreateEventViewModel : ObservableObject
     {
-        private readonly EventsService eventsService;
+        private readonly IEventsService eventsService;
         private readonly ICompanyService companyService;
         private readonly SessionService sessionService;
 
@@ -57,7 +57,7 @@ namespace OurApp.Core.ViewModels
         /// <param name="eventsService"> events service </param>
         /// <param name="companyService"> company service </param>
         /// <param name="sessionService"> session service </param>
-        public CreateEventViewModel(EventsService eventsService, ICompanyService companyService, SessionService sessionService)
+        public CreateEventViewModel(IEventsService eventsService, ICompanyService companyService, SessionService sessionService)
         {
             this.eventsService = eventsService;
             this.companyService = companyService;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Services
 {
-    public class EventsService
+    public class EventsService : IEventsService
     {
         IEventsRepo eventsRepository;
 
@@ -18,7 +18,7 @@ namespace OurApp.Core.Services
         /// Events service constructor
         /// </summary>
         /// <param name="eventsRepo"> events repository </param>
-        public EventsService(IEventsRepo eventsRepo) 
+        public EventsService(IEventsRepo eventsRepo)
         {
             this.eventsRepository = eventsRepo;
         }
@@ -54,6 +54,11 @@ namespace OurApp.Core.Services
             this.eventsRepository.UpdateEventToRepo(eventIdToBeUpdated, newEventPhoto, newEventTitle, newEventDescription, newEventStartDate, newEventEndDate, newEventLocation);
         }
 
+
+        /// <summary>
+        /// Function that deletes an event
+        /// </summary>
+        /// <param name="eventToBeRemoved"> event selected to be removed </param>
         public void DeleteEvent(Event eventToBeRemoved)
         {
             this.eventsRepository.RemoveEventFromRepo(eventToBeRemoved);

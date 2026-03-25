@@ -25,14 +25,23 @@ namespace OurApp.WinUI
     public sealed partial class CollaboratorsPage : Page
     {
         public CollaboratorsViewModel ViewModel { get; }
+
+        /// <summary>
+        /// Collaborators page constructor that initializes its view model
+        /// </summary>
         public CollaboratorsPage()
         {
-            var mainW = App.mainWindow;
+            var mainWindow = App.mainWindow;
             InitializeComponent();
-            ViewModel = new CollaboratorsViewModel(mainW.collabsService, mainW.sessionService);
+            ViewModel = new CollaboratorsViewModel(mainWindow.collabsService, mainWindow.sessionService);
             this.DataContext = ViewModel;
         }
 
+        /// <summary>
+        /// Function that navigates back to "Our Events" page when pressing the button "Back"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
             var mainW = App.mainWindow;

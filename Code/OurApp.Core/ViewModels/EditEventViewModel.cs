@@ -13,7 +13,7 @@ namespace OurApp.Core.ViewModels
 {
     public partial class EditEventViewModel : ObservableObject
     {
-        private readonly EventsService eventsService;
+        private readonly IEventsService eventsService;
         private readonly Event eventToEdit;
         public EventValidator eventValidator = new EventValidator();
 
@@ -49,11 +49,11 @@ namespace OurApp.Core.ViewModels
         /// <summary>
         /// Edit Event View Model constructor which sets the textboxes' values to the event's
         /// </summary>
-        /// <param name="service"> events service </param>
+        /// <param name="eventsService"> events service </param>
         /// <param name="selectedEvent"> the selected event to be modified </param>
-        public EditEventViewModel(EventsService service, Event selectedEvent)
+        public EditEventViewModel(IEventsService eventsService, Event selectedEvent)
         {
-            this.eventsService = service;
+            this.eventsService = eventsService;
             this.eventToEdit = selectedEvent;
 
             this.title = selectedEvent.Title;
@@ -90,6 +90,9 @@ namespace OurApp.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// Function that tries to delete an event
+        /// </summary>
         [RelayCommand] public void DeleteEvent()
         {
             try
