@@ -6,7 +6,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
-using OurApp.Core.ViewModels;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
@@ -26,20 +25,21 @@ namespace OurApp.WinUI
         public Frame RootFrame => rootFrame;
         public EventsService eventService { get; }
 
+        public GameService gameService;
 
         ICompanyService companyService;
         public MainWindow()
         {
             this.InitializeComponent();
 
-            RootFrame.Navigate(typeof(GamePage));
+            IGameRepo game_repo = new GameMemoryRepo();
+            this. gameService = new GameService(game_repo);
+
             ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
-            companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            companyService.addCompany("Acme Corp", "We build things.", "profile.jpg", "logo.png", "Cluj", "hello@acme.test");
             companyService.printAll();
-            InitializeComponent();
 
             IEventsRepo eventRepo = new EventsRepo();
 
@@ -56,6 +56,12 @@ namespace OurApp.WinUI
             eventService = new EventsService(eventRepo);
         }
 
+        private void NavigateToGamePage_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Clicked to nav");
+            RootFrame.Navigate(typeof(GamePage));
+        }
+
         private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
@@ -69,12 +75,12 @@ namespace OurApp.WinUI
 
         private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
         {
-            RootFrame.Navigate(typeof(ViewProfilePage));
+            RootFrame.Navigate(typeof(ViewProfilePage), 1);
         }
 
         private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
         {
-            RootFrame.Navigate(typeof(EditProfilePage));
+            RootFrame.Navigate(typeof(EditProfilePage), 1);
         }
     }
 }

@@ -26,7 +26,11 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class GamePage : Page
     {
+        
         public GameViewModel ViewModel { get; set; }
+        public Frame GameFrame => gameFrame;
+
+        public GameService service;
 
         public GamePage()
         {
@@ -37,6 +41,11 @@ namespace OurApp.WinUI
             this.InitializeComponent();
         }
 
+        private void NavigateToEditGame_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Clicked to editgame");
+            this.Frame.Navigate(typeof(EditGame));
+        }
 
         private void OnStartGameClick(object sender, RoutedEventArgs e)
         {

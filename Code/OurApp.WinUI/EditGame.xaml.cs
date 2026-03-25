@@ -12,6 +12,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using OurApp.Core.ViewModels;
+using OurApp.Core.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,9 +25,13 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class EditGame : Page
     {
-        public EditGame()
+        public EditGameViewModel ViewModel { get; private set; }
+
+        public EditGame(GameService service)
         {
             InitializeComponent();
+            ViewModel = new EditGameViewModel(service);
+            DataContext = ViewModel;
         }
     }
 }
