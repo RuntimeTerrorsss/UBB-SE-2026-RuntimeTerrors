@@ -11,5 +11,6 @@ namespace iss_project.Code.OurApp.Core.Repositories
         Task AddAsync(JobPosting job);
         Task UpdateAsync(JobPosting job);
         Task DeleteAsync(int id);
+        Task<List<JobPosting>> GetPastJobsAsync(int companyId);
     }
 }

@@ -50,7 +50,7 @@ namespace iss_project.UI.Validators
 
             if (model.Deadline.HasValue)
             {
-                if (model.Deadline < DateTimeOffset.Now)
+                if (model.Deadline.Value.Date < DateTimeOffset.Now.Date)
                     errors.Add("Deadline cannot be in the past.");
             }
 
@@ -122,10 +122,11 @@ namespace iss_project.UI.Validators
                 if (model.Job.EndDate <= model.Job.StartDate)
                     errors.Add("End date must be after start date.");
             }
-
+            Console.WriteLine($"Deadline received: {model.Job.Deadline}");
+            Console.WriteLine($"Now: {DateTimeOffset.Now}");
             if (model.Job.Deadline.HasValue)
             {
-                if (model.Job.Deadline < DateTimeOffset.Now)
+                if (model.Job.Deadline.Value.Date < DateTimeOffset.Now.Date)
                     errors.Add("Deadline cannot be in the past.");
             }
 

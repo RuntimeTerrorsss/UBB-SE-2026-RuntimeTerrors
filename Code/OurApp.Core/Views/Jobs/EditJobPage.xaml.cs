@@ -10,10 +10,15 @@ namespace iss_project.UI.Views.Jobs
     {
         private EditJobViewModel ViewModel => this.DataContext as EditJobViewModel;
 
-        public EditJobPage(JobPosting job)
+        public EditJobPage(JobPosting job,bool isRepost = false)
         {
             this.InitializeComponent();
-            this.DataContext = new EditJobViewModel(job);
+            var vm = new EditJobViewModel(job)
+            {
+                IsRepostMode = isRepost
+            };
+
+            this.DataContext = vm;
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)
@@ -23,6 +28,12 @@ namespace iss_project.UI.Views.Jobs
             try
             {
                 var vm = (EditJobViewModel)this.DataContext;
+
+                if (vm.IsRepostMode)
+                {
+                    vm.Job.PostedAt = DateTime.Now;
+                    System.Diagnostics.Debug.WriteLine("PostedAt set in UI: " + vm.Job.PostedAt);
+                }
 
                 var result = await vm.UpdateJob();
 

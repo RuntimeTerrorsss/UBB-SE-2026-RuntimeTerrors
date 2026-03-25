@@ -42,14 +42,9 @@
                          Text="{Binding Job.AvailablePositions, Mode=TwoWay}" />
 
                 <!-- Dates -->
-                <DatePicker Header="Start Date"
-                            Date="{Binding Job.StartDate, Mode=TwoWay}" />
-
-                <DatePicker Header="End Date"
-                            Date="{Binding Job.EndDate, Mode=TwoWay}" />
-
-                <DatePicker Header="Deadline"
-                            Date="{Binding Job.Deadline, Mode=TwoWay}" />
+                <DatePicker Date="{Binding StartDate, Mode=TwoWay}" />
+                <DatePicker Date="{Binding EndDate, Mode=TwoWay}" />
+                <DatePicker Date="{Binding Deadline, Mode=TwoWay}" />
 
                 <!-- Financials -->
                 <TextBox Header="Salary"

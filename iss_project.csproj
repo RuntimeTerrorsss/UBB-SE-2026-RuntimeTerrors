@@ -17,6 +17,7 @@
     <None Remove="Code\OurApp.Core\ViewModels\Jobs\CreateJobPage.xaml" />
     <None Remove="Code\OurApp.Core\Views\Jobs\EditJobPage.xaml" />
     <None Remove="Code\OurApp.Core\Views\Jobs\JobsListPage.xaml" />
+    <None Remove="Code\OurApp.Core\Views\Jobs\PastJobsPage.xaml" />
     <None Remove="Code\OurApp.Core\Views\MainPage.xaml" />
   </ItemGroup>
 
@@ -47,6 +48,11 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Code\OurApp.Core\Views\Jobs\PastJobsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Code\OurApp.Core\Views\Jobs\EditJobPage.xaml">

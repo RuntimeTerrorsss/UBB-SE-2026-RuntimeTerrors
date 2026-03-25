@@ -1,19 +1,22 @@
 ﻿using iss_project.Code.OurApp.Core.Models;
 using iss_project.Code.OurApp.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace iss_project.UI.ViewModels.Jobs
+namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
 {
-    public class JobsListViewModel
+    public class PastJobsViewModel
     {
         private readonly IJobService _jobService;
 
         public ObservableCollection<JobPosting> Jobs { get; set; }
 
-        public JobsListViewModel()
+        public PastJobsViewModel()
         {
             _jobService = MainWindow.Services.GetService<IJobService>();
             Jobs = new ObservableCollection<JobPosting>();
@@ -21,30 +24,25 @@ namespace iss_project.UI.ViewModels.Jobs
 
         public async Task LoadJobs()
         {
-            var jobs = await _jobService.GetCurrentJobsAsync(1);
+            var jobs = await _jobService.GetPastJobsAsync(1);
 
             Jobs.Clear();
-
             foreach (var job in jobs)
-            {
                 Jobs.Add(job);
-            }
         }
-        public async Task<(bool Success, string Message)> DeleteJob(int jobId)
+
+        public async Task<(bool Success, string Message)> RepostJob(JobPosting job)
         {
             try
             {
-                await _jobService.DeleteJobAsync(jobId);
+                await _jobService.RepostJobAsync(job);
+                Jobs.Remove(job);
 
-                var job = Jobs.FirstOrDefault(j => j.JobId == jobId);
-                if (job != null)
-                    Jobs.Remove(job);
-
-                return (true, "Job deleted successfully");
+                return (true, "Job reposted successfully");
             }
             catch
             {
-                return (false, "We’re sorry, an error occurred. The job was not deleted. Please try again.");
+                return (false, "We’re sorry, an error occurred. The job was not reposted.");
             }
         }
     }

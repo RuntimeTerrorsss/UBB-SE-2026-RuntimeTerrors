@@ -13,6 +13,10 @@
                     Width="200"
                     Height="50"
                     Click="GoToJobsList"/>
+			<Button Content="View Past Jobs"
+                    Width="200"
+                    Height="50"
+                    Click="GoToPastJobs"/>
 
         </StackPanel>
     </Grid>

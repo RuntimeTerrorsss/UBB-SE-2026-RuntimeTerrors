@@ -9,11 +9,11 @@ namespace iss_project.Code.OurApp.Core.Services
 {
     public class JobService : IJobService
     {
-        private readonly IJobRepository _repo;
+        private readonly IJobRepository _jobRepository;
 
         public JobService(IJobRepository repo)
         {
-            _repo = repo;
+            _jobRepository = repo;
         }
 
         public async Task CreateJobAsync(JobPosting job)
@@ -22,38 +22,48 @@ namespace iss_project.Code.OurApp.Core.Services
 
             job.PostedAt = DateTime.Now;
 
-            await _repo.AddAsync(job);
+            await _jobRepository.AddAsync(job);
         }
 
         public async Task UpdateJobAsync(JobPosting job)
         {
             Validate(job);
-            await _repo.UpdateAsync(job);
+            await _jobRepository.UpdateAsync(job);
         }
 
         public async Task DeleteJobAsync(int id)
         {
-            await _repo.DeleteAsync(id);
+            await _jobRepository.DeleteAsync(id);
         }
 
         public async Task<List<JobPosting>> GetCurrentJobsAsync(int companyId)
         {
-            var jobs = await _repo.GetByCompanyAsync(companyId);
+            var jobs = await _jobRepository.GetByCompanyAsync(companyId);
 
             return jobs.Where(j =>
                 j.PostedAt != null &&
-                (j.Salary == null || j.Salary > 0) // example filter (adjust if needed)
+                (j.Salary == null || j.Salary > 0)
             ).ToList();
         }
 
         public async Task<List<JobPosting>> GetPastJobsAsync(int companyId)
         {
-            var jobs = await _repo.GetByCompanyAsync(companyId);
+            return await _jobRepository.GetPastJobsAsync(companyId);
+        }
 
-            return jobs.Where(j =>
-                j.PostedAt != null &&
-                j.PostedAt < DateTime.Now.AddMonths(-1) // example logic
-            ).ToList();
+        public async Task RepostJobAsync(JobPosting job)
+        {
+            
+            job.PostedAt = DateTime.Now;
+
+            
+            if (job.Deadline.HasValue)
+            {
+                var duration = job.Deadline.Value - job.PostedAt.Value;
+                job.Deadline = DateTime.Now.Add(duration);
+            }
+
+            await _jobRepository.UpdateAsync(job);
         }
 
         private void Validate(JobPosting job)

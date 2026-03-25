@@ -26,5 +26,10 @@ namespace iss_project.UI.Views
         {
             MainWindow.Instance.ShowEditJob(job);
         }
+
+        private void GoToPastJobs(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.ShowPastJobs();
+        }
     }
 }

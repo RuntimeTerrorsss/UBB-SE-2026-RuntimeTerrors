@@ -23,6 +23,8 @@ namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public bool IsRepostMode { get; set; }
+
         private void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -42,10 +44,6 @@ namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
             {
                 "Internship", "Entry", "Mid","Senior", "Director","Junior"
             };
-
-            
-            //Job.JobType = Job.JobType?.Trim().ToLower();
-            //Job.ExperienceLevel = Job.ExperienceLevel?.Trim().ToLower();
         }
 
         public string JobType
@@ -64,6 +62,35 @@ namespace iss_project.Code.OurApp.Core.ViewModels.Jobs
             set
             {
                 Job.ExperienceLevel = value;
+                OnPropertyChanged();
+            }
+        }
+        public DateTimeOffset? Deadline
+        {
+            get => Job.Deadline.HasValue ? new DateTimeOffset(Job.Deadline.Value) : null;
+            set
+            {
+                Job.Deadline = value?.DateTime;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTimeOffset? StartDate
+        {
+            get => Job.StartDate.HasValue ? new DateTimeOffset(Job.StartDate.Value) : null;
+            set
+            {
+                Job.StartDate = value?.DateTime;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTimeOffset? EndDate
+        {
+            get => Job.EndDate.HasValue ? new DateTimeOffset(Job.EndDate.Value) : null;
+            set
+            {
+                Job.EndDate = value?.DateTime;
                 OnPropertyChanged();
             }
         }

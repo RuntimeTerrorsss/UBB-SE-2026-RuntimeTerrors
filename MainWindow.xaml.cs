@@ -55,9 +55,14 @@ namespace iss_project
             this.Content = new MainPage();
         }
 
-        public void ShowEditJob(JobPosting job)
+        public void ShowEditJob(JobPosting job, bool isRepost = false)
         {
-            this.Content = new EditJobPage(job);
+            this.Content = new EditJobPage(job,isRepost);
+        }
+
+        public void ShowPastJobs()
+        {
+            this.Content = new PastJobsPage();
         }
     }
 }

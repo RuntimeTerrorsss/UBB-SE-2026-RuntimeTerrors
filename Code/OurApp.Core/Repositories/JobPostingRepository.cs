@@ -80,6 +80,37 @@ namespace iss_project.Code.OurApp.Core.Repositories
             return null;
         }
 
+        public async Task<List<JobPosting>> GetPastJobsAsync(int companyId)
+        {
+            var jobs = new List<JobPosting>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = @"
+        SELECT * FROM jobs
+        WHERE company_id = @CompanyId
+        AND deadline IS NOT NULL
+        AND deadline < GETDATE()";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@CompanyId", companyId);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            jobs.Add(MapJob(reader));
+                        }
+                    }
+                }
+            }
+
+            return jobs;
+        }
+
         public async Task<List<JobPosting>> GetByCompanyAsync(int companyId)
         {
             var jobs = new List<JobPosting>();
@@ -88,7 +119,10 @@ namespace iss_project.Code.OurApp.Core.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT * FROM jobs WHERE company_id = @CompanyId";
+                string query = @"SELECT * FROM jobs
+                    WHERE company_id = @CompanyId
+                    AND deadline IS NULL
+                    or deadline > GETDATE()";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -114,21 +148,22 @@ namespace iss_project.Code.OurApp.Core.Repositories
                 await connection.OpenAsync();
 
                 string query = @"
-        UPDATE jobs
-        SET photo = @Photo,
-            job_title = @JobTitle,
-            industry_field = @IndustryField,
-            job_type = @JobType,
-            experience_level = @ExperienceLevel,
-            start_date = @StartDate,
-            end_date = @EndDate,
-            job_description = @JobDescription,
-            job_location = @JobLocation,
-            available_positions = @AvailablePositions,
-            salary = @Salary,
-            amount_payed = @AmountPayed,
-            deadline = @Deadline
-        WHERE job_id = @JobId";
+UPDATE jobs
+SET photo = @Photo,
+    job_title = @JobTitle,
+    industry_field = @IndustryField,
+    job_type = @JobType,
+    experience_level = @ExperienceLevel,
+    start_date = @StartDate,
+    end_date = @EndDate,
+    job_description = @JobDescription,
+    job_location = @JobLocation,
+    available_positions = @AvailablePositions,
+    salary = @Salary,
+    amount_payed = @AmountPayed,
+    deadline = @Deadline,
+    posted_at = @PostedAt
+WHERE job_id = @JobId";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -146,6 +181,9 @@ namespace iss_project.Code.OurApp.Core.Repositories
                     command.Parameters.AddWithValue("@Salary", (object?)job.Salary ?? DBNull.Value);
                     command.Parameters.AddWithValue("@AmountPayed", (object?)job.AmountPayed ?? DBNull.Value);
                     command.Parameters.AddWithValue("@Deadline", (object?)job.Deadline ?? DBNull.Value);
+
+                    // ✅ IMPORTANT: this ensures repost updates the timestamp
+                    command.Parameters.AddWithValue("@PostedAt", (object?)job.PostedAt ?? DBNull.Value);
 
                     await command.ExecuteNonQueryAsync();
                 }

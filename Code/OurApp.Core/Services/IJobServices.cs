@@ -12,5 +12,6 @@ namespace iss_project.Code.OurApp.Core.Services
 
         Task<List<JobPosting>> GetCurrentJobsAsync(int companyId);
         Task<List<JobPosting>> GetPastJobsAsync(int companyId);
+        Task RepostJobAsync(JobPosting job);
     }
 }
