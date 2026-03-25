@@ -1,6 +1,7 @@
-﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
+﻿using iss_project.Code.OurApp.Core.Models;
 using iss_project.UI.Views.Jobs;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace iss_project.UI.Views
 {
@@ -19,6 +20,11 @@ namespace iss_project.UI.Views
         private void GoToJobsList(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.ShowJobs();
+        }
+
+        public void ShowEditJob(JobPosting job)
+        {
+            MainWindow.Instance.ShowEditJob(job);
         }
     }
 }

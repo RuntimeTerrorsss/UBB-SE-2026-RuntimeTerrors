@@ -1,4 +1,5 @@
-﻿using iss_project.UI.ViewModels.Jobs;
+﻿using iss_project.Code.OurApp.Core.Models;
+using iss_project.UI.ViewModels.Jobs;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -34,18 +35,19 @@ namespace iss_project.UI.Views.Jobs
         private void EditJob_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuFlyoutItem;
-            var job = menuItem?.Tag;
+            var job = menuItem?.Tag as JobPosting;
 
-            // Cast to your Job model
-            // var jobModel = (Job)job;
+            if (job == null) return;
 
-            // Navigate to edit page or open editor
+            MainWindow.Instance.ShowEditJob(job);
         }
 
         private async void DeleteJob_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuFlyoutItem;
-            var job = menuItem?.Tag;
+            var job = menuItem?.Tag as JobPosting;
+
+            if (job == null) return;
 
             var dialog = new ContentDialog
             {
@@ -60,7 +62,8 @@ namespace iss_project.UI.Views.Jobs
 
             if (result == ContentDialogResult.Primary)
             {
-                // Delete logic here
+                await ViewModel.DeleteJob(job.JobId);
+                await ViewModel.LoadJobs();
             }
         }
     }

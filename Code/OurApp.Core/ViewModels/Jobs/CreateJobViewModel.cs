@@ -28,12 +28,12 @@ namespace iss_project.UI.ViewModels.Jobs
 
             JobTypes = new ObservableCollection<string>
             {
-                "part-time", "full-time", "volunteer", "internship", "remote", "hybrid"
+                "Full-time", "Part-time", "Volunteer", "Internship", "Remote", "Hybrid"
             };
 
             ExperienceLevels = new ObservableCollection<string>
             {
-                "internship", "entry-level", "mid-senior level", "director", "executive"
+                "Internship", "Entry", "Mid","Senior", "Director","Junior"
             };
         }
 

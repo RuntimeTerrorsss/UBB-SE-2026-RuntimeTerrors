@@ -1,13 +1,14 @@
 ﻿using iss_project.Code.OurApp.Core.Data;
+using iss_project.Code.OurApp.Core.Models;
 using iss_project.Code.OurApp.Core.Repositories;
 using iss_project.Code.OurApp.Core.Services;
+using iss_project.UI.Views;
 using iss_project.UI.Views.Jobs;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
 using WinRT.Interop;
-using Microsoft.UI.Windowing;
-using iss_project.UI.Views;
 
 namespace iss_project
 {
@@ -52,6 +53,11 @@ namespace iss_project
         public void ShowMain()
         {
             this.Content = new MainPage();
+        }
+
+        public void ShowEditJob(JobPosting job)
+        {
+            this.Content = new EditJobPage(job);
         }
     }
 }

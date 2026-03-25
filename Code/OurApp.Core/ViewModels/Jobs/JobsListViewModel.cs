@@ -2,6 +2,7 @@
 using iss_project.Code.OurApp.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace iss_project.UI.ViewModels.Jobs
@@ -27,6 +28,16 @@ namespace iss_project.UI.ViewModels.Jobs
             foreach (var job in jobs)
             {
                 Jobs.Add(job);
+            }
+        }
+        public async Task DeleteJob(int jobId)
+        {
+            await _jobService.DeleteJobAsync(jobId);
+
+            var job = Jobs.FirstOrDefault(j => j.JobId == jobId);
+            if (job != null)
+            {
+                Jobs.Remove(job);
             }
         }
     }
