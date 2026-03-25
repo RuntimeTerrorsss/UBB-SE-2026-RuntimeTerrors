@@ -63,6 +63,30 @@ namespace iss_project.UI.ViewModels.Jobs
         public ObservableCollection<string> JobTypes { get; set; }
         public ObservableCollection<string> ExperienceLevels { get; set; }
 
+        private bool _useScheduledPosting;
+
+        public bool UseScheduledPosting
+        {
+            get => _useScheduledPosting;
+            set
+            {
+                _useScheduledPosting = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTimeOffset? _scheduledAt;
+
+        public DateTimeOffset? ScheduledAt
+        {
+            get => _scheduledAt;
+            set
+            {
+                _scheduledAt = value;
+                OnPropertyChanged();
+            }
+        }
+
         public async Task<(bool Success, string Message)> CreateJob()
         {
             var validator = new JobValidator();
@@ -95,7 +119,8 @@ namespace iss_project.UI.ViewModels.Jobs
         : Deadline?.DateTime,
 
                     Salary = Salary,
-                    AmountPayed = AmountPayed
+                    AmountPayed = AmountPayed,
+                    ScheduledAt = UseScheduledPosting ? ScheduledAt?.DateTime : null,
                 };
 
                 await _jobService.CreateJobAsync(job);

@@ -79,6 +79,15 @@ namespace iss_project.UI.Validators
                     errors.Add("Expiration days must be greater than 0 when automatic expiration is enabled.");
             }
 
+            if (model.UseScheduledPosting)
+            {
+                if (!model.ScheduledAt.HasValue)
+                    errors.Add("Scheduled date is required.");
+
+                else if (model.ScheduledAt <= DateTimeOffset.Now)
+                    errors.Add("Scheduled date must be in the future.");
+            }
+
             return errors;
         }
 
@@ -154,6 +163,8 @@ namespace iss_project.UI.Validators
             //    if (!model.ExpirationDays.HasValue || model.ExpirationDays <= 0)
             //        errors.Add("Expiration days must be greater than 0 when automatic expiration is enabled.");
             //}
+
+            
 
             return errors;
         }

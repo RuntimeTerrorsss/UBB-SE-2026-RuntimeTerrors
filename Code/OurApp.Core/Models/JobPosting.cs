@@ -72,5 +72,7 @@ namespace iss_project.Code.OurApp.Core.Models
         public string AmountPayedDisplay => AmountPayed.HasValue ? $"Paid: {AmountPayed.Value}" : "";
 
         public string DescriptionDisplay => $"Description: {JobDescription}";
+
+        public DateTime? ScheduledAt { get; set; }
     }
 }

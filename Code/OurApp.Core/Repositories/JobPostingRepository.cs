@@ -23,14 +23,14 @@ namespace iss_project.Code.OurApp.Core.Repositories
                 await connection.OpenAsync();
 
                 string query = @"
-        INSERT INTO jobs
-        (company_id, photo, job_title, industry_field, job_type, experience_level,
-         start_date, end_date, job_description, job_location, available_positions,
-         posted_at, salary, amount_payed, deadline)
-        VALUES
-        (@CompanyId, @Photo, @JobTitle, @IndustryField, @JobType, @ExperienceLevel,
-         @StartDate, @EndDate, @JobDescription, @JobLocation, @AvailablePositions,
-         @PostedAt, @Salary, @AmountPayed, @Deadline)";
+INSERT INTO jobs
+(company_id, photo, job_title, industry_field, job_type, experience_level,
+ start_date, end_date, job_description, job_location, available_positions,
+ posted_at, salary, amount_payed, deadline, scheduled_at)
+VALUES
+(@CompanyId, @Photo, @JobTitle, @IndustryField, @JobType, @ExperienceLevel,
+ @StartDate, @EndDate, @JobDescription, @JobLocation, @AvailablePositions,
+ @PostedAt, @Salary, @AmountPayed, @Deadline, @ScheduledAt)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -49,6 +49,7 @@ namespace iss_project.Code.OurApp.Core.Repositories
                     command.Parameters.AddWithValue("@Salary", (object?)job.Salary ?? DBNull.Value);
                     command.Parameters.AddWithValue("@AmountPayed", (object?)job.AmountPayed ?? DBNull.Value);
                     command.Parameters.AddWithValue("@Deadline", (object?)job.Deadline ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@ScheduledAt", (object?)job.ScheduledAt ?? DBNull.Value);
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -89,10 +90,10 @@ namespace iss_project.Code.OurApp.Core.Repositories
                 await connection.OpenAsync();
 
                 string query = @"
-        SELECT * FROM jobs
-        WHERE company_id = @CompanyId
-        AND deadline IS NOT NULL
-        AND deadline < GETDATE()";
+SELECT * FROM jobs
+WHERE company_id = @CompanyId
+AND deadline IS NOT NULL
+AND deadline < GETDATE()";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -119,10 +120,17 @@ namespace iss_project.Code.OurApp.Core.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = @"SELECT * FROM jobs
-                    WHERE company_id = @CompanyId
-                    AND deadline IS NULL
-                    or deadline > GETDATE()";
+                string query = @"
+SELECT * FROM jobs
+WHERE company_id = @CompanyId
+AND (
+    scheduled_at IS NULL
+    OR scheduled_at <= GETDATE()
+)
+AND (
+    deadline IS NULL
+    OR deadline > GETDATE()
+)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -162,7 +170,8 @@ SET photo = @Photo,
     salary = @Salary,
     amount_payed = @AmountPayed,
     deadline = @Deadline,
-    posted_at = @PostedAt
+    posted_at = @PostedAt,
+    scheduled_at = @ScheduledAt
 WHERE job_id = @JobId";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -181,9 +190,8 @@ WHERE job_id = @JobId";
                     command.Parameters.AddWithValue("@Salary", (object?)job.Salary ?? DBNull.Value);
                     command.Parameters.AddWithValue("@AmountPayed", (object?)job.AmountPayed ?? DBNull.Value);
                     command.Parameters.AddWithValue("@Deadline", (object?)job.Deadline ?? DBNull.Value);
-
-                    // ✅ IMPORTANT: this ensures repost updates the timestamp
                     command.Parameters.AddWithValue("@PostedAt", (object?)job.PostedAt ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@ScheduledAt", (object?)job.ScheduledAt ?? DBNull.Value);
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -225,7 +233,8 @@ WHERE job_id = @JobId";
                 PostedAt = reader["posted_at"] == DBNull.Value ? null : (DateTime?)reader["posted_at"],
                 Salary = reader["salary"] == DBNull.Value ? null : (int?)reader["salary"],
                 AmountPayed = reader["amount_payed"] == DBNull.Value ? null : (int?)reader["amount_payed"],
-                Deadline = reader["deadline"] == DBNull.Value ? null : (DateTime?)reader["deadline"]
+                Deadline = reader["deadline"] == DBNull.Value ? null : (DateTime?)reader["deadline"],
+                ScheduledAt = reader["scheduled_at"] == DBNull.Value ? null : (DateTime?)reader["scheduled_at"]
             };
         }
     }

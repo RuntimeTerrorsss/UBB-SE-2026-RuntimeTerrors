@@ -60,6 +60,12 @@
          Text="{Binding ExpirationDays, Mode=TwoWay}"
          IsEnabled="{Binding UseAutomaticExpiration}" />
 
+                <CheckBox Content="Schedule posting"
+          IsChecked="{Binding UseScheduledPosting, Mode=TwoWay}" />
+
+                <DatePicker Date="{Binding ScheduledAt, Mode=TwoWay}"
+            IsEnabled="{Binding UseScheduledPosting}" />
+
                 <!-- Buttons -->
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <Button Content="POST" Click="CreateJob_Click"/>
