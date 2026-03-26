@@ -42,7 +42,7 @@ namespace OurApp.WinUI
         public CreateEventPage()
         {
             var mainWindow = App.mainWindow;
-            createEventViewModel = new CreateEventViewModel(mainWindow.eventsService, mainWindow.companyService, mainWindow.sessionService);
+            createEventViewModel = new CreateEventViewModel(mainWindow.eventsService, mainWindow.companyService, mainWindow.sessionService, mainWindow.collabsService);
             this.DataContext = createEventViewModel;
 
             InitializeComponent();
