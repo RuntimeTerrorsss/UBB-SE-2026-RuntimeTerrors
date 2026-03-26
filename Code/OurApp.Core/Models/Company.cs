@@ -44,7 +44,7 @@ namespace OurApp.Core.Models
             string logoUrl,
             string location,
             string email,
-            int companyId = 0,
+            int companyId = 1,
             string buddyName = "",
             int? avatarId = null,
             string finalQuote = "",

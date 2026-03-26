@@ -14,9 +14,8 @@ public sealed partial class EditProfilePage : Page
 
     public EditProfilePage()
     {
-        var repo = new CompanyRepo();
-        var companyService = new CompanyService(repo);
-        ViewModel = new EditCompanyProfileViewModel(companyService);
+        var mainWindow = App.mainWindow;
+        ViewModel = new EditCompanyProfileViewModel(mainWindow.companyService);
         InitializeComponent();
         DataContext = ViewModel;
     }
@@ -30,7 +29,7 @@ public sealed partial class EditProfilePage : Page
 
     private void NavigateBack_Click(object sender, RoutedEventArgs e)
     {
-        var mainW = App.MainWin;
+        var mainW = App.mainWindow;
         if (mainW.RootFrame.CanGoBack)
             mainW.RootFrame.GoBack();
         else
@@ -50,7 +49,7 @@ public sealed partial class EditProfilePage : Page
                 XamlRoot = XamlRoot
             };
             await ok.ShowAsync();
-            App.MainWin.RootFrame.Navigate(typeof(ViewProfilePage), ViewModel.CompanyId);
+            App.mainWindow.RootFrame.Navigate(typeof(ViewProfilePage), ViewModel.CompanyId);
             return;
         }
 

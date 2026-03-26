@@ -42,7 +42,7 @@ namespace OurApp.Core.Repositories
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
                 sqlCommand.Parameters.AddWithValue("@EventId", eventOfCollaboration.Id);
-                sqlCommand.Parameters.AddWithValue("@CompanyId", collaboratorToBeAdded.Id);
+                sqlCommand.Parameters.AddWithValue("@CompanyId", collaboratorToBeAdded.CompanyId);
 
                 sqlCommand.ExecuteNonQuery();
             }
@@ -74,7 +74,6 @@ namespace OurApp.Core.Repositories
                 while (reader.Read())
                 {
                     usersCollaborators.Add(new Company(
-                        (int)reader["company_id"],
                         reader["company_name"].ToString(),
                         "",
                         "",

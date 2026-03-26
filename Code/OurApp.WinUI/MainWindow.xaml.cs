@@ -34,16 +34,16 @@ namespace OurApp.WinUI
         public MainWindow()
         {
             string connectionString = "Data Source=DESKTOP-D8Q1P5P\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
-            ICompanyRepo repo = new CompanyRepo();
+            ICompanyRepo repo = new CompanyRepo(connectionString);
             this.companyService = new CompanyService(repo);
 
             ICollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
             this.collabsService = new CollaboratorsService(collabRepo);
 
-            Company c1 = new Company(1, "ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
-            companyService.printAll();
+            Company c1 = new Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.printAll();
             InitializeComponent();
 
             IEventsRepo eventsRepo = new EventsRepo(connectionString);

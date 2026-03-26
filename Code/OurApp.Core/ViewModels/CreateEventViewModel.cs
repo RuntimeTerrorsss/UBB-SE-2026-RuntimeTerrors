@@ -106,7 +106,7 @@ namespace OurApp.Core.ViewModels
                 DateTime eventStartDateTime = startDate.Value.DateTime;
                 DateTime eventEndDateTime = endDate.Value.DateTime;
 
-                int hostId = sessionService.loggedInUser.Id;
+                int hostId = sessionService.loggedInUser.CompanyId;
                 eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, hostId, SelectedCollaborators.ToList());
                 eventCreatedSuccessfully = true;
 

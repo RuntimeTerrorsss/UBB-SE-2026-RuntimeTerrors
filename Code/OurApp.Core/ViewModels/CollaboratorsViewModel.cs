@@ -25,7 +25,7 @@ namespace OurApp.Core.ViewModels
             this.collaboratorsService = collaboratorsService;
             this.sessionService = sessionService;
 
-            this.allCollaborators = collaboratorsService.GetAllCollaborators(sessionService.loggedInUser.Id);
+            this.allCollaborators = collaboratorsService.GetAllCollaborators(sessionService.loggedInUser.CompanyId);
         }
     }
 }

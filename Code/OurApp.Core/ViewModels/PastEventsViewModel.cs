@@ -27,7 +27,7 @@ namespace OurApp.Core.ViewModels
             this.eventsService = eventsService;
             this.sessionService = sessionService;
 
-            pastEventsCollection = eventsService.GetPastEvents(sessionService.loggedInUser.Id);
+            pastEventsCollection = eventsService.GetPastEvents(sessionService.loggedInUser.CompanyId);
         }
     }
 }

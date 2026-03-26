@@ -27,7 +27,7 @@ namespace OurApp.Core.ViewModels
             this.eventsService = eventsService;
             this.sessionService = sessionService;
 
-            currentEventsCollection = eventsService.GetCurrentEvents(sessionService.loggedInUser.Id);
+            currentEventsCollection = eventsService.GetCurrentEvents(sessionService.loggedInUser.CompanyId);
         }
     }
 }

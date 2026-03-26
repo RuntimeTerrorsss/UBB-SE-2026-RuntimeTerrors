@@ -14,8 +14,9 @@ namespace OurApp.Core.Repositories
         ObservableCollection<Company> GetAll();
         Company? GetById(int companyId);
         void Add(Company c);
-        void Remove(Company c);
+        void Remove(int companyID);
         Company? GetCompanyByName(string companyName);
+        void Update(Company c);
 
     }
 }

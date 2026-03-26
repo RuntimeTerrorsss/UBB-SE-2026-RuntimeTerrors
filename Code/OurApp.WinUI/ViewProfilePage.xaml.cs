@@ -13,14 +13,13 @@ public sealed partial class ViewProfilePage : Page
 
     public ViewProfilePage()
     {
-        var repo = new CompanyRepo();
-        var companyService = new CompanyService(repo);
-        ViewModel = new CompanyProfileViewModel(companyService, new ProfileCompletionCalculator());
+        var mainWindow = App.mainWindow;
+        ViewModel = new CompanyProfileViewModel(mainWindow.companyService, new ProfileCompletionCalculator());
         InitializeComponent();
         DataContext = ViewModel;
         ViewModel.NavigateEditProfileRequested += (_, _) =>
         {
-            App.MainWin.RootFrame.Navigate(typeof(EditProfilePage), ViewModel.CompanyId);
+            App.mainWindow.RootFrame.Navigate(typeof(EditProfilePage), ViewModel.CompanyId);
         };
     }
 
