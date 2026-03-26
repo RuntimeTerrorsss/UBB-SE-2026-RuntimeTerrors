@@ -54,11 +54,15 @@ public partial class CompanyProfileViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<CompanyProfileListRow> _eventPreview = new();
 
+    public IEnumerable<CompanyProfileListRow> Top3JobPreviews => _jobPreview.Take(3);
+    public IEnumerable<CompanyProfileListRow> Top3EventPreviews => _eventPreview.Take(3);
+
     [ObservableProperty]
     private ObservableCollection<string> _collaboratorLines = new();
 
-    /// <summary>Fired when the user chooses Edit profile (page should navigate and pass <see cref="CompanyId"/>).</summary>
     public event EventHandler? NavigateEditProfileRequested;
+    public event EventHandler? NavigateAllEventsRequested;
+    public event EventHandler? NavigateAllJobsRequested;
 
     public int CompanyId { get; private set; }
 
@@ -136,11 +140,26 @@ public partial class CompanyProfileViewModel : ObservableObject
         TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "1", SkillName = "—", Detail = "Hook job_skills + skills API" });
         TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "2", SkillName = "—", Detail = "Top skills across all postings" });
         TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "3", SkillName = "—", Detail = "Will rank by frequency" });
+
+        OnPropertyChanged(nameof(Top3JobPreviews));
+        OnPropertyChanged(nameof(Top3EventPreviews));
     }
 
     [RelayCommand]
     private void EditProfile()
     {
         NavigateEditProfileRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    [RelayCommand]
+    private void SeeAllEvents()
+    {
+        NavigateAllEventsRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    [RelayCommand]
+    private void SeeAllJobs()
+    {
+        NavigateAllJobsRequested?.Invoke(this, EventArgs.Empty);
     }
 }

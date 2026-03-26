@@ -90,44 +90,44 @@ namespace OurApp.Core.Validators
             return true;
         }
 
-        public bool MiniGameStruggleValidator(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return true;
-            }
-            if (value.Length > 500)
-            {
-                throw new Exception("Buddy struggle is too long");
-            }
-            return true;
-        }
+        //public bool MiniGameStruggleValidator(string value)
+        //{
+        //    if (string.IsNullOrEmpty(value))
+        //    {
+        //        return true;
+        //    }
+        //    if (value.Length > 500)
+        //    {
+        //        throw new Exception("Buddy struggle is too long");
+        //    }
+        //    return true;
+        //}
 
-        public bool MiniGameResponseValidator(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return true;
-            }
-            if (value.Length > 200)
-            {
-                throw new Exception("Mini-game response is too long");
-            }
-            return true;
-        }
+        //public bool MiniGameResponseValidator(string value)
+        //{
+        //    if (string.IsNullOrEmpty(value))
+        //    {
+        //        return true;
+        //    }
+        //    if (value.Length > 200)
+        //    {
+        //        throw new Exception("Mini-game response is too long");
+        //    }
+        //    return true;
+        //}
 
-        public bool MiniGameFeedbackValidator(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return true;
-            }
-            if (value.Length > 200)
-            {
-                throw new Exception("Mini-game feedback is too long");
-            }
-            return true;
-        }
+        //public bool MiniGameFeedbackValidator(string value)
+        //{
+        //    if (string.IsNullOrEmpty(value))
+        //    {
+        //        return true;
+        //    }
+        //    if (value.Length > 200)
+        //    {
+        //        throw new Exception("Mini-game feedback is too long");
+        //    }
+        //    return true;
+        //}
 
         private static bool HasAllowedImageExtension(string value)
         {

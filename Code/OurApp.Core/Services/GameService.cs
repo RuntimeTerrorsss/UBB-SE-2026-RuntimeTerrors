@@ -15,7 +15,7 @@ namespace OurApp.Core.Services
             _repository = repository;
         }
 
-        private Game LoadedGame()
+        public Game LoadedGame()
         {
             var game = _repository.Get();
             if (game == null)

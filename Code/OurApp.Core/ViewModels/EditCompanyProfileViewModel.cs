@@ -108,22 +108,6 @@ public partial class EditCompanyProfileViewModel : ObservableObject
         CompanyLogoPath = c.CompanyLogoPath;
         Location = c.Location;
         Email = c.Email;
-        BuddyName = c.BuddyName;
-        FinalQuote = c.FinalQuote;
-        Scenario1Text = c.Scenario1Text;
-        Scenario1Answer1 = c.Scenario1Answer1;
-        Scenario1Answer2 = c.Scenario1Answer2;
-        Scenario1Answer3 = c.Scenario1Answer3;
-        Scenario1Reaction1 = c.Scenario1Reaction1;
-        Scenario1Reaction2 = c.Scenario1Reaction2;
-        Scenario1Reaction3 = c.Scenario1Reaction3;
-        Scenario2Text = c.Scenario2Text;
-        Scenario2Answer1 = c.Scenario2Answer1;
-        Scenario2Answer2 = c.Scenario2Answer2;
-        Scenario2Answer3 = c.Scenario2Answer3;
-        Scenario2Reaction1 = c.Scenario2Reaction1;
-        Scenario2Reaction2 = c.Scenario2Reaction2;
-        Scenario2Reaction3 = c.Scenario2Reaction3;
     }
 
     private Company ToCompany(int postedJobs, int collaborators)
@@ -136,23 +120,6 @@ public partial class EditCompanyProfileViewModel : ObservableObject
             location: Location,
             email: Email,
             companyId: CompanyId,
-            buddyName: BuddyName,
-            avatarId: null,
-            finalQuote: FinalQuote,
-            scenario1Text: Scenario1Text,
-            scenario1Answer1: Scenario1Answer1,
-            scenario1Answer2: Scenario1Answer2,
-            scenario1Answer3: Scenario1Answer3,
-            scenario1Reaction1: Scenario1Reaction1,
-            scenario1Reaction2: Scenario1Reaction2,
-            scenario1Reaction3: Scenario1Reaction3,
-            scenario2Text: Scenario2Text,
-            scenario2Answer1: Scenario2Answer1,
-            scenario2Answer2: Scenario2Answer2,
-            scenario2Answer3: Scenario2Answer3,
-            scenario2Reaction1: Scenario2Reaction1,
-            scenario2Reaction2: Scenario2Reaction2,
-            scenario2Reaction3: Scenario2Reaction3,
             postedJobsCount: postedJobs,
             collaboratorsCount: collaborators);
     }
@@ -174,20 +141,6 @@ public partial class EditCompanyProfileViewModel : ObservableObject
             _validator.LogoValidator(CompanyLogoPath);
             _validator.LocationValidator(Location);
             _validator.EmailValidator(Email);
-            _validator.MiniGameStruggleValidator(Scenario1Text);
-            _validator.MiniGameStruggleValidator(Scenario2Text);
-            _validator.MiniGameResponseValidator(Scenario1Answer1);
-            _validator.MiniGameResponseValidator(Scenario1Answer2);
-            _validator.MiniGameResponseValidator(Scenario1Answer3);
-            _validator.MiniGameResponseValidator(Scenario2Answer1);
-            _validator.MiniGameResponseValidator(Scenario2Answer2);
-            _validator.MiniGameResponseValidator(Scenario2Answer3);
-            _validator.MiniGameFeedbackValidator(Scenario1Reaction1);
-            _validator.MiniGameFeedbackValidator(Scenario1Reaction2);
-            _validator.MiniGameFeedbackValidator(Scenario1Reaction3);
-            _validator.MiniGameFeedbackValidator(Scenario2Reaction1);
-            _validator.MiniGameFeedbackValidator(Scenario2Reaction2);
-            _validator.MiniGameFeedbackValidator(Scenario2Reaction3);
 
             var updated = ToCompany(posted, collab);
             updated.Collaborators = copy;

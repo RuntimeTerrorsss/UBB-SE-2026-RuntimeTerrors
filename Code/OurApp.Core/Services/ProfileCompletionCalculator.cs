@@ -14,6 +14,12 @@ namespace OurApp.Core.Services
         //    this.Location = location;
         //    this.Email = email;
 
+        public Game game;
+
+        public ProfileCompletionCalculator(Company company, Game game) {
+            this.game = game;
+        }
+
         public (int percentage, List<string> remainingTasks) Calculate(Company company)
         {
             int total = 5;
@@ -32,28 +38,15 @@ namespace OurApp.Core.Services
             if (company.CollaboratorsCount >= 2 || company.Collaborators.Count >= 2) done++;
             else tasks.Add("Add 2 collaborators");
 
-            if (IsMiniGameComplete(company)) done++;
+            if (IsMiniGameComplete(this.game)) done++;
             else tasks.Add("Complete mini-game");
 
             return ((done * 100) / total, tasks);
         }
 
-        private static bool IsMiniGameComplete(Company c)
+        private static bool IsMiniGameComplete(Game g)
         {
-            return !string.IsNullOrWhiteSpace(c.Scenario1Text)
-                && !string.IsNullOrWhiteSpace(c.Scenario1Answer1)
-                && !string.IsNullOrWhiteSpace(c.Scenario1Answer2)
-                && !string.IsNullOrWhiteSpace(c.Scenario1Answer3)
-                && !string.IsNullOrWhiteSpace(c.Scenario2Text)
-                && !string.IsNullOrWhiteSpace(c.Scenario2Answer1)
-                && !string.IsNullOrWhiteSpace(c.Scenario2Answer2)
-                && !string.IsNullOrWhiteSpace(c.Scenario2Answer3)
-                && !string.IsNullOrWhiteSpace(c.Scenario1Reaction1)
-                && !string.IsNullOrWhiteSpace(c.Scenario1Reaction2)
-                && !string.IsNullOrWhiteSpace(c.Scenario1Reaction3)
-                && !string.IsNullOrWhiteSpace(c.Scenario2Reaction1)
-                && !string.IsNullOrWhiteSpace(c.Scenario2Reaction2)
-                && !string.IsNullOrWhiteSpace(c.Scenario2Reaction3);
+            return g.IsPublished;
         }
     }
 }
