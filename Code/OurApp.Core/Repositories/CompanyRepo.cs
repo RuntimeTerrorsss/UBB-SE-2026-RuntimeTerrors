@@ -11,12 +11,10 @@ namespace OurApp.Core.Repositories
         ObservableCollection<Company> companies;
         private readonly string _connectionString;
 
-        public CompanyRepo()
+        public CompanyRepo(string connectionString)
         {
             companies = new ObservableCollection<Company>();
-            _connectionString =
-                Environment.GetEnvironmentVariable("ISS_PROJECT_DB_CONNECTION_STRING") ??
-                "Data Source=TEA\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
+            _connectionString = connectionString;
         }
 
         private void ValidateRequiredFields(Company c)
@@ -264,6 +262,34 @@ namespace OurApp.Core.Repositories
                 throw new InvalidOperationException($"No company found with id '{c.CompanyId}' to update.");
 
             RefreshCompaniesFromDatabase();
+        }
+
+
+        /// <summary>
+        /// Function that searches a company by name and returns it
+        /// </summary>
+        /// <param name="companyName"> the name of the company being searched </param>
+        /// <returns> the company if found, else null </returns>
+        public Company? GetCompanyByName(string companyName)
+        {
+            return null;
+            //Company company = null;
+
+            //if (string.IsNullOrWhiteSpace(companyName))
+            //{
+            //    return null;
+            //}
+
+
+            //foreach (Company compan in companies)
+            //{
+            //    if (compan.Name == companyName)
+            //    {
+            //        company = compan;
+            //    }
+            //}
+
+            //return company;
         }
     }
 }

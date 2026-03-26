@@ -26,26 +26,54 @@ namespace OurApp.WinUI;
 public sealed partial class OurEventsPage : Page
 {
     public OurEventsViewModel ViewModel { get; }
+
+    /// <summary>
+    /// Our events page constructor that initializes its view model
+    /// </summary>
     public OurEventsPage()
     {
-        var mainW = App.MainWin;
+        var mainWindow = App.mainWindow;
         InitializeComponent();
-        ViewModel = new OurEventsViewModel(mainW.eventService);
+        ViewModel = new OurEventsViewModel(mainWindow.eventsService, mainWindow.sessionService);
         this.DataContext = ViewModel;
     }
 
+    /// <summary>
+    /// Function that navigates the user to the "Create Event" page when clicking 
+    /// the button "Create Event"
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void CreateEventButton_Click(object sender, RoutedEventArgs e)
     {
-        var mainWindow = App.MainWin;
+        var mainWindow = App.mainWindow;
         mainWindow.RootFrame.Navigate(typeof(CreateEventPage));
     }
 
+    /// <summary>
+    /// Function that navigates the user to the "Edit Event" page when clicking
+    /// the 3-dot button next to the event
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void EditEvent_Click(object sender, RoutedEventArgs e)
     {
         var button = sender as Button;
         var selectedEvent = button.Tag as Event;
 
-        var mainWindow = App.MainWin;
+        var mainWindow = App.mainWindow;
         mainWindow.RootFrame.Navigate(typeof(EditEventPage), selectedEvent);
+    }
+
+    /// <summary>
+    /// Function that navigates the user to the "Collaborators" page when clicking the
+    /// "See Collaborators" button
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void SeeCollaboratorsButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = App.mainWindow;
+        mainWindow.RootFrame.Navigate(typeof(CollaboratorsPage));
     }
 }

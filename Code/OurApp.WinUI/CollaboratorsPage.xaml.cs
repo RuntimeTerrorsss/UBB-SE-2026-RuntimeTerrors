@@ -5,7 +5,6 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.WindowsAppSDK.Runtime.Packages;
 using OurApp.Core.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,19 +22,30 @@ namespace OurApp.WinUI
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class PastEventsPage : Page
+    public sealed partial class CollaboratorsPage : Page
     {
-        public PastEventsViewModel ViewModel { get; }
+        public CollaboratorsViewModel ViewModel { get; }
 
         /// <summary>
-        /// Past events page constructor that initializes its view model
+        /// Collaborators page constructor that initializes its view model
         /// </summary>
-        public PastEventsPage()
+        public CollaboratorsPage()
         {
             var mainWindow = App.mainWindow;
             InitializeComponent();
-            ViewModel = new PastEventsViewModel(mainWindow.eventsService, mainWindow.sessionService);
+            ViewModel = new CollaboratorsViewModel(mainWindow.collabsService, mainWindow.sessionService);
             this.DataContext = ViewModel;
+        }
+
+        /// <summary>
+        /// Function that navigates back to "Our Events" page when pressing the button "Back"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NavigateBack_Click(object sender, RoutedEventArgs e)
+        {
+            var mainW = App.mainWindow;
+            mainW.RootFrame.Navigate(typeof(OurEventsPage));
         }
     }
 }

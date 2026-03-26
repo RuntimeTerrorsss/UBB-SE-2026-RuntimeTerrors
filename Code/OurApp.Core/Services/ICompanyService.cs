@@ -14,5 +14,6 @@ namespace OurApp.Core.Services
         void UpdateCompany(Company company);
         void RemoveCompany(int companyId);
         void PrintAll();
+        Company? GetCompanyByName(string companyName);
     }
 }

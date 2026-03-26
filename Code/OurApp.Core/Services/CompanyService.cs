@@ -2,6 +2,11 @@ using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using OurApp.Core.Validators;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OurApp.Core.Services
 {
@@ -67,6 +72,16 @@ namespace OurApp.Core.Services
         public void PrintAll()
         {
             this.CompanyRepo.PrintAll();
+        }
+
+        /// <summary>
+        /// Function that searches a company by name and returns it
+        /// </summary>
+        /// <param name="companyName"> the name of the company being searched </param>
+        /// <returns> the company if found, else null </returns>
+        public Company? GetCompanyByName(string companyName)
+        {
+            return this.CompanyRepo.GetCompanyByName(companyName);
         }
     }
 }

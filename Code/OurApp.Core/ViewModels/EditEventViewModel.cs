@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OurApp.Core.Models;
 using OurApp.Core.Services;
 using OurApp.Core.Validators;
@@ -12,140 +13,194 @@ namespace OurApp.Core.ViewModels
 {
     public partial class EditEventViewModel : ObservableObject
     {
-        EventsService service;
-        Event selectedEvent;
-        public EventValidator validator = new EventValidator();
+        private readonly IEventsService eventsService;
+        private readonly Event eventToEdit;
+        public EventValidator eventValidator = new EventValidator();
 
         [ObservableProperty] private string photo;
 
         [ObservableProperty] private string title;
         [ObservableProperty] private string titleError;
-        private bool validTitle = false;
+        private bool titleIsValid = true;
 
         [ObservableProperty] private string description;
         [ObservableProperty] private string descriptionError;
-        private bool validDescription = true;
+        private bool descriptionIsValid = true;
 
-        [ObservableProperty] private DateTimeOffset? startDate = DateTimeOffset.Now;
+        [ObservableProperty] private DateTimeOffset? startDate;
         [ObservableProperty] private string startDateError;
-        private bool validStartDate = true;
+        private bool startDateIsValid = true;
 
-        [ObservableProperty] private DateTimeOffset? endDate = DateTimeOffset.Now;
+        [ObservableProperty] private DateTimeOffset? endDate;
         [ObservableProperty] private string endDateError;
-        private bool validEndDate = true;
+        private bool endDateIsValid = true;
 
         [ObservableProperty] private string location;
         [ObservableProperty] private string locationError;
-        private bool validLocation = false;
+        private bool locationIsValid = true;
 
         [ObservableProperty] private string addError = "";
 
-        public bool validationSuccess => (addError == "");
-        public bool createSuccess = false;
+        public bool isEverythingValid => (addError == "");
+        public bool eventUpdatedSuccessfully = false;
+        public bool eventDeletedSuccessfully = false;
 
-        public EditEventViewModel(EventsService service, Event selectedEvent)
+
+        /// <summary>
+        /// Edit Event View Model constructor which sets the textboxes' values to the event's
+        /// </summary>
+        /// <param name="eventsService"> events service </param>
+        /// <param name="selectedEvent"> the selected event to be modified </param>
+        public EditEventViewModel(IEventsService eventsService, Event selectedEvent)
         {
-            this.service = service;
-            this.selectedEvent = selectedEvent;
+            this.eventsService = eventsService;
+            this.eventToEdit = selectedEvent;
 
             this.title = selectedEvent.Title;
             this.description = selectedEvent.Description;
             this.startDate = new DateTimeOffset?(selectedEvent.StartDate);
             this.endDate = new DateTimeOffset?(selectedEvent.EndDate);
+            this.location = selectedEvent.Location;
         }
 
 
+        /// <summary>
+        /// Function that tries to update an event
+        /// </summary>
+        [RelayCommand] public void EditEvent()
+        {
+            if (!titleIsValid || !descriptionIsValid || !startDateIsValid || !endDateIsValid || !locationIsValid)
+            {
+                AddError = "Please enter valid inputs before creating an event";
+                return;
+            }
+
+            try
+            {
+                AddError = "";
+                DateTime eventStartDateTime = startDate.Value.DateTime;
+                DateTime eventEndDateTime = endDate.Value.DateTime;
+
+                eventsService.UpdateEvent(eventToEdit.Id, Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location);
+                eventUpdatedSuccessfully = true;
+            }
+            catch (Exception)
+            {
+                eventUpdatedSuccessfully = false;
+            }
+        }
+
+        /// <summary>
+        /// Function that tries to delete an event
+        /// </summary>
+        [RelayCommand] public void DeleteEvent()
+        {
+            try
+            {
+                eventsService.DeleteEvent(eventToEdit);
+                eventDeletedSuccessfully = true;
+            }
+            catch (Exception)
+            {
+                eventDeletedSuccessfully = false;
+            }
+        }
+
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event title is valid
+        /// </summary>
+        /// <returns> true if the title is valid, false otherwise </returns>
         public bool ValidateTitle()
         {
             try
             {
-                if (validator.TitleValidator(Title))
+                if (eventValidator.IsEventTitleValid(Title))
                 {
                     TitleError = "";
-                    validTitle = true;
+                    titleIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 TitleError = ex.Message;
-                validTitle = false;
+                titleIsValid = false;
             }
             return false;
         }
 
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event description is valid
+        /// </summary>
+        /// <returns> true if the description is valid, false otherwise </returns>
         public bool ValidateDescription()
         {
             try
             {
-                if (validator.DescriptionValidator(Description))
+                if (eventValidator.IsEventDescriptionValid(Description))
                 {
                     DescriptionError = "";
-                    validDescription = true;
+                    descriptionIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 DescriptionError = ex.Message;
-                validDescription = false;
+                descriptionIsValid = false;
             }
             return false;
         }
 
-        public bool ValidateStartDate()
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event dates are cronologically valid
+        /// </summary>
+        /// <returns> true if the dates are in cronological order, false otherwise </returns>
+        public bool ValidateDatesCronologity()
         {
             try
             {
-                if (validator.StartDateValidator(StartDate))
+                if (eventValidator.AreEventDatesCronologicallyValid(StartDate, EndDate))
                 {
                     StartDateError = "";
-                    validStartDate = true;
+                    EndDateError = "";
+                    endDateIsValid = true;
+                    startDateIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 StartDateError = ex.Message;
-                validStartDate = false;
+                EndDateError = ex.Message;
+                endDateIsValid = false;
+                startDateIsValid = false;
             }
             return false;
         }
 
-        public bool ValidateEndDate()
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event location is valid
+        /// </summary>
+        /// <returns> true if the location is valid, false otherwise </returns>
+        public bool ValidateLocation()
         {
             try
             {
-                if (validator.EndDateValidator(EndDate))
+                if (eventValidator.IsEventLocationValid(Location))
                 {
-                    EndDateError = "";
-                    validEndDate = true;
+                    LocationError = "";
+                    locationIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                EndDateError = ex.Message;
-                validEndDate = false;
-            }
-            return false;
-        }
-
-        public bool ValidateDatesCronologity()
-        {
-            try
-            {
-                if (validator.DateCronologityValidator(StartDate, EndDate))
-                {
-                    EndDateError = "";
-                    validEndDate = true;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                EndDateError = ex.Message;
-                validEndDate = false;
+                LocationError = ex.Message;
+                locationIsValid = false;
             }
             return false;
         }

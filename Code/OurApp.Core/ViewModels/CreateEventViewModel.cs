@@ -1,5 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
 using OurApp.Core.Validators;
@@ -8,187 +9,309 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
 
 namespace OurApp.Core.ViewModels
 {
     public partial class CreateEventViewModel : ObservableObject
     {
-        EventsService service;
-        public EventValidator validator = new EventValidator();
+        private readonly IEventsService eventsService;
+        private readonly ICompanyService companyService;
+        private readonly SessionService sessionService;
+
+        public EventValidator eventValidator = new EventValidator();
+        public List<Company> SelectedCollaborators { get; } = new List<Company>();
 
         [ObservableProperty] private string photo;
 
         [ObservableProperty] private string title;
         [ObservableProperty] private string titleError;
-        private bool validTitle = false;
+        private bool titleIsValid = false;
 
         [ObservableProperty] private string description;
         [ObservableProperty] private string descriptionError;
-        private bool validDescription = true;
+        private bool descriptionIsValid = true;
 
         [ObservableProperty] private DateTimeOffset? startDate = DateTimeOffset.Now;
         [ObservableProperty] private string startDateError;
-        private bool validStartDate = true;
+        private bool startDateIsValid = true;
 
         [ObservableProperty] private DateTimeOffset? endDate = DateTimeOffset.Now;
         [ObservableProperty] private string endDateError;
-        private bool validEndDate = true;
+        private bool endDateIsValid = true;
 
         [ObservableProperty] private string location;
         [ObservableProperty] private string locationError;
-        private bool validLocation = false;
+        private bool locationIsValid = false;
 
         [ObservableProperty] private string addError = "";
 
-        public bool validationSuccess => (addError == "");
-        public bool createSuccess = false;
+        public bool isEverythingValid => (addError == "");
+        public bool eventCreatedSuccessfully = false;
 
 
-        public CreateEventViewModel(EventsService service)
+        /// <summary>
+        /// Create Event View Model constructor
+        /// </summary>
+        /// <param name="eventsService"> events service </param>
+        /// <param name="companyService"> company service </param>
+        /// <param name="sessionService"> session service </param>
+        public CreateEventViewModel(IEventsService eventsService, ICompanyService companyService, SessionService sessionService)
         {
-            this.service = service;
+            this.eventsService = eventsService;
+            this.companyService = companyService;
+            this.sessionService = sessionService;
         }
 
 
-        [RelayCommand]
-        public void Tap()
+        /// <summary>
+        /// Function that sends an email to a company
+        /// </summary>
+        /// <param name="destinationCompany"> company to send email to </param>
+        private void SendMailToCompany(Company destinationCompany)
         {
-            //if (!validTitle || !validDescription || !validStartDate || !validEndDate || !validLocation)
-            if (!validTitle || !validDescription || !validLocation)
+            System.Diagnostics.Debug.WriteLine($"Sending email to {destinationCompany.Name}");
+            System.Diagnostics.Debug.WriteLine($"{destinationCompany.Name} receives invitation\n");
+        }
+
+        /// <summary>
+        /// Function that sends the invitations to all the selected companies, 
+        /// after the user creates the event
+        /// </summary>
+        private void SendInvitations()
+        {
+            foreach (Company invitedCompany in this.SelectedCollaborators)
+            {
+                this.SendMailToCompany(invitedCompany);
+            }
+        }
+
+
+        /// <summary>
+        /// Function that tries to create a new event
+        /// </summary>
+        [RelayCommand]
+        public void CreateEvent()
+        {
+            if (!titleIsValid || !descriptionIsValid || !startDateIsValid || !endDateIsValid || !locationIsValid)
             {
                 AddError = "Please enter valid inputs before creating an event";
                 return;
             }
 
-
             try
             {
                 AddError = "";
-                DateTime start = startDate.Value.DateTime;
-                DateTime end = endDate.Value.DateTime;
+                DateTime eventStartDateTime = startDate.Value.DateTime;
+                DateTime eventEndDateTime = endDate.Value.DateTime;
 
-                service.AddEvent(Photo, Title, Description, start, end, Location);
-                createSuccess = true;
+                int hostId = sessionService.loggedInUser.CompanyId;
+                eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, hostId, SelectedCollaborators.ToList());
+                eventCreatedSuccessfully = true;
+
+                SendInvitations();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                createSuccess = false;
+                eventCreatedSuccessfully = false;
             }
         }
 
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event title is valid
+        /// </summary>
+        /// <returns> true if the title is valid, false otherwise </returns>
         public bool ValidateTitle()
         {
             try
             {
-                if (validator.TitleValidator(Title))
+                if (eventValidator.IsEventTitleValid(Title))
                 {
                     TitleError = "";
-                    validTitle = true;
+                    titleIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 TitleError = ex.Message;
-                validTitle = false;
+                titleIsValid = false;
             }
             return false;
         }
 
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event description is valid
+        /// </summary>
+        /// <returns> true if the description is valid, false otherwise </returns>
         public bool ValidateDescription()
         {
             try
             {
-                if (validator.DescriptionValidator(Description))
+                if (eventValidator.IsEventDescriptionValid(Description))
                 {
                     DescriptionError = "";
-                    validDescription = true;
+                    descriptionIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 DescriptionError = ex.Message;
-                validDescription = false;
+                descriptionIsValid = false;
             }
             return false;
         }
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event location is valid
+        /// </summary>
+        /// <returns> true if the location is valid, false otherwise </returns>
         public bool ValidateLocation()
         {
             try
             {
-                if (validator.LocationValidator(Location))
+                if (eventValidator.IsEventLocationValid(Location))
                 {
                     LocationError = "";
-                    validLocation = true;
+                    locationIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 LocationError = ex.Message;
-                validLocation = false;
+                locationIsValid = false;
             }
             return false;
         }
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event starting date is valid
+        /// </summary>
+        /// <returns> true if the starting date is valid, false otherwise </returns>
         public bool ValidateStartDate()
         {
             try
             {
-                if (validator.StartDateValidator(StartDate))
+                if (eventValidator.IsEventStartDateValid(StartDate))
                 {
                     StartDateError = "";
-                    validStartDate = true;
+                    startDateIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 StartDateError = ex.Message;
-                validStartDate = false;
+                startDateIsValid = false;
             }
             return false;
         }
 
+
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event ending date is valid
+        /// </summary>
+        /// <returns> true if the ending date is valid, false otherwise </returns>
         public bool ValidateEndDate()
         {
             try
             {
-                if (validator.EndDateValidator(EndDate))
+                if (eventValidator.IsEventEndDateValid(EndDate))
                 {
                     EndDateError = "";
-                    validEndDate = true;
+                    endDateIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 EndDateError = ex.Message;
-                validEndDate = false;
+                endDateIsValid = false;
             }
             return false;
         }
 
+        /// <summary>
+        /// Function that sets some flags, used in the View, if the event dates are cronologically valid
+        /// </summary>
+        /// <returns> true if the dates are valid, false otherwise </returns>
         public bool ValidateDatesCronologity()
         {
             try
             {
-                if (validator.DateCronologityValidator(StartDate, EndDate))
+                if (eventValidator.AreEventDatesCronologicallyValid(StartDate, EndDate))
                 {
                     EndDateError = "";
-                    validEndDate = true;
+                    endDateIsValid = true;
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 EndDateError = ex.Message;
-                validEndDate = false;
+                endDateIsValid = false;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Function that tries to add a collaborator to the event
+        /// </summary>
+        /// <param name="companyName"> the invited company's name </param>
+        /// <param name="errorMessage"> the error message returned </param>
+        /// <returns> true if the company name exists, false otherwise </returns>
+        public bool TryAddCollaboratorByName(string companyName, out string errorMessage)
+        {
+            errorMessage = "";
+
+            if (string.IsNullOrWhiteSpace(companyName))
+            {
+                errorMessage = "Please enter a company name.";
+                return false;
+            }
+
+            Company? company = companyService.GetCompanyByName(companyName);
+            if (company == null)
+            {
+                errorMessage = "Company was not found.";
+                return false;
+            }
+
+            if (SelectedCollaborators.Any(c => string.Equals(c.Name, company.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                errorMessage = "Company is already added as a collaborator.";
+                return false;
+            }
+
+            SelectedCollaborators.Add(company);
+            return true;
+        }
+
+        /// <summary>
+        /// Function that removes a collaborator
+        /// </summary>
+        /// <param name="companyName"> the name of the company to be removed from the collaborators list </param>
+        public void RemoveCollaboratorByName(string companyName)
+        {
+            foreach (Company selectedCompany in SelectedCollaborators)
+            {
+                if (selectedCompany.Name == companyName)
+                {
+                    SelectedCollaborators.Remove(selectedCompany);
+                }
+            }
+            //var collaborator = SelectedCollaborators
+            //    .FirstOrDefault(c => string.Equals(c.Name, companyName, StringComparison.OrdinalIgnoreCase));
+
+            //if (collaborator != null)
+            //{
+            //    SelectedCollaborators.Remove(collaborator);
+            //}
         }
     }
 }

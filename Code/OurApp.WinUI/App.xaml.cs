@@ -37,7 +37,7 @@ namespace OurApp.WinUI
             InitializeComponent();
         }
 
-        public static MainWindow MainWin { get; private set; }
+        public static MainWindow mainWindow { get; private set; }
 
         /// <summary>
         /// Invoked when the application is launched.
@@ -45,8 +45,8 @@ namespace OurApp.WinUI
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            MainWin = new MainWindow();
-            MainWin.Activate();
+            mainWindow = new MainWindow();
+            mainWindow.Activate();
         }
     }
 }

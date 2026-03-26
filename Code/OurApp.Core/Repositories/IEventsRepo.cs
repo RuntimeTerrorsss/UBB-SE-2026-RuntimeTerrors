@@ -10,11 +10,11 @@ namespace OurApp.Core.Repositories
 {
     public interface IEventsRepo
     {
-        ObservableCollection<Event> GetAll();
-        void Add(Event e);
-        void Remove(Event e);
-        public void printAll();
-        ObservableCollection<Event> getCurrentEvents();
-        ObservableCollection<Event> getPastEvents();
+        void AddEventToRepo(Event e);
+        void RemoveEventFromRepo(Event e);
+        ObservableCollection<Event> getCurrentEventsFromRepo(int loggedInUser);
+        ObservableCollection<Event> getPastEventsFromRepo(int loggedInUser);
+        void UpdateEventToRepo(int id, string photo, string title, string description, DateTime start, DateTime end, string location);
+
     }
 }

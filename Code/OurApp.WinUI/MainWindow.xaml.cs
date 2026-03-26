@@ -23,52 +23,84 @@ namespace OurApp.WinUI
     public sealed partial class MainWindow : Window
     {
         public Frame RootFrame => rootFrame;
-        public EventsService eventService { get; }
+        public IEventsService eventsService { get; }
+        public ICompanyService companyService { get; }
+        public SessionService sessionService { get; }
+        public ICollaboratorsService collabsService { get; }
 
-
-        ICompanyService companyService;
+        /// <summary>
+        /// MainWindow constructor that initialize the repositories and services
+        /// </summary>
         public MainWindow()
         {
-            this.InitializeComponent();
-           
-            RootFrame.Navigate(typeof(GamePage));
-            ICompanyRepo repo = new CompanyRepo();
+            string connectionString = "Data Source=DESKTOP-D8Q1P5P\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
+            ICompanyRepo repo = new CompanyRepo(connectionString);
             this.companyService = new CompanyService(repo);
 
-            companyService.AddCompany("Acme Corp", "We build things.", "profile.jpg", "logo.png", "Cluj", "hello@acme.test");
-            companyService.PrintAll();
+            ICollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
+            this.collabsService = new CollaboratorsService(collabRepo);
 
-            IEventsRepo eventRepo = new EventsRepo();
+            Company c1 = new Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.printAll();
+            InitializeComponent();
+
+            IEventsRepo eventsRepo = new EventsRepo(connectionString);
 
             // hardcode events
-            Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, 2);
-            Event ev2 = new Event("", "Event2", "This is another event. You should attend.", new DateTime(2026, 3, 21, 14, 0, 0), new DateTime(2026, 3, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, 2);
-            Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, 2);
-            Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, 2);
+            //Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            //Event ev2 = new Event("", "Event2", "This is another event. You should attend.", new DateTime(2026, 3, 21, 14, 0, 0), new DateTime(2026, 3, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            //Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, new List<Company>());
+            //Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, new List<Company>());
 
-            eventRepo.Add(ev1);
-            eventRepo.Add(ev2);
-            eventRepo.Add(ev3);
-            eventRepo.Add(ev4);
-            eventService = new EventsService(eventRepo);
+            //eventsRepo.AddEventToRepo(ev1);
+            //eventsRepo.AddEventToRepo(ev2);
+            //eventsRepo.AddEventToRepo(ev3);
+            //eventsRepo.AddEventToRepo(ev4);
+
+            //eventsRepo.printAll();
+            eventsService = new EventsService(eventsRepo);
+            sessionService = new SessionService(c1); // hardcode user = c1
+
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "Our Events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
             RootFrame.Navigate(typeof(OurEventsPage));
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "Past Events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(PastEventsPage));
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "View Profile" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(ViewProfilePage), 1);
         }
 
+        /// <summary>
+        /// Function that navigates to a different page: "Edit Profile" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(EditProfilePage), 1);
