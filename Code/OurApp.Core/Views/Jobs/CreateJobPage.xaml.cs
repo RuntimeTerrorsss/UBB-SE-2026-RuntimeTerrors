@@ -57,5 +57,10 @@ namespace iss_project.UI.Views.Jobs
             
         }
 
+        private void PayToPromote_Click(object sender, RoutedEventArgs e)
+        {
+            // something here
+        }
+
     }
 }

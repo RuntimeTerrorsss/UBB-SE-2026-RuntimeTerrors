@@ -35,5 +35,10 @@ namespace iss_project.UI.Views.Jobs
 
             MainWindow.Instance.ShowEditJob(job, true);
         }
+
+        private async void SeeApplicants_Click(object sender, RoutedEventArgs e)
+        {
+            // something here
+        }
     }
 }

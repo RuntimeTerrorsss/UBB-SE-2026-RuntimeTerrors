@@ -70,6 +70,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <Button Content="POST" Click="CreateJob_Click"/>
                     <Button Content="Cancel" Click="GoBack"/>
+                    <Button Content="Pay to Promote" Click="PayToPromote_Click"/>
                 </StackPanel>
 
             </StackPanel>

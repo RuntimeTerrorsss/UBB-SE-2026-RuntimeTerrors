@@ -66,6 +66,11 @@ namespace iss_project.UI.Views.Jobs
             }
         }
 
+        private void PayToPromote_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: implement later
+        }
+
         private async void Cancel_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new ContentDialog

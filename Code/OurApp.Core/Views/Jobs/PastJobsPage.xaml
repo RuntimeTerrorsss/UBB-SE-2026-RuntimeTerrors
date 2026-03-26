@@ -82,9 +82,8 @@
 
                                 <Button.Flyout>
                                     <MenuFlyout>
-                                        <MenuFlyoutItem Text="Repost"
-                    Click="RepostJob_Click"
-                    Tag="{Binding}" />
+                                        <MenuFlyoutItem Text="Repost" Click="RepostJob_Click" Tag="{Binding}" />
+                                        <MenuFlyoutItem Text="See applicants" Click="SeeApplicants_Click" Tag="{Binding}" />
                                     </MenuFlyout>
                                 </Button.Flyout>
 

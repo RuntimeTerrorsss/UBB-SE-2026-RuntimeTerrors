@@ -57,6 +57,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <Button Content="Save" Click="Save_Click"/>
                     <Button Content="Cancel" Click="Cancel_Click"/>
+                    <Button Content="Pay to Promote" Click="PayToPromote_Click"/>
                 </StackPanel>
 
             </StackPanel>
