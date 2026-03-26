@@ -15,8 +15,8 @@
 	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Assets\Captură de ecran 2026-03-26 130818.png" />
-    <Content Remove="Assets\Captură de ecran 2026-03-26 131333.png" />
+    <Content Remove="Assets\AvatarFemale.png" />
+    <Content Remove="Assets\AvatarMale.png" />
   </ItemGroup>
   <ItemGroup>
 	<None Remove="CollaboratorsPage.xaml" />
