@@ -25,30 +25,29 @@ namespace OurApp.Core.Repositories
                     "Missing DB connection string. Set environment variable 'UBB_DB_CONNECTION_STRING' (or 'UBB_CONNECTION_STRING').");
         }
 
-        public Game GetGameById(int id)
+        // Company-specific game stored inside the `companies` table.
+        public Game GetGame(int companyId)
         {
-            // This app currently stores a single active game (no multi-game selection in IGameRepo).
-            // If you later add multi-game support, update this method to query by a real primary key.
-            if (id != 0)
-                throw new NotSupportedException("GameRepo currently supports a single active game row only (id must be 0).");
+            if (companyId <= 0)
+                return new Game();
 
-            var sql =
-                $@"SELECT TOP 1
-                        avatar_id,
-                        buddy_name,
-                        scen_1_text,
-                        scen2_text,
-                        scen1_answer1, scen1_reaction1,
-                        scen1_answer2, scen1_reaction2,
-                        scen1_answer3, scen1_reaction3,
-                        scen2_answer1, scen2_reaction1,
-                        scen2_answer2, scen2_reaction2,
-                        scen2_answer3, scen2_reaction3,
-                        final_quote
-                   FROM {TableName};";
+            const string query = @"
+                SELECT
+                    avatar_id,
+                    buddy_name,
+                    final_quote,
+                    scen_1_text,
+                    scen1_answer1, scen1_answer2, scen1_answer3,
+                    scen1_reaction1, scen1_reaction2, scen1_reaction3,
+                    scen2_text,
+                    scen2_answer1, scen2_answer2, scen2_answer3,
+                    scen2_reaction1, scen2_reaction2, scen2_reaction3
+                FROM companies
+                WHERE company_id = @CompanyId;";
 
             using var conn = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand(sql, conn);
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@CompanyId", companyId);
 
             conn.Open();
             using var reader = cmd.ExecuteReader(CommandBehavior.SingleRow);
@@ -58,63 +57,34 @@ namespace OurApp.Core.Repositories
             return MapGame(reader);
         }
 
-        public void SaveGame(Game game)
+        public void SaveGame(Game game, int companyId)
         {
             if (game == null) throw new ArgumentNullException(nameof(game));
+            if (companyId <= 0) throw new ArgumentOutOfRangeException(nameof(companyId), "companyId must be > 0.");
 
-            // Upsert a single active row. If your DB uses a different key strategy, adjust accordingly.
-            var sql =
-                $@"IF EXISTS (SELECT 1 FROM {TableName})
-                    BEGIN
-                        UPDATE {TableName}
-                        SET
-                            avatar_id = @avatar_id,
-                            buddy_name = @buddy_name,
-                            scen_1_text = @scen_1_text,
-                            scen2_text = @scen2_text,
-                            scen1_answer1 = @scen1_answer1,
-                            scen1_reaction1 = @scen1_reaction1,
-                            scen1_answer2 = @scen1_answer2,
-                            scen1_reaction2 = @scen1_reaction2,
-                            scen1_answer3 = @scen1_answer3,
-                            scen1_reaction3 = @scen1_reaction3,
-                            scen2_answer1 = @scen2_answer1,
-                            scen2_reaction1 = @scen2_reaction1,
-                            scen2_answer2 = @scen2_answer2,
-                            scen2_reaction2 = @scen2_reaction2,
-                            scen2_answer3 = @scen2_answer3,
-                            scen2_reaction3 = @scen2_reaction3,
-                            final_quote = @final_quote;
-                    END
-                    ELSE
-                    BEGIN
-                        INSERT INTO {TableName} (
-                            avatar_id,
-                            buddy_name,
-                            scen_1_text,
-                            scen2_text,
-                            scen1_answer1, scen1_reaction1,
-                            scen1_answer2, scen1_reaction2,
-                            scen1_answer3, scen1_reaction3,
-                            scen2_answer1, scen2_reaction1,
-                            scen2_answer2, scen2_reaction2,
-                            scen2_answer3, scen2_reaction3,
-                            final_quote
-                        )
-                        VALUES (
-                            @avatar_id,
-                            @buddy_name,
-                            @scen_1_text,
-                            @scen2_text,
-                            @scen1_answer1, @scen1_reaction1,
-                            @scen1_answer2, @scen1_reaction2,
-                            @scen1_answer3, @scen1_reaction3,
-                            @scen2_answer1, @scen2_reaction1,
-                            @scen2_answer2, @scen2_reaction2,
-                            @scen2_answer3, @scen2_reaction3,
-                            @final_quote
-                        );
-                    END";
+            const string query = @"
+                UPDATE companies
+                SET
+                    avatar_id = @AvatarId,
+                    buddy_name = @BuddyName,
+                    final_quote = @FinalQuote,
+
+                    scen_1_text = @Scen1Text,
+                    scen1_answer1 = @Scen1Answer1,
+                    scen1_answer2 = @Scen1Answer2,
+                    scen1_answer3 = @Scen1Answer3,
+                    scen1_reaction1 = @Scen1Reaction1,
+                    scen1_reaction2 = @Scen1Reaction2,
+                    scen1_reaction3 = @Scen1Reaction3,
+
+                    scen2_text = @Scen2Text,
+                    scen2_answer1 = @Scen2Answer1,
+                    scen2_answer2 = @Scen2Answer2,
+                    scen2_answer3 = @Scen2Answer3,
+                    scen2_reaction1 = @Scen2Reaction1,
+                    scen2_reaction2 = @Scen2Reaction2,
+                    scen2_reaction3 = @Scen2Reaction3
+                WHERE company_id = @CompanyId;";
 
             var scenarios = game.Scenarios;
 
@@ -142,52 +112,62 @@ namespace OurApp.Core.Repositories
                 return scenario.AdviceChoices[adviceIndex]?.Feedback;
             }
 
-            var scenario1Text = scenarios.Count > 0 ? scenarios[0].Description : null;
-            var scenario2Text = scenarios.Count > 1 ? scenarios[1].Description : null;
+            string? scen1Text = scenarios.Count > 0 ? scenarios[0].Description : null;
+            string? scen2Text = scenarios.Count > 1 ? scenarios[1].Description : null;
 
             using var conn = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand(sql, conn);
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@CompanyId", companyId);
+            cmd.Parameters.AddWithValue("@AvatarId", game.Buddy.Id);
+            cmd.Parameters.AddWithValue("@BuddyName", game.Buddy.Name ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@FinalQuote", game.Conclusion ?? (object)DBNull.Value);
 
-            cmd.Parameters.Add("@avatar_id", SqlDbType.Int).Value = game.Buddy.Id;
-            cmd.Parameters.Add("@buddy_name", SqlDbType.NVarChar, 200).Value =
-                (object?)(game.Buddy.Name ?? string.Empty);
+            cmd.Parameters.AddWithValue("@Scen1Text", scen1Text ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen2Text", scen2Text ?? (object)DBNull.Value);
 
-            cmd.Parameters.Add("@scen_1_text", SqlDbType.NVarChar).Value =
-                (object?)scenario1Text ?? DBNull.Value;
-            cmd.Parameters.Add("@scen2_text", SqlDbType.NVarChar).Value =
-                (object?)scenario2Text ?? DBNull.Value;
+            cmd.Parameters.AddWithValue("@Scen1Answer1", GetAdvice(0, 0) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen1Answer2", GetAdvice(0, 1) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen1Answer3", GetAdvice(0, 2) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen1Reaction1", GetFeedback(0, 0) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen1Reaction2", GetFeedback(0, 1) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen1Reaction3", GetFeedback(0, 2) ?? (object)DBNull.Value);
 
-            // Scenario 1 (index 0)
-            cmd.Parameters.Add("@scen1_answer1", SqlDbType.NVarChar).Value = (object?)GetAdvice(0, 0) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen1_reaction1", SqlDbType.NVarChar).Value = (object?)GetFeedback(0, 0) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen1_answer2", SqlDbType.NVarChar).Value = (object?)GetAdvice(0, 1) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen1_reaction2", SqlDbType.NVarChar).Value = (object?)GetFeedback(0, 1) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen1_answer3", SqlDbType.NVarChar).Value = (object?)GetAdvice(0, 2) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen1_reaction3", SqlDbType.NVarChar).Value = (object?)GetFeedback(0, 2) ?? DBNull.Value;
-
-            // Scenario 2 (index 1)
-            cmd.Parameters.Add("@scen2_answer1", SqlDbType.NVarChar).Value = (object?)GetAdvice(1, 0) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen2_reaction1", SqlDbType.NVarChar).Value = (object?)GetFeedback(1, 0) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen2_answer2", SqlDbType.NVarChar).Value = (object?)GetAdvice(1, 1) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen2_reaction2", SqlDbType.NVarChar).Value = (object?)GetFeedback(1, 1) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen2_answer3", SqlDbType.NVarChar).Value = (object?)GetAdvice(1, 2) ?? DBNull.Value;
-            cmd.Parameters.Add("@scen2_reaction3", SqlDbType.NVarChar).Value = (object?)GetFeedback(1, 2) ?? DBNull.Value;
-
-            cmd.Parameters.Add("@final_quote", SqlDbType.NVarChar).Value = (object?)game.Conclusion ?? DBNull.Value;
+            cmd.Parameters.AddWithValue("@Scen2Answer1", GetAdvice(1, 0) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen2Answer2", GetAdvice(1, 1) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen2Answer3", GetAdvice(1, 2) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen2Reaction1", GetFeedback(1, 0) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen2Reaction2", GetFeedback(1, 1) ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Scen2Reaction3", GetFeedback(1, 2) ?? (object)DBNull.Value);
 
             conn.Open();
-            cmd.ExecuteNonQuery();
+            int affected = cmd.ExecuteNonQuery();
+            if (affected == 0)
+                throw new InvalidOperationException($"No company found with id '{companyId}'.");
         }
 
-        public Game Get() => GetGameById(0);
+        public Game GetGameById(int id)
+        {
+            // Backward compatible: old method name now acts as company-specific lookup.
+            return GetGame(id);
+        }
+
+        public void SaveGame(Game game)
+        {
+            // Backward compatible: old method saves to a "default" company.
+            // If you need per-company editing, call SaveGame(game, companyId) instead.
+            SaveGame(game, 0);
+        }
+
+        public Game Get() => GetGame(0);
 
         public void Save(Game game)
         {
             if (game == null) throw new ArgumentNullException(nameof(game));
-            SaveGame(game);
+            SaveGame(game, 0);
         }
 
-        private static Game MapGame(SqlDataReader reader)
+        // Public so other repos (like CompanyRepo) can reuse the mapper.
+        public Game MapGame(SqlDataReader reader)
         {
             var buddy = new Buddy(
                 reader["avatar_id"] is DBNull ? 0 : Convert.ToInt32(reader["avatar_id"]),

@@ -9,15 +9,17 @@ namespace OurApp.Core.Services
     public class GameService
     {
         private readonly IGameRepo _repository;
+        private readonly int _companyId;
 
-        public GameService(IGameRepo repository)
+        public GameService(IGameRepo repository, int companyId = 0)
         {
             _repository = repository;
+            _companyId = companyId;
         }
 
         private Game LoadedGame()
         {
-            var game = _repository.Get();
+            var game = _companyId != 0 ? _repository.GetGame(_companyId) : _repository.Get();
             if (game == null)
                 throw new InvalidOperationException("No game is available from the repository.");
             return game;
@@ -26,7 +28,10 @@ namespace OurApp.Core.Services
         public void Save(Game game)
         {
             if (game == null) throw new ArgumentNullException(nameof(game));
-            _repository.Save(game);
+            if (_companyId != 0)
+                _repository.SaveGame(game, _companyId);
+            else
+                _repository.Save(game);
         }
 
         public int getBuddyId()
@@ -36,7 +41,7 @@ namespace OurApp.Core.Services
 
         public Game GetStoredGame()
         {
-            return _repository.Get() ?? new Game();
+            return (_companyId != 0 ? _repository.GetGame(_companyId) : _repository.Get()) ?? new Game();
         }
 
         public string ShowCoworker()

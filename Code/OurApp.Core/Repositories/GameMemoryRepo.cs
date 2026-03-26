@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +23,20 @@ namespace OurApp.Core.Repositories
         public void Save(Game updatedGame)
         {
             game = updatedGame;
+        }
+
+        public Game GetGame(int companyId)
+        {
+            // In-memory repo currently stores a single game regardless of company.
+            _ = companyId;
+            return game;
+        }
+
+        public void SaveGame(Game game, int companyId)
+        {
+            // In-memory repo currently stores a single game regardless of company.
+            _ = companyId;
+            Save(game);
         }
     }
 }

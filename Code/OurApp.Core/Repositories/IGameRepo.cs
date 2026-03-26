@@ -10,5 +10,9 @@ namespace OurApp.Core.Repositories
     {
         Game Get();
         void Save(Game game);
+
+        // Company-specific game (stored inside the companies table).
+        Game GetGame(int companyId);
+        void SaveGame(Game game, int companyId);
     }
 }
