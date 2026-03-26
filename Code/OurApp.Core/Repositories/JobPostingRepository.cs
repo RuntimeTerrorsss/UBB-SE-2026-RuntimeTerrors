@@ -200,11 +200,11 @@ AND (
 
         public async Task UpdateAsync(JobPosting job)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
 
-                string query = @"
+            // 1️⃣ Update jobs table
+            string query = @"
 UPDATE jobs
 SET photo = @Photo,
     job_title = @JobTitle,
@@ -223,26 +223,52 @@ SET photo = @Photo,
     scheduled_at = @ScheduledAt
 WHERE job_id = @JobId";
 
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@JobId", job.JobId);
-                    command.Parameters.AddWithValue("@Photo", (object?)job.Photo ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@JobTitle", job.JobTitle);
-                    command.Parameters.AddWithValue("@IndustryField", job.IndustryField);
-                    command.Parameters.AddWithValue("@JobType", job.JobType);
-                    command.Parameters.AddWithValue("@ExperienceLevel", job.ExperienceLevel);
-                    command.Parameters.AddWithValue("@StartDate", (object?)job.StartDate ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@EndDate", (object?)job.EndDate ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@JobDescription", job.JobDescription);
-                    command.Parameters.AddWithValue("@JobLocation", job.JobLocation);
-                    command.Parameters.AddWithValue("@AvailablePositions", job.AvailablePositions);
-                    command.Parameters.AddWithValue("@Salary", (object?)job.Salary ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@AmountPayed", (object?)job.AmountPayed ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@Deadline", (object?)job.Deadline ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@PostedAt", (object?)job.PostedAt ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@ScheduledAt", (object?)job.ScheduledAt ?? DBNull.Value);
+            using (var cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@JobId", job.JobId);
+                cmd.Parameters.AddWithValue("@Photo", (object?)job.Photo ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@JobTitle", job.JobTitle);
+                cmd.Parameters.AddWithValue("@IndustryField", job.IndustryField);
+                cmd.Parameters.AddWithValue("@JobType", job.JobType);
+                cmd.Parameters.AddWithValue("@ExperienceLevel", job.ExperienceLevel);
+                cmd.Parameters.AddWithValue("@StartDate", (object?)job.StartDate ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@EndDate", (object?)job.EndDate ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@JobDescription", job.JobDescription);
+                cmd.Parameters.AddWithValue("@JobLocation", job.JobLocation);
+                cmd.Parameters.AddWithValue("@AvailablePositions", job.AvailablePositions);
+                cmd.Parameters.AddWithValue("@Salary", (object?)job.Salary ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@AmountPayed", (object?)job.AmountPayed ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Deadline", (object?)job.Deadline ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@PostedAt", (object?)job.PostedAt ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ScheduledAt", (object?)job.ScheduledAt ?? DBNull.Value);
 
-                    await command.ExecuteNonQueryAsync();
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            // 2️⃣ Delete old skills
+            string deleteSkills = "DELETE FROM job_skills WHERE job_id = @JobId";
+            using (var cmd = new SqlCommand(deleteSkills, connection))
+            {
+                cmd.Parameters.AddWithValue("@JobId", job.JobId);
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            // 3️⃣ Insert new skills
+            foreach (var skill in job.RequiredSkills)
+            {
+                string insertSkill = @"
+INSERT INTO job_skills (job_id, skill_id, required_percentage)
+SELECT @JobId, skill_id, @Percentage
+FROM skills
+WHERE skill_name = @SkillName";
+
+                using (var cmd = new SqlCommand(insertSkill, connection))
+                {
+                    cmd.Parameters.AddWithValue("@JobId", job.JobId);
+                    cmd.Parameters.AddWithValue("@SkillName", skill.SkillName);
+                    cmd.Parameters.AddWithValue("@Percentage", skill.Percentage);
+
+                    await cmd.ExecuteNonQueryAsync();
                 }
             }
         }
@@ -284,6 +310,7 @@ WHERE job_id = @JobId";
                 AmountPayed = reader["amount_payed"] == DBNull.Value ? null : (int?)reader["amount_payed"],
                 Deadline = reader["deadline"] == DBNull.Value ? null : (DateTime?)reader["deadline"],
                 ScheduledAt = reader["scheduled_at"] == DBNull.Value ? null : (DateTime?)reader["scheduled_at"]
+                // RequiredSkills will be loaded separately via GetSkillsForJobAsync
             };
         }
     }

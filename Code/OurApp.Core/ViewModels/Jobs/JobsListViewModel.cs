@@ -29,7 +29,15 @@ namespace iss_project.UI.ViewModels.Jobs
             {
                 // Load skills from DB
                 var skills = await _jobService.GetSkillsForJobAsync(job.JobId);
-                job.RequiredSkills = skills.Select(s => (s.SkillName, s.Percentage)).ToList();
+
+                // Map to JobSkill objects
+                job.RequiredSkills = skills
+                    .Select(s => new JobSkill
+                    {
+                        SkillName = s.SkillName,
+                        Percentage = s.Percentage
+                    })
+                    .ToList();
 
                 Jobs.Add(job);
             }

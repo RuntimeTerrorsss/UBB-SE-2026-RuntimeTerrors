@@ -10,15 +10,19 @@ namespace iss_project.UI.Views.Jobs
     {
         private EditJobViewModel ViewModel => this.DataContext as EditJobViewModel;
 
-        public EditJobPage(JobPosting job,bool isRepost = false)
+        public EditJobPage(JobPosting job, bool isRepost = false)
         {
             this.InitializeComponent();
+
             var vm = new EditJobViewModel(job)
             {
                 IsRepostMode = isRepost
             };
 
             this.DataContext = vm;
+
+            // Load skills from DB
+            _ = vm.LoadSkillsAsync();
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)
@@ -27,15 +31,12 @@ namespace iss_project.UI.Views.Jobs
 
             try
             {
-                var vm = (EditJobViewModel)this.DataContext;
-
-                if (vm.IsRepostMode)
+                if (ViewModel.IsRepostMode)
                 {
-                    vm.Job.PostedAt = DateTime.Now;
-                    System.Diagnostics.Debug.WriteLine("PostedAt set in UI: " + vm.Job.PostedAt);
+                    ViewModel.Job.PostedAt = DateTime.Now;
                 }
 
-                var result = await vm.UpdateJob();
+                var result = await ViewModel.UpdateJob();
 
                 var dialog = new ContentDialog
                 {
@@ -82,7 +83,6 @@ namespace iss_project.UI.Views.Jobs
                 DefaultButton = ContentDialogButton.Close,
                 XamlRoot = this.XamlRoot
             };
-
 
             var result = await dialog.ShowAsync();
 
