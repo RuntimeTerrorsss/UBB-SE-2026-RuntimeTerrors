@@ -40,19 +40,25 @@ public class JobPosting
     // ==========================
     // Display-friendly fields
     // ==========================
+
+    public string StartDateDisplay => StartDate.HasValue ? $"Start: {StartDate.Value:dd/MM/yyyy}" : null;
+    public string EndDateDisplay => EndDate.HasValue ? $"End: {EndDate.Value:dd/MM/yyyy}" : null;
+    public string DeadlineDisplay => Deadline.HasValue ? $"Deadline: {Deadline.Value:dd/MM/yyyy}" : null;
+    public string PostedAtDisplay => PostedAt.HasValue ? $"Posted: {PostedAt.Value:g}" : null;
+
+    public string SalaryDisplay => Salary.HasValue ? $"Salary: {Salary.Value}" : null;
+    public string AmountPayedDisplay => AmountPayed.HasValue ? $"Paid: {AmountPayed.Value}" : null;
+
+    public string DescriptionDisplay => !string.IsNullOrWhiteSpace(JobDescription)
+        ? $"Description: {JobDescription}"
+        : null;
+
     public string JobTitleDisplay => $"Title: {JobTitle}";
     public string IndustryFieldDisplay => $"Field: {IndustryField}";
     public string JobTypeDisplay => $"Type: {JobType}";
     public string ExperienceLevelDisplay => $"Experience: {ExperienceLevel}";
     public string JobLocationDisplay => $"Location: {JobLocation}";
     public string PositionsDisplay => $"Positions: {AvailablePositions}";
-    public string StartDateDisplay => StartDate.HasValue ? $"Start: {StartDate.Value:dd/MM/yyyy}" : "";
-    public string EndDateDisplay => EndDate.HasValue ? $"End: {EndDate.Value:dd/MM/yyyy}" : "";
-    public string DeadlineDisplay => Deadline.HasValue ? $"Deadline: {Deadline.Value:dd/MM/yyyy}" : "";
-    public string PostedAtDisplay => PostedAt.HasValue ? $"Posted: {PostedAt.Value:g}" : "";
-    public string SalaryDisplay => Salary.HasValue ? $"Salary: {Salary.Value}" : "";
-    public string AmountPayedDisplay => AmountPayed.HasValue ? $"Paid: {AmountPayed.Value}" : "";
-    public string DescriptionDisplay => $"Description: {JobDescription}";
     public string SkillsDisplay => RequiredSkills.Count > 0
         ? string.Join(", ", RequiredSkills.Select(s => $"{s.SkillName} ({s.Percentage}%)"))
         : "No skills";

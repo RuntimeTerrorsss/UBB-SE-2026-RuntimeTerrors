@@ -1,7 +1,12 @@
 ﻿<Page
     x:Class="iss_project.UI.Views.Jobs.PastJobsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:iss_project.Code.OurApp.Core.Converters">
+
+    <Page.Resources>
+        <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </Page.Resources>
 
     <Grid Padding="20">
         <Grid.RowDefinitions>
@@ -12,21 +17,21 @@
 
         <!-- Title -->
         <TextBlock Grid.Row="0"
-                   Text="Jobs"
+                   Text="Past Jobs"
                    FontSize="24"
                    Margin="0,0,0,10"/>
 
         <!-- Scrollable list -->
         <ListView Grid.Row="1"
-          ItemsSource="{Binding Jobs}">
+                  ItemsSource="{Binding Jobs}">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="5"
-            Padding="12"
-            CornerRadius="8"
-            BorderBrush="Gray"
-            BorderThickness="1">
+                            Padding="12"
+                            CornerRadius="8"
+                            BorderBrush="Gray"
+                            BorderThickness="1">
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -38,55 +43,72 @@
                             <StackPanel Spacing="6">
 
                                 <TextBlock Text="{Binding JobTitleDisplay}"
-           FontSize="16"
-           FontWeight="Bold"/>
+                                           FontSize="16"
+                                           FontWeight="Bold"/>
 
-                                <TextBlock Text="{Binding IndustryFieldDisplay}" />
-                                <TextBlock Text="{Binding JobTypeDisplay}" />
-                                <TextBlock Text="{Binding ExperienceLevelDisplay}" />
-                                <TextBlock Text="{Binding JobLocationDisplay}" />
+                                <TextBlock Text="{Binding IndustryFieldDisplay}"
+                                           Visibility="{Binding IndustryFieldDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
-                                <TextBlock Text="{Binding PositionsDisplay}"/>
+                                <TextBlock Text="{Binding JobTypeDisplay}"
+                                           Visibility="{Binding JobTypeDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                                <TextBlock Text="{Binding ExperienceLevelDisplay}"
+                                           Visibility="{Binding ExperienceLevelDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                                <TextBlock Text="{Binding JobLocationDisplay}"
+                                           Visibility="{Binding JobLocationDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                                <TextBlock Text="{Binding PositionsDisplay}"
+                                           Visibility="{Binding PositionsDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                                <TextBlock Text="{Binding SkillsDisplay}"
+                                           TextWrapping="Wrap"
+                                           Visibility="{Binding SkillsDisplay, Converter={StaticResource NullToVisibilityConverter}}"
+                                           FontStyle="Italic"
+                                           Foreground="Gray"/>
 
                                 <TextBlock Text="{Binding StartDateDisplay}"
-           Visibility="{Binding StartDateVisibility}"/>
+                                           Visibility="{Binding StartDateDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                                 <TextBlock Text="{Binding EndDateDisplay}"
-           Visibility="{Binding EndDateVisibility}"/>
+                                           Visibility="{Binding EndDateDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                                 <TextBlock Text="{Binding DeadlineDisplay}"
-           Visibility="{Binding DeadlineVisibility}"/>
+                                           Visibility="{Binding DeadlineDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                                 <TextBlock Text="{Binding SalaryDisplay}"
-           Visibility="{Binding SalaryVisibility}"/>
+                                           Visibility="{Binding SalaryDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                                 <TextBlock Text="{Binding AmountPayedDisplay}"
-           Visibility="{Binding AmountPayedVisibility}"/>
+                                           Visibility="{Binding AmountPayedDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                                 <TextBlock Text="{Binding PostedAtDisplay}"
-           Visibility="{Binding PostedAtVisibility}"/>
+                                           Visibility="{Binding PostedAtDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                                 <TextBlock Text="{Binding DescriptionDisplay}"
-           TextWrapping="Wrap"
-           MaxLines="3"/>
+                                           TextWrapping="Wrap"
+                                           MaxLines="3"
+                                           Visibility="{Binding DescriptionDisplay, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                             </StackPanel>
 
                             <!-- 3-dot menu -->
                             <Button Grid.Column="1"
-                    Content="⋯"
-                    FontSize="18"
-                    Padding="10"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top">
-
+                                    Content="⋯"
+                                    FontSize="18"
+                                    Padding="10"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top">
                                 <Button.Flyout>
                                     <MenuFlyout>
-                                        <MenuFlyoutItem Text="Repost" Click="RepostJob_Click" Tag="{Binding}" />
-                                        <MenuFlyoutItem Text="See applicants" Click="SeeApplicants_Click" Tag="{Binding}" />
+                                        <MenuFlyoutItem Text="Repost"
+                                                        Click="RepostJob_Click"
+                                                        Tag="{Binding}" />
+                                        <MenuFlyoutItem Text="See applicants"
+                                                        Click="SeeApplicants_Click"
+                                                        Tag="{Binding}" />
                                     </MenuFlyout>
                                 </Button.Flyout>
-
                             </Button>
                         </Grid>
                     </Border>
@@ -97,10 +119,9 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
             <Button Content="Back"
-            Click="GoBack"
-            HorizontalAlignment="Stretch"
-            Width="150"/>
-
+                    Click="GoBack"
+                    HorizontalAlignment="Stretch"
+                    Width="150"/>
         </StackPanel>
     </Grid>
 </Page>
