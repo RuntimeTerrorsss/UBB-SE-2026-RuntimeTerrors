@@ -38,8 +38,8 @@
                             <StackPanel Spacing="6">
 
                                 <TextBlock Text="{Binding JobTitleDisplay}"
-           FontSize="16"
-           FontWeight="Bold"/>
+                                   FontSize="16"
+                                   FontWeight="Bold"/>
 
                                 <TextBlock Text="{Binding IndustryFieldDisplay}" />
                                 <TextBlock Text="{Binding JobTypeDisplay}" />
@@ -48,27 +48,33 @@
 
                                 <TextBlock Text="{Binding PositionsDisplay}"/>
 
+                                <TextBlock Text="{Binding SkillsDisplay}"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding SkillsVisibility}"
+                                   FontStyle="Italic"
+                                   Foreground="Gray"/>
+
                                 <TextBlock Text="{Binding StartDateDisplay}"
-           Visibility="{Binding StartDateVisibility}"/>
+                                   Visibility="{Binding StartDateVisibility}"/>
 
                                 <TextBlock Text="{Binding EndDateDisplay}"
-           Visibility="{Binding EndDateVisibility}"/>
+                                     Visibility="{Binding EndDateVisibility}"/>
 
                                 <TextBlock Text="{Binding DeadlineDisplay}"
-           Visibility="{Binding DeadlineVisibility}"/>
+                                    Visibility="{Binding DeadlineVisibility}"/>
 
                                 <TextBlock Text="{Binding SalaryDisplay}"
-           Visibility="{Binding SalaryVisibility}"/>
+                                     Visibility="{Binding SalaryVisibility}"/>
 
                                 <TextBlock Text="{Binding AmountPayedDisplay}"
-           Visibility="{Binding AmountPayedVisibility}"/>
+                                    Visibility="{Binding AmountPayedVisibility}"/>
 
                                 <TextBlock Text="{Binding PostedAtDisplay}"
-           Visibility="{Binding PostedAtVisibility}"/>
+                                    Visibility="{Binding PostedAtVisibility}"/>
 
                                 <TextBlock Text="{Binding DescriptionDisplay}"
-           TextWrapping="Wrap"
-           MaxLines="3"/>
+                                   TextWrapping="Wrap"
+                                   MaxLines="3"/>
 
                             </StackPanel>
 

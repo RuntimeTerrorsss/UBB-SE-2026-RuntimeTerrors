@@ -16,13 +16,18 @@ namespace iss_project.Code.OurApp.Core.Services
             _jobRepository = repo;
         }
 
-        public async Task CreateJobAsync(JobPosting job)
+        public async Task CreateJobAsync(JobPosting job, List<(int SkillId, int Percentage)> skills)
         {
             Validate(job);
 
             job.PostedAt = DateTime.Now;
 
-            await _jobRepository.AddAsync(job);
+            await _jobRepository.AddAsync(job, skills);
+        }
+
+        public async Task<List<(string SkillName, int Percentage)>> GetSkillsForJobAsync(int jobId)
+        {
+            return await _jobRepository.GetSkillsForJobAsync(jobId);
         }
 
         public async Task UpdateJobAsync(JobPosting job)

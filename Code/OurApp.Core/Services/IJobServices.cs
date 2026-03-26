@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using iss_project.Code.OurApp.Core.Models;
+using iss_project.Code.OurApp.Core.Repositories;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using iss_project.Code.OurApp.Core.Models;
 
 namespace iss_project.Code.OurApp.Core.Services
 {
     public interface IJobService
     {
-        Task CreateJobAsync(JobPosting job);
+        Task CreateJobAsync(JobPosting job, List<(int SkillId, int Percentage)> skills);
+
+        Task<List<(string SkillName, int Percentage)>> GetSkillsForJobAsync(int jobId);
         Task UpdateJobAsync(JobPosting job);
         Task DeleteJobAsync(int id);
 

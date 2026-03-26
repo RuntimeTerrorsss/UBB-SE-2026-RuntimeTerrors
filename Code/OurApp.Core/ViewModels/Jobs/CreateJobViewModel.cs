@@ -1,19 +1,21 @@
 ﻿using iss_project.Code.OurApp.Core.Models;
+using iss_project.Code.OurApp.Core.Repositories.iss_project.Code.OurApp.Core.Repositories;
 using iss_project.Code.OurApp.Core.Services;
 using iss_project.UI.Validators;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Linq;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace iss_project.UI.ViewModels.Jobs
 {
     public class CreateJobViewModel : INotifyPropertyChanged
     {
         private readonly IJobService _jobService;
+        private readonly SkillService _skillService = new SkillService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,6 +37,26 @@ namespace iss_project.UI.ViewModels.Jobs
             {
                 "Internship", "Entry", "Mid","Senior", "Director","Junior"
             };
+
+            Skills = new ObservableCollection<SkillRequirement>();
+            _ = LoadSkills(); // async fire-and-forget
+
+        }
+
+        private async Task LoadSkills()
+        {
+            var dbSkills = await _skillService.GetAllSkillsAsync();
+
+            Skills.Clear();
+
+            foreach (var skill in dbSkills)
+            {
+                Skills.Add(new SkillRequirement
+                {
+                    SkillId = skill.SkillId,
+                    SkillName = skill.SkillName
+                });
+            }
         }
 
         public int CompanyId { get; set; } = 1;
@@ -63,9 +85,12 @@ namespace iss_project.UI.ViewModels.Jobs
         public ObservableCollection<string> JobTypes { get; set; }
         public ObservableCollection<string> ExperienceLevels { get; set; }
 
+        public ObservableCollection<SkillRequirement> Skills { get; set; } = new();
+
         private bool _useScheduledPosting;
 
-        public bool UseScheduledPosting
+
+public bool UseScheduledPosting
         {
             get => _useScheduledPosting;
             set
@@ -123,7 +148,12 @@ namespace iss_project.UI.ViewModels.Jobs
                     ScheduledAt = UseScheduledPosting ? ScheduledAt?.DateTime : null,
                 };
 
-                await _jobService.CreateJobAsync(job);
+                var selectedSkills = Skills
+                .Where(s => s.IsSelected)
+                .Select(s => (s.SkillId, s.Percentage))
+                .ToList();
+
+                await _jobService.CreateJobAsync(job, selectedSkills);
 
                 return (true, "Job created successfully");
             }

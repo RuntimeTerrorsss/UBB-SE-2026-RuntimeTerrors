@@ -35,6 +35,27 @@
                 <TextBox Header="Available Positions"
                          Text="{Binding AvailablePositions, Mode=TwoWay}" />
 
+                <TextBlock Text="Required Skills" FontSize="18" Margin="0,10,0,5"/>
+
+                <ItemsControl ItemsSource="{Binding Skills}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+
+                                <!-- Select skill -->
+                                <CheckBox Content="{Binding SkillName}"
+                          IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+
+                                <!-- Percentage -->
+                                <TextBox Width="60"
+                         PlaceholderText="%"
+                         Text="{Binding Percentage, Mode=TwoWay}"/>
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
                 <!-- Dates -->
                 <DatePicker Header="Start Date"
                             Date="{Binding StartDate, Mode=TwoWay}" />

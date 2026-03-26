@@ -16,21 +16,50 @@ namespace iss_project.Code.OurApp.Core.Repositories
             _connectionString = DbConfig.ConnectionString;
         }
 
-        public async Task AddAsync(JobPosting job)
+        public async Task<List<(string SkillName, int Percentage)>> GetSkillsForJobAsync(int jobId)
+        {
+            var skills = new List<(string SkillName, int Percentage)>();
+
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            string query = @"
+SELECT s.skill_name, js.required_percentage
+FROM job_skills js
+JOIN skills s ON js.skill_id = s.skill_id
+WHERE js.job_id = @JobId";
+
+            using var command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@JobId", jobId);
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                skills.Add((reader.GetString(0), reader.GetInt32(1)));
+            }
+
+            return skills;
+        }
+
+        public async Task AddAsync(JobPosting job, List<(int SkillId, int Percentage)> skills)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
+                // 🔥 Get inserted job_id
                 string query = @"
 INSERT INTO jobs
 (company_id, photo, job_title, industry_field, job_type, experience_level,
  start_date, end_date, job_description, job_location, available_positions,
  posted_at, salary, amount_payed, deadline, scheduled_at)
+OUTPUT INSERTED.job_id
 VALUES
 (@CompanyId, @Photo, @JobTitle, @IndustryField, @JobType, @ExperienceLevel,
  @StartDate, @EndDate, @JobDescription, @JobLocation, @AvailablePositions,
  @PostedAt, @Salary, @AmountPayed, @Deadline, @ScheduledAt)";
+
+                int jobId;
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -51,7 +80,27 @@ VALUES
                     command.Parameters.AddWithValue("@Deadline", (object?)job.Deadline ?? DBNull.Value);
                     command.Parameters.AddWithValue("@ScheduledAt", (object?)job.ScheduledAt ?? DBNull.Value);
 
-                    await command.ExecuteNonQueryAsync();
+                    jobId = (int)await command.ExecuteScalarAsync();
+                }
+
+                // 🔥 Insert into job_skills
+                if (skills != null)
+                {
+                    foreach (var skill in skills)
+                    {
+                        string skillQuery = @"
+INSERT INTO job_skills (job_id, skill_id, required_percentage)
+VALUES (@JobId, @SkillId, @Percentage)";
+
+                        using (SqlCommand cmd = new SqlCommand(skillQuery, connection))
+                        {
+                            cmd.Parameters.AddWithValue("@JobId", jobId);
+                            cmd.Parameters.AddWithValue("@SkillId", skill.SkillId);
+                            cmd.Parameters.AddWithValue("@Percentage", skill.Percentage);
+
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
                 }
             }
         }

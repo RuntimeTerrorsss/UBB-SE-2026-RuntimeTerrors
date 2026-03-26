@@ -1,5 +1,7 @@
-﻿using System;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace iss_project.Code.OurApp.Core.Models
 {
@@ -44,6 +46,16 @@ namespace iss_project.Code.OurApp.Core.Models
         public int? AmountPayed { get; set; }
 
         // =======================
+        // Scheduling
+        // =======================
+        public DateTime? ScheduledAt { get; set; }
+
+        // =======================
+        // Skills
+        // =======================
+        public List<(string SkillName, int Percentage)> RequiredSkills { get; set; } = new();
+
+        // =======================
         // Visibility Helpers
         // =======================
         public Visibility SalaryVisibility => Salary.HasValue ? Visibility.Visible : Visibility.Collapsed;
@@ -70,9 +82,14 @@ namespace iss_project.Code.OurApp.Core.Models
 
         public string SalaryDisplay => Salary.HasValue ? $"Salary: {Salary.Value}" : "";
         public string AmountPayedDisplay => AmountPayed.HasValue ? $"Paid: {AmountPayed.Value}" : "";
-
         public string DescriptionDisplay => $"Description: {JobDescription}";
 
-        public DateTime? ScheduledAt { get; set; }
+        public string SkillsDisplay => RequiredSkills != null && RequiredSkills.Count > 0
+            ? string.Join(", ", RequiredSkills.Select(s => $"{s.SkillName} ({s.Percentage}%)"))
+            : "No skills";
+
+        public Visibility SkillsVisibility => RequiredSkills != null && RequiredSkills.Count > 0
+            ? Visibility.Visible
+            : Visibility.Collapsed;
     }
 }
