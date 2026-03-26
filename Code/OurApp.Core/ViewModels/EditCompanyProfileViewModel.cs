@@ -24,10 +24,10 @@ public partial class EditCompanyProfileViewModel : ObservableObject
     private string _aboutUs = "";
 
     [ObservableProperty]
-    private string _profilePicturePath = "";
+    public string profilePicturePath = "";
 
     [ObservableProperty]
-    private string _companyLogoPath = "";
+    public string companyLogoPath = "";
 
     [ObservableProperty]
     private string _location = "";

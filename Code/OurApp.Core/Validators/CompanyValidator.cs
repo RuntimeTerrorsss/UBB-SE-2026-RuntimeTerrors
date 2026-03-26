@@ -36,7 +36,6 @@ namespace OurApp.Core.Validators
 
         public bool LocationValidator(string location)
         {
-            // Optional field per requirements.
             if (string.IsNullOrEmpty(location))
             {
                 return true;
@@ -50,7 +49,6 @@ namespace OurApp.Core.Validators
 
         public bool EmailValidator(string email)
         {
-            // Optional field per requirements.
             if (string.IsNullOrEmpty(email))
             {
                 return true;
@@ -72,10 +70,6 @@ namespace OurApp.Core.Validators
             {
                 return true;
             }
-            if (pfp.Length > 255)
-            {
-                throw new Exception("Profile picture path is too long!");
-            }
             if (!HasAllowedImageExtension(pfp))
             {
                 throw new Exception("Profile picture must be .jpg, .jpeg or .png");
@@ -88,10 +82,6 @@ namespace OurApp.Core.Validators
             if (string.IsNullOrWhiteSpace(logo))
             {
                 throw new Exception("Logo is mandatory");
-            }
-            if (logo.Length > 255)
-            {
-                throw new Exception("Logo path is too long");
             }
             if (!HasAllowedImageExtension(logo))
             {
@@ -141,9 +131,30 @@ namespace OurApp.Core.Validators
 
         private static bool HasAllowedImageExtension(string value)
         {
-            return value.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+
+            if (value.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
                 || value.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
-                || value.EndsWith(".png", StringComparison.OrdinalIgnoreCase);
+                || value.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (value.StartsWith("data:image/", StringComparison.OrdinalIgnoreCase))
+            {
+                var rest = value.Substring("data:image/".Length);
+                var semicolonIndex = rest.IndexOf(';');
+                var mimeSubtype = (semicolonIndex >= 0 ? rest.Substring(0, semicolonIndex) : rest)
+                    .Trim()
+                    .ToLowerInvariant();
+
+                return mimeSubtype == "png"
+                    || mimeSubtype == "jpeg"
+                    || mimeSubtype == "jpg";
+            }
+
+            return false;
         }
     }
 }

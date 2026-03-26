@@ -6,6 +6,7 @@ using OurApp.Core.Repositories;
 using OurApp.Core.Services;
 using OurApp.Core.ViewModels;
 using System;
+using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Storage.Streams;
 using Windows.Storage.Pickers;
@@ -76,7 +77,10 @@ public sealed partial class EditProfilePage : Page
             reader.ReadBytes(bytes);
         }
 
-        ViewModel.profilePicturePath = Convert.ToBase64String(bytes);
+        // Store as a data-URI so the backend validator can recognize the image type.
+        var ext = Path.GetExtension(file.Name).TrimStart('.').ToLowerInvariant();
+        var mimeSubtype = ext == "jpg" ? "jpeg" : ext;
+        ViewModel.ProfilePicturePath = $"data:image/{mimeSubtype};base64,{Convert.ToBase64String(bytes)}";
 
         // Create preview image from the selected bytes
         var bitmapImage = new BitmapImage();
@@ -110,7 +114,7 @@ public sealed partial class EditProfilePage : Page
         if (file == null)
             return;
 
-        PhotoFileNameTextBlock.Text = file.Name;
+        LogoFileNameTextBlock.Text = file.Name;
 
         // Read file bytes and convert to base64 (stored in ViewModel.Photo)
         byte[] bytes;
@@ -122,7 +126,10 @@ public sealed partial class EditProfilePage : Page
             reader.ReadBytes(bytes);
         }
 
-        ViewModel.companyLogoPath = Convert.ToBase64String(bytes);
+        // Store as a data-URI so the backend validator can recognize the image type.
+        var ext = Path.GetExtension(file.Name).TrimStart('.').ToLowerInvariant();
+        var mimeSubtype = ext == "jpg" ? "jpeg" : ext;
+        ViewModel.CompanyLogoPath = $"data:image/{mimeSubtype};base64,{Convert.ToBase64String(bytes)}";
 
         // Create preview image from the selected bytes
         var bitmapImage = new BitmapImage();
@@ -132,7 +139,7 @@ public sealed partial class EditProfilePage : Page
             memStream.Seek(0);
             bitmapImage.SetSource(memStream);
         }
-        PhotoPreviewImage.Source = bitmapImage;
+        LogoPreviewImage.Source = bitmapImage;
     }
 
     private async void Save_Click(object sender, RoutedEventArgs e)

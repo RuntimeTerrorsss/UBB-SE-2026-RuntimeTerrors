@@ -24,8 +24,38 @@
                 <TextBox Header="Company name" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox Header="About us" Text="{Binding AboutUs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"
                          TextWrapping="Wrap" MinHeight="120" />
-                <TextBox Header="Profile picture (.jpg / .jpeg / .png path or URL)" Text="{Binding ProfilePicturePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBox Header="Logo (.jpg / .jpeg / .png path or URL, required)" Text="{Binding CompanyLogoPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel>
+                    <TextBlock Text="Profile picture (.jpg / .jpeg / .png path or URL)"/>
+                    <Button Content="Attach image" Click="AttachProfileImage_Click" />
+                    <Image
+                        x:Name="PhotoPreviewImage"
+                        Width="200"
+                        Height="200"
+                        Stretch="UniformToFill"
+                        Margin="0,10,0,5" />
+                    <TextBlock
+                        x:Name="PhotoFileNameTextBlock"
+                        FontSize="12"
+                        Foreground="Gray"
+                        Text="No image selected" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Logo (.jpg / .jpeg / .png path or URL, required)"/>
+                    <Button Content="Attach image" Click="AttachLogoImage_Click" />
+                    <Image
+                        x:Name="LogoPreviewImage"
+                        Width="200"
+                        Height="200"
+                        Stretch="UniformToFill"
+                        Margin="0,10,0,5" />
+                    <TextBlock
+                        x:Name="LogoFileNameTextBlock"
+                        FontSize="12"
+                        Foreground="Gray"
+                        Text="No image selected" />
+                </StackPanel>
+
                 <TextBox Header="Location" Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox Header="Contact email" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 

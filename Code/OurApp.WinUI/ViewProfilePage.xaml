@@ -19,8 +19,17 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Spacing="4">
-                    <Ellipse Width="80" Height="80" StrokeThickness="1" Stroke="{ThemeResource CardStrokeColorDefaultBrush}" />
-                    <TextBlock Text="{Binding Company.CompanyLogoPath}" TextWrapping="Wrap" MaxWidth="120" FontSize="10" Opacity="0.7" />
+                    <Ellipse Width="80" Height="80" StrokeThickness="1" Stroke="{ThemeResource CardStrokeColorDefaultBrush}">
+                        <Ellipse.Fill>
+                            <ImageBrush x:Name="CompanyLogoBrush" Stretch="UniformToFill" />
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <TextBlock x:Name="CompanyLogoHintText"
+                               Text="(logo)"
+                               TextWrapping="Wrap"
+                               MaxWidth="120"
+                               FontSize="10"
+                               Opacity="0.7" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="24,0,0,0" VerticalAlignment="Center">
