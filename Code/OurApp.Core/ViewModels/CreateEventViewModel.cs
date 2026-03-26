@@ -78,7 +78,7 @@ namespace OurApp.Core.ViewModels
                 const string fromPassword = "angxokbiqoyodwgm";
                 const string subject = "Event Invitation";
                 string sourceCompanyName = sessionService.loggedInUser.Name;
-                string body = $"Hello, you have been invited to collaborate on {sourceCompanyName}'s event: {Title}";
+                string body = $"Hello, you have been invited to collaborate on {sourceCompanyName}'s event: {Title}\nPlease reply to this email within 7 days from receiving it, if you would like to accept the invitation.";
 
                 var smtp = new SmtpClient
                 {
