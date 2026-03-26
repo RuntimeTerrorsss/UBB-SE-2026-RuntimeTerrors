@@ -20,8 +20,8 @@
     <None Remove="CreateEventPage.xaml" />
     <None Remove="EditEventPage.xaml" />
     <None Remove="OurEventsPage.xaml" />
-    <None Remove="PastEventsPage.xaml" />
     <None Remove="EditProfilePage.xaml" />
+    <None Remove="PastEventsPage.xaml" />
     <None Remove="ViewProfilePage.xaml" />
   </ItemGroup>
 
@@ -71,11 +71,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="PastEventsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="OurEventsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -87,6 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PastEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="CollaboratorsPage.xaml">

@@ -6,4 +6,9 @@
   <PropertyGroup>
     <ActiveDebugProfile>OurApp.WinUI (Unpackaged)</ActiveDebugProfile>
   </PropertyGroup>
+  <ItemGroup>
+    <Page Update="PastEventsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>

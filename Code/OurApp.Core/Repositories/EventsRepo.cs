@@ -106,35 +106,43 @@ namespace OurApp.Core.Repositories
         {
             var currentEvents = new ObservableCollection<Event>();
 
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            try
             {
-                sqlConnection.Open();
-
-                string queryToBeRun = "SELECT * FROM events WHERE host_company_id = @HostID and end_date >= @TodaysDate";
-
-                SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
-
-                sqlCommand.Parameters.AddWithValue("@HostID", loggedInUser);
-                sqlCommand.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
-
-                SqlDataReader reader = sqlCommand.ExecuteReader();
-
-                while (reader.Read())
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    currentEvents.Add(new Event(
-                        reader["photo"].ToString(),
-                        reader["title"].ToString(),
-                        reader["description"].ToString(),
-                        (DateTime)reader["start_date"],
-                        (DateTime)reader["end_date"],
-                        reader["location"].ToString(),
-                        1,
-                        new List<Company>()
-                    )
+                    sqlConnection.Open();
+
+                    string queryToBeRun = "SELECT * FROM events WHERE host_company_id = @HostID and end_date >= @TodaysDate";
+
+                    SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
+
+                    sqlCommand.Parameters.AddWithValue("@HostID", loggedInUser);
+                    sqlCommand.Parameters.AddWithValue("@TodaysDate", DateTime.Now.Date);
+
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                    while (reader.Read())
                     {
-                        Id = (int)reader["event_id"]
-                    });
+                        currentEvents.Add(new Event(
+                            reader["photo"].ToString(),
+                            reader["title"].ToString(),
+                            reader["description"].ToString(),
+                            (DateTime)reader["start_date"],
+                            (DateTime)reader["end_date"],
+                            reader["location"].ToString(),
+                            1,
+                            new List<Company>()
+                        )
+                        {
+                            Id = (int)reader["event_id"]
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                throw;
             }
 
             return currentEvents;
