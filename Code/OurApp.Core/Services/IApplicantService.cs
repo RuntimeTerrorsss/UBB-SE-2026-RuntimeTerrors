@@ -15,6 +15,6 @@ namespace OurApp.Core.Services
         void UpdateApplicant(Applicant applicant);
         void RemoveApplicant(int applicantId);
         
-        decimal? ScanCvXml(string xmlPath);
+        decimal? ScanCvXml(Applicant applicant);
     }
 }

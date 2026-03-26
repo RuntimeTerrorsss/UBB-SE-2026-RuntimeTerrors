@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Linq;
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
+using System.Linq;
 
 namespace OurApp.Core.Services
 {
@@ -61,7 +62,20 @@ namespace OurApp.Core.Services
             
             try
             {
-                XDocument.Load(xmlPath);
+                XDocument doc = XDocument.Load(xmlPath);
+                
+                var nameNode = doc.Descendants("Name").FirstOrDefault();
+                if (nameNode == null || string.IsNullOrWhiteSpace(nameNode.Value))
+                {
+                    return false;
+                }
+
+                var emailNode = doc.Descendants("Email").FirstOrDefault();
+                if (emailNode == null || string.IsNullOrWhiteSpace(emailNode.Value))
+                {
+                    return false;
+                }
+
                 return true;
             }
             catch
@@ -130,12 +144,8 @@ namespace OurApp.Core.Services
             return newWords;
         }
 
-        private decimal CalculateTfIdfGrade(List<string> words, decimal sectionWeight)
+        private decimal CalculateTfIdfGrade(List<string> words, List<string> importantKeywords, decimal sectionWeight)
         {
-            List<string> importantKeywords = new List<string> 
-            { 
-                "c#", "java", "sql", "react", "agile", "javascript", ".net", "python", "docker", "azure"
-            };
             
             Dictionary<string, int> termFrequencies = new Dictionary<string, int>();
 
@@ -184,7 +194,7 @@ namespace OurApp.Core.Services
             }
 
             // If the file isnt valid, grade remains null
-            decimal? cvGrade = ScanCvXml(applicant.CvFileUrl);
+            decimal? cvGrade = ScanCvXml(applicant);
             if (cvGrade != null)
             {
                 applicant.CvGrade = cvGrade;
@@ -205,34 +215,49 @@ namespace OurApp.Core.Services
             }
         }
 
-        public decimal? ScanCvXml(string xmlPath)
+        public decimal? ScanCvXml(Applicant applicant)
         {
-            if (IsCvValid(xmlPath) == false)
+            if (IsCvValid(applicant.CvFileUrl) == false)
             {
                 return null;
             }
 
-            XDocument doc = XDocument.Load(xmlPath);
+            List<string> expectedKeywords = new List<string>();
+            if (applicant.Job != null && applicant.Job.JobSkills != null)
+            {
+                foreach (var js in applicant.Job.JobSkills)
+                {
+                    if (js.Skill != null && !string.IsNullOrWhiteSpace(js.Skill.SkillName))
+                    {
+                        expectedKeywords.Add(js.Skill.SkillName.ToLower());
+                    }
+                }
+            }
+
+            if (expectedKeywords.Count == 0)
+            {
+                expectedKeywords = new List<string> { "c#", "java", "sql", "react", "agile", "javascript", ".net", "python", "docker", "azure" };
+            }
+
+            XDocument doc = XDocument.Load(applicant.CvFileUrl);
             decimal totalGrade = 4.0m;
             
             XElement skillsNode = doc.Descendants("Skills").FirstOrDefault();
             
-
             if (skillsNode != null)
             {
                 List<string> words = TokenizeAndClean(skillsNode.Value);
                 words = ApplySynonyms(words);
-                totalGrade += CalculateTfIdfGrade(words, 1.5m);
+                totalGrade += CalculateTfIdfGrade(words, expectedKeywords, 1.5m);
             }
             
             XElement interestsNode = doc.Descendants("Interests").FirstOrDefault();
             
-
             if (interestsNode != null)
             {
                 List<string> words = TokenizeAndClean(interestsNode.Value);
                 words = ApplySynonyms(words);
-                totalGrade += CalculateTfIdfGrade(words, 0.5m);
+                totalGrade += CalculateTfIdfGrade(words, expectedKeywords, 0.5m);
             }
 
             if (totalGrade > 10.0m)
