@@ -14,6 +14,18 @@
     </Window.SystemBackdrop>
     <Grid>
         <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" VerticalAlignment="Top">
+            <AppBarButton Label="Profile">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="View Profile" Click="NavigateToViewProfile_Click"/>
+                        <MenuFlyoutItem Text="Edit Profile" Click="NavigateToEditProfile_Click"/>
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Label="Our jobs"/>
+            <AppBarButton Label="Past jobs"/>
+            <AppBarButton Label="Our events" Click="NavigateToOurEvents_Click"/>
+            <AppBarButton Label="Past events" Click="NavigateToPastEvents_Click"/>
             <AppBarButton Label="Game" Click="NavigateToGamePage_Click"/>
             <AppBarButton Label="Edit Game" Click="NavigateToEditGame_Click"/>
         </CommandBar>

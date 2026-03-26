@@ -25,17 +25,21 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class EditGame : Page
     {
-        public PastEventsViewModel ViewModel { get; }
+        public EditGameViewModel ViewModel { get; private set; }
 
-        /// <summary>
-        /// Past events page constructor that initializes its view model
-        /// </summary>
-        public PastEventsPage()
+        public GameService gameService;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var mainWindow = App.mainWindow;
+            base.OnNavigatedTo(e);
+            gameService = (GameService)e.Parameter;
+            ViewModel = new EditGameViewModel(gameService);
+            DataContext = ViewModel;
+        }
+
+        public EditGame()
+        {
             InitializeComponent();
-            ViewModel = new PastEventsViewModel(mainWindow.eventsService, mainWindow.sessionService);
-            this.DataContext = ViewModel;
         }
     }
 }

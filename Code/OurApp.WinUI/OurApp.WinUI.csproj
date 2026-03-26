@@ -15,9 +15,13 @@
 	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="EditGame.xaml" />
 	<None Remove="CollaboratorsPage.xaml" />
     <None Remove="GamePage.xaml" />
+    <None Remove="CreateEventPage.xaml" />
+    <None Remove="EditEventPage.xaml" />
+    <None Remove="OurEventsPage.xaml" />
+    <None Remove="PastEventsPage.xaml" />
+    <None Remove="EditProfilePage.xaml" />
     <None Remove="ViewProfilePage.xaml" />
   </ItemGroup>
 
@@ -55,18 +59,24 @@
     <Page Update="GamePage.xaml">
 	      <Generator>MSBuild:Compile</Generator>
     </Page>
+	  </ItemGroup>
+	<ItemGroup>
     <Page Update="EditEventPage.xaml">
 		<Generator>MSBuild:Compile</Generator>
 	</Page>
   </ItemGroup>
-    <ItemGroup>
+   <ItemGroup>
     <Page Update="EditProfilePage.xaml">
-    <Page Update="EditGame.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="GamePage.xaml">
+    <Page Update="PastEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="OurEventsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

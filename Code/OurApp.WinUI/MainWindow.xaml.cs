@@ -102,7 +102,7 @@ namespace OurApp.WinUI
 
         private void NavigateToGamePage_Click(object sender, RoutedEventArgs e)
         {
-            RootFrame.Navigate(typeof(PastEventsPage));
+            RootFrame.Navigate(typeof(GamePage));
         }
 
         /// <summary>
@@ -125,11 +125,6 @@ namespace OurApp.WinUI
             RootFrame.Navigate(typeof(EditProfilePage), 1);
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
 
-        }
-
-        private void NavigateToGamePage_Click(object sender, RoutedEventArgs e)
-        {
-            RootFrame.Navigate(typeof(GamePage), gameService);
         }
     }
 }
