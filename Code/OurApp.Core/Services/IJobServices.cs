@@ -9,7 +9,7 @@ namespace iss_project.Code.OurApp.Core.Services
     public interface IJobService
     {
         Task CreateJobAsync(JobPosting job, List<(int SkillId, int Percentage)> skills);
-
+        Task<List<SkillUsage>> GetSkillUsageAsync();
         Task<List<(string SkillName, int Percentage)>> GetSkillsForJobAsync(int jobId);
         Task UpdateJobAsync(JobPosting job);
         Task DeleteJobAsync(int id);

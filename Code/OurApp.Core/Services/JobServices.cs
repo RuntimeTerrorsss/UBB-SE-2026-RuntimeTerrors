@@ -15,7 +15,10 @@ namespace iss_project.Code.OurApp.Core.Services
         {
             _jobRepository = repo;
         }
-
+        public async Task<List<SkillUsage>> GetSkillUsageAsync()
+        {
+            return await _jobRepository.GetSkillUsageAsync();
+        }
         public async Task CreateJobAsync(JobPosting job, List<(int SkillId, int Percentage)> skills)
         {
             Validate(job);

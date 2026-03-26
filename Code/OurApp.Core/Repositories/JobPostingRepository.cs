@@ -313,5 +313,46 @@ WHERE skill_name = @SkillName";
                 // RequiredSkills will be loaded separately via GetSkillsForJobAsync
             };
         }
+
+        public async Task<List<SkillUsage>> GetSkillUsageAsync()
+        {
+            var result = new List<SkillUsage>();
+
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            string query = @"
+WITH SkillCounts AS (
+    SELECT s.skill_name, COUNT(DISTINCT js.job_id) AS job_count
+    FROM job_skills js
+    JOIN skills s ON js.skill_id = s.skill_id
+    GROUP BY s.skill_name
+),
+Total AS (
+    SELECT SUM(job_count) AS total_count FROM SkillCounts
+)
+SELECT 
+    sc.skill_name,
+    sc.job_count,
+    CAST(sc.job_count * 100.0 / t.total_count AS FLOAT) AS percentage
+FROM SkillCounts sc
+CROSS JOIN Total t
+ORDER BY sc.job_count DESC";
+
+            using var command = new SqlCommand(query, connection);
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                result.Add(new SkillUsage
+                {
+                    SkillName = reader.GetString(0),
+                    JobCount = reader.GetInt32(1),
+                    Percentage = reader.GetDouble(2)
+                });
+            }
+
+            return result;
+        }
     }
 }
