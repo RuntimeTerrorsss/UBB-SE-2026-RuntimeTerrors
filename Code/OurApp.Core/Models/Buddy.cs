@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,25 +8,17 @@ namespace OurApp.Core.Models
 {
     public class Buddy
     {   
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        bool Mood  { get; set; }
-        public Buddy(int id, string name) {
+        public string Introduction {  get; private set; }
+
+        public Buddy(int id, string name, string introduction) {
             Id = id;
             Name = name;
-            Mood = true;
+            Introduction = introduction;
         }
 
-        public void UpdateMood(bool newMood)
-        {
-            Mood = newMood;
-        }
-
-        public bool GetCurrentState()
-        {
-            return Mood;
-        }
     }
 }

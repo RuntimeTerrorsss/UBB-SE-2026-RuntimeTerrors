@@ -38,6 +38,7 @@
       <SubType>Designer</SubType>
     </None>
     <Page Update="ViewProfilePage.xaml">
+    <Page Update="EditGame.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
