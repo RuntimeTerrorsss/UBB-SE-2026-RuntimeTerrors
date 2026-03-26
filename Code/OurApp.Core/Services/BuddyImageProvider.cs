@@ -10,8 +10,8 @@ namespace OurApp.Core.Services
     {
         private static readonly Dictionary<int, string> BuddyImages = new Dictionary<int, string>
         {
-            { 1, "ms-appx:///Assets/AvatarMale.png" },
-            { 2, "ms-appx:///Assets/AvatarFemale.png" }
+            { 0, "Assets\\AvatarFemale.png" },
+            { 1, "Assets\\AvatarMale.png" }
         };
 
         public static string GetImagePathById(int id)
@@ -20,7 +20,7 @@ namespace OurApp.Core.Services
             {
                 return path;
             }
-            return BuddyImages[1];
+            return BuddyImages[0];
         }
     }
 }

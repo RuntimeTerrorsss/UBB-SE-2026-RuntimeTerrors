@@ -15,10 +15,8 @@
 	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Assets\AvatarFemale.png" />
-    <Content Remove="Assets\AvatarMale.png" />
-  </ItemGroup>
-  <ItemGroup>
+	<None Remove="Assets\AvatarFemale.png" />
+	<None Remove="Assets\AvatarMale.png" />
 	<None Remove="CollaboratorsPage.xaml" />
     <None Remove="GamePage.xaml" />
     <None Remove="CreateEventPage.xaml" />
@@ -91,6 +89,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Assets\AvatarFemale.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\AvatarMale.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Update="CollaboratorsPage.xaml">

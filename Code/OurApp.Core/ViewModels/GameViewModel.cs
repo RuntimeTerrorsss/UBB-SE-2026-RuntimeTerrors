@@ -50,11 +50,13 @@ namespace OurApp.Core.ViewModels
         [ObservableProperty]
         private string _feedback = string.Empty;
 
+        public string BuddyImagePath => BuddyImageProvider.GetImagePathById(_gameService.getBuddyId());
+
         public GameViewModel(GameService gameService, Action? exitApplication = null)
         {
             _gameService = gameService;
             _exitApplication = exitApplication;
-            WelcomeMessage = _gameService.ShowCoworker();
+             WelcomeMessage = _gameService.ShowCoworker();
             UpdateScenario();
         }
 

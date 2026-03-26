@@ -29,6 +29,11 @@ namespace OurApp.Core.Services
             _repository.Save(game);
         }
 
+        public int getBuddyId()
+        {
+            return LoadedGame().Buddy.Id;
+        }
+
         public Game GetStoredGame()
         {
             return _repository.Get() ?? new Game();

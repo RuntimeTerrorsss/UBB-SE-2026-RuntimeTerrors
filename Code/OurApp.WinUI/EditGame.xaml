@@ -19,8 +19,8 @@
 
                 <Image
                     Source="{Binding BuddyImagePath}"
-                    Width="96"
-                    Height="96"
+                    Width="160"
+                    Height="100"
                     Stretch="UniformToFill"
                     HorizontalAlignment="Left"
                     Margin="0,4,0,0" />

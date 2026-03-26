@@ -13,6 +13,13 @@
         <StackPanel Padding="40" Spacing="25" HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <StackPanel Visibility="{Binding IsStartVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                <Image
+                    Source="{Binding BuddyImagePath}"
+                    Width="230"
+                    Height="140"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Left"
+                    Margin="0,4,0,0" />     
                 <TextBlock Text="{Binding WelcomeMessage, Mode=OneWay}" 
                 FontSize="28" FontWeight="Bold" Foreground="{ThemeResource SystemAccentColor}" 
                 TextAlignment="Center" Margin="0,0,0,20"/>
@@ -20,6 +27,13 @@
             </StackPanel>
 
             <StackPanel Visibility="{Binding IsChoiceActive, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                <Image
+                Source="{Binding BuddyImagePath}"
+                Width="230"
+                Height="140"
+                Stretch="UniformToFill"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,0" />
                 <TextBlock Text="{Binding CurrentQuestion, Mode=OneWay}" 
                 FontSize="18" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="500" Margin="0,0,0,20"/>
 
@@ -35,6 +49,13 @@
             </StackPanel>
 
             <StackPanel Visibility="{Binding IsReactionActive, Mode=OneWay, Converter={StaticResource BoolToVis}}" Spacing="20">
+                <Image
+                    Source="{Binding BuddyImagePath}"
+                    Width="230"
+                    Height="140"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Left"
+                    Margin="0,4,0,0" />
                 <TextBlock Text="Reaction:" FontSize="14" Foreground="Gray" TextAlignment="Center"/>
                 <TextBlock Text="{Binding Feedback, Mode=OneWay}" 
                 FontSize="20" FontStyle="Italic" Foreground="LightGreen" 
