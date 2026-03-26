@@ -15,8 +15,17 @@
 	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="EditGame.xaml" />
+    <Content Remove="Assets\Captură de ecran 2026-03-26 130818.png" />
+    <Content Remove="Assets\Captură de ecran 2026-03-26 131333.png" />
+  </ItemGroup>
+  <ItemGroup>
+	<None Remove="CollaboratorsPage.xaml" />
     <None Remove="GamePage.xaml" />
+    <None Remove="CreateEventPage.xaml" />
+    <None Remove="EditEventPage.xaml" />
+    <None Remove="OurEventsPage.xaml" />
+    <None Remove="PastEventsPage.xaml" />
+    <None Remove="EditProfilePage.xaml" />
     <None Remove="ViewProfilePage.xaml" />
   </ItemGroup>
 
@@ -51,12 +60,45 @@
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="EditGame.xaml">
+    <Page Update="GamePage.xaml">
+	      <Generator>MSBuild:Compile</Generator>
+    </Page>
+	  </ItemGroup>
+	<ItemGroup>
+    <Page Update="EditEventPage.xaml">
+		<Generator>MSBuild:Compile</Generator>
+	</Page>
+  </ItemGroup>
+   <ItemGroup>
+    <Page Update="EditProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="GamePage.xaml">
+    <Page Update="PastEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="OurEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="CreateEventPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="CollaboratorsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="EditProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
