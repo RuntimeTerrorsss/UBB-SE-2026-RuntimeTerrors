@@ -1,4 +1,4 @@
-﻿using OurApp.Core.Models;
+using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +12,7 @@ namespace OurApp.Core.Repositories
     {
         public void PrintAll();
         ObservableCollection<Company> GetAll();
+        Company? GetById(int companyId);
         void Add(Company c);
         void Remove(Company c);
         Company? GetCompanyByName(string companyName);

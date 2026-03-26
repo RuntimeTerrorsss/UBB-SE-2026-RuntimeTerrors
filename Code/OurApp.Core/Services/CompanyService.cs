@@ -1,5 +1,6 @@
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
+using OurApp.Core.Validators;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,20 +12,64 @@ namespace OurApp.Core.Services
 {
     public class CompanyService : ICompanyService
     {
-        ICompanyRepo CompanyRepo;
+        private readonly ICompanyRepo CompanyRepo;
+        private readonly CompanyValidator _validator;
 
         public CompanyService(ICompanyRepo repo) 
         {
             CompanyRepo = repo;
+            _validator = new CompanyValidator();
         }
 
-        public void addCompany(string companyName, string aboutUs, string pfpUrl, string logoUrl, string location, string email)
+        private void ValidateCompany(Company company)
         {
-            Company companyToBeAdded = new Company(1, companyName, aboutUs, pfpUrl, logoUrl, location, email);
-            this.CompanyRepo.Add(companyToBeAdded);
+            _validator.NameValidator(company.Name);
+            _validator.AboutUsValidator(company.AboutUs);
+            _validator.PfpValidator(company.ProfilePicturePath);
+            _validator.LogoValidator(company.CompanyLogoPath);
+            _validator.LocationValidator(company.Location);
+            _validator.EmailValidator(company.Email);
+
+            _validator.MiniGameStruggleValidator(company.Scenario1Text);
+            _validator.MiniGameStruggleValidator(company.Scenario2Text);
+            _validator.MiniGameResponseValidator(company.Scenario1Answer1);
+            _validator.MiniGameResponseValidator(company.Scenario1Answer2);
+            _validator.MiniGameResponseValidator(company.Scenario1Answer3);
+            _validator.MiniGameResponseValidator(company.Scenario2Answer1);
+            _validator.MiniGameResponseValidator(company.Scenario2Answer2);
+            _validator.MiniGameResponseValidator(company.Scenario2Answer3);
+            _validator.MiniGameFeedbackValidator(company.Scenario1Reaction1);
+            _validator.MiniGameFeedbackValidator(company.Scenario1Reaction2);
+            _validator.MiniGameFeedbackValidator(company.Scenario1Reaction3);
+            _validator.MiniGameFeedbackValidator(company.Scenario2Reaction1);
+            _validator.MiniGameFeedbackValidator(company.Scenario2Reaction2);
+            _validator.MiniGameFeedbackValidator(company.Scenario2Reaction3);
         }
 
-        public void printAll()
+        public void AddCompany(string companyName, string aboutUs, string pfpUrl, string logoUrl, string location, string email)
+        {
+            Company companyToBeAdded = new Company(companyName, aboutUs, pfpUrl, logoUrl, location, email);
+            ValidateCompany(companyToBeAdded);
+            CompanyRepo.Add(companyToBeAdded);
+        }
+
+        public Company? GetCompanyById(int companyId)
+        {
+            return CompanyRepo.GetById(companyId);
+        }
+
+        public void UpdateCompany(Company company)
+        {
+            ValidateCompany(company);
+            CompanyRepo.Update(company);
+        }
+
+        public void RemoveCompany(int companyId)
+        {
+            CompanyRepo.Remove(companyId);
+        }
+
+        public void PrintAll()
         {
             this.CompanyRepo.PrintAll();
         }

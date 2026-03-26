@@ -1,45 +1,83 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using OurApp.Core.Repositories;
+using OurApp.Core.Services;
+using OurApp.Core.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+namespace OurApp.WinUI;
 
-namespace OurApp.WinUI
+public sealed partial class EditProfilePage : Page
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class EditProfilePage : Page
+    public EditCompanyProfileViewModel ViewModel { get; }
+
+    public EditProfilePage()
     {
-        public EditProfilePage()
+        var repo = new CompanyRepo();
+        var companyService = new CompanyService(repo);
+        ViewModel = new EditCompanyProfileViewModel(companyService);
+        InitializeComponent();
+        DataContext = ViewModel;
+    }
+
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+        base.OnNavigatedTo(e);
+        var id = e.Parameter is int companyId ? companyId : 1;
+        ViewModel.Load(id);
+    }
+
+    private void NavigateBack_Click(object sender, RoutedEventArgs e)
+    {
+        var mainW = App.MainWin;
+        if (mainW.RootFrame.CanGoBack)
+            mainW.RootFrame.GoBack();
+        else
+            mainW.RootFrame.Navigate(typeof(ViewProfilePage), ViewModel.CompanyId);
+    }
+
+    private async void Save_Click(object sender, RoutedEventArgs e)
+    {
+        var err = ViewModel.TrySave();
+        if (err is null)
         {
-            InitializeComponent();
+            var ok = new ContentDialog
+            {
+                Title = "Profile saved",
+                Content = "Your changes were saved.",
+                CloseButtonText = "OK",
+                XamlRoot = XamlRoot
+            };
+            await ok.ShowAsync();
+            App.MainWin.RootFrame.Navigate(typeof(ViewProfilePage), ViewModel.CompanyId);
+            return;
         }
 
-
-        private void NavigateBack_Click(object sender, RoutedEventArgs e)
+        var bad = new ContentDialog
         {
-            var mainW = App.mainWindow;
-            if (mainW.RootFrame.CanGoBack)
-            {
-                mainW.RootFrame.GoBack();
-            }
-            else
-            {
-                mainW.RootFrame.Navigate(typeof(ViewProfilePage));
-            }
-        }
+            Title = "Could not save",
+            Content = err,
+            CloseButtonText = "OK",
+            XamlRoot = XamlRoot
+        };
+        await bad.ShowAsync();
+    }
+
+    private async void Cancel_Click(object sender, RoutedEventArgs e)
+    {
+        var confirm = new ContentDialog
+        {
+            Title = "Discard changes?",
+            Content = "Are you sure you want to cancel the modifications?",
+            PrimaryButtonText = "Yes",
+            CloseButtonText = "No",
+            XamlRoot = XamlRoot
+        };
+        var result = await confirm.ShowAsync();
+        if (result != ContentDialogResult.Primary)
+            return;
+
+        NavigateBack_Click(sender, e);
     }
 }

@@ -11,9 +11,12 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+	<SelfContained>true</SelfContained>
+	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="CollaboratorsPage.xaml" />
+	<None Remove="CollaboratorsPage.xaml" />
+    <None Remove="GamePage.xaml" />
     <None Remove="CreateEventPage.xaml" />
     <None Remove="EditEventPage.xaml" />
     <None Remove="OurEventsPage.xaml" />
@@ -53,6 +56,9 @@
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="GamePage.xaml">
+	      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="EditEventPage.xaml">
 		<Generator>MSBuild:Compile</Generator>
 	</Page>
