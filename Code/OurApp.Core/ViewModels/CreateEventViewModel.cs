@@ -111,7 +111,7 @@ namespace OurApp.Core.ViewModels
         {
             foreach (Company invitedCompany in this.SelectedCollaborators)
             {
-                //this.SendMailToCompany(invitedCompany);
+                this.SendMailToCompany(invitedCompany);
             }
         }
 
@@ -138,8 +138,7 @@ namespace OurApp.Core.ViewModels
                 eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, hostId, SelectedCollaborators.ToList());
                 eventCreatedSuccessfully = true;
 
-                this.SendMailToCompany();
-                //SendInvitations();
+                SendInvitations();
             }
             catch (Exception exception)
             {
