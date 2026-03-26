@@ -52,7 +52,7 @@ namespace OurApp.Core.Repositories
         /// <summary>
         /// Function that returns a list of all the collaborators of the user company
         /// </summary>
-        /// <param name="loggedInCompanyId"></param>
+        /// <param name="loggedInCompanyId">  </param>
         /// <returns></returns>
         public List<Company> GetAllCollaborators(int loggedInCompanyId)
         {

@@ -69,10 +69,38 @@ namespace OurApp.Core.ViewModels
         /// Function that sends an email to a company
         /// </summary>
         /// <param name="destinationCompany"> company to send email to </param>
-        private void SendMailToCompany(Company destinationCompany)
+        private async void SendMailToCompany(Company destinationCompany)
         {
-            System.Diagnostics.Debug.WriteLine($"Sending email to {destinationCompany.Name}");
-            System.Diagnostics.Debug.WriteLine($"{destinationCompany.Name} receives invitation\n");
+            var fromAddress = new MailAddress("carla.draghiciu@cnglsibiu.ro", "Your Name");
+            if (destinationCompany.Email != null) 
+            {
+                var toAddress = new MailAddress(destinationCompany.Email, destinationCompany.Name);
+                const string fromPassword = "angxokbiqoyodwgm";
+                const string subject = "Event Invitation";
+                string sourceCompanyName = sessionService.loggedInUser.Name;
+                string body = $"Hello, you have been invited to collaborate on {sourceCompanyName}'s event: {Title}";
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 60000
+                };
+
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    await smtp.SendMailAsync(message);
+                }
+
+                System.Diagnostics.Debug.WriteLine("Email sent!");
+            }
         }
 
         /// <summary>
@@ -83,7 +111,7 @@ namespace OurApp.Core.ViewModels
         {
             foreach (Company invitedCompany in this.SelectedCollaborators)
             {
-                this.SendMailToCompany(invitedCompany);
+                //this.SendMailToCompany(invitedCompany);
             }
         }
 
@@ -110,10 +138,12 @@ namespace OurApp.Core.ViewModels
                 eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, hostId, SelectedCollaborators.ToList());
                 eventCreatedSuccessfully = true;
 
-                SendInvitations();
+                this.SendMailToCompany();
+                //SendInvitations();
             }
             catch (Exception exception)
             {
+                System.Diagnostics.Debug.WriteLine(exception);
                 eventCreatedSuccessfully = false;
             }
         }
