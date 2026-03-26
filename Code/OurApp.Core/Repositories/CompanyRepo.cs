@@ -213,24 +213,57 @@ namespace OurApp.Core.Repositories
         /// <returns> the company if found, else null </returns>
         public Company? GetCompanyByName(string companyName)
         {
-            return null;
-            //Company company = null;
+            if (string.IsNullOrWhiteSpace(companyName))
+            {
+                return null;
+            }
 
-            //if (string.IsNullOrWhiteSpace(companyName))
-            //{
-            //    return null;
-            //}
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                sqlConnection.Open();
 
+                string query = "SELECT * FROM companies WHERE company_name = @Name";
 
-            //foreach (Company compan in companies)
-            //{
-            //    if (compan.Name == companyName)
-            //    {
-            //        company = compan;
-            //    }
-            //}
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@Name", companyName);
 
-            //return company;
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Company(
+                        reader["company_name"]?.ToString() ?? "",
+                        reader["about_us"]?.ToString() ?? "",
+                        reader["profile_picture_url"]?.ToString() ?? "",
+                        reader["logo_picture_url"]?.ToString() ?? "",
+                        reader["location"]?.ToString() ?? "",
+                        reader["email"]?.ToString() ?? "",
+                        (int)reader["company_id"],
+
+                        reader["buddy_name"]?.ToString() ?? "",
+                        reader["avatar_id"] == DBNull.Value ? null : (int?)reader["avatar_id"],
+                        reader["final_quote"]?.ToString() ?? "",
+
+                        reader["scen_1_text"]?.ToString() ?? "",
+                        reader["scen1_answer1"]?.ToString() ?? "",
+                        reader["scen1_answer2"]?.ToString() ?? "",
+                        reader["scen1_answer3"]?.ToString() ?? "",
+                        reader["scen1_reaction1"]?.ToString() ?? "",
+                        reader["scen1_reaction2"]?.ToString() ?? "",
+                        reader["scen1_reaction3"]?.ToString() ?? "",
+
+                        reader["scen2_text"]?.ToString() ?? "",
+                        reader["scen2_answer1"]?.ToString() ?? "",
+                        reader["scen2_answer2"]?.ToString() ?? "",
+                        reader["scen2_answer3"]?.ToString() ?? "",
+                        reader["scen2_reaction1"]?.ToString() ?? "",
+                        reader["scen2_reaction2"]?.ToString() ?? "",
+                        reader["scen2_reaction3"]?.ToString() ?? ""
+                    );
+                }
+
+                return null;
+            }
         }
     }
 }

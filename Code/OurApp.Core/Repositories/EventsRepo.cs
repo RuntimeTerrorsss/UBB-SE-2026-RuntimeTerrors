@@ -64,7 +64,8 @@ namespace OurApp.Core.Repositories
 
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 
-                sqlCommand.Parameters.AddWithValue("@Id", GetMaxEventId() + 1);
+                int nextIdToBeUsed = GetMaxEventId() + 1;
+                sqlCommand.Parameters.AddWithValue("@Id", nextIdToBeUsed);
                 sqlCommand.Parameters.AddWithValue("@Photo", eventToBeAdded.Photo ?? (object)DBNull.Value);
                 sqlCommand.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
                 sqlCommand.Parameters.AddWithValue("@Description", eventToBeAdded.Description ?? (object)DBNull.Value);
@@ -75,6 +76,7 @@ namespace OurApp.Core.Repositories
                 sqlCommand.Parameters.AddWithValue("@CurrentDateTime", DateTime.Now);
 
                 sqlCommand.ExecuteNonQuery();
+                eventToBeAdded.Id = nextIdToBeUsed;
             }
         }
 

@@ -16,6 +16,7 @@ namespace OurApp.Core.ViewModels
 {
     public partial class CreateEventViewModel : ObservableObject
     {
+        private readonly ICollaboratorsService collaboratorsService;
         private readonly IEventsService eventsService;
         private readonly ICompanyService companyService;
         private readonly SessionService sessionService;
@@ -57,11 +58,12 @@ namespace OurApp.Core.ViewModels
         /// <param name="eventsService"> events service </param>
         /// <param name="companyService"> company service </param>
         /// <param name="sessionService"> session service </param>
-        public CreateEventViewModel(IEventsService eventsService, ICompanyService companyService, SessionService sessionService)
+        public CreateEventViewModel(IEventsService eventsService, ICompanyService companyService, SessionService sessionService, ICollaboratorsService collaboratorsService)
         {
             this.eventsService = eventsService;
             this.companyService = companyService;
             this.sessionService = sessionService;
+            this.collaboratorsService = collaboratorsService;
         }
 
 
@@ -71,13 +73,19 @@ namespace OurApp.Core.ViewModels
         /// <param name="destinationCompany"> company to send email to </param>
         private async void SendMailToCompany(Company destinationCompany)
         {
-            var fromAddress = new MailAddress("carla.draghiciu@cnglsibiu.ro", "Your Name");
+            if (destinationCompany.Email == null || destinationCompany.Email == "")
+            {
+                System.Diagnostics.Debug.WriteLine("Company has no email");
+                return;
+            }
+
+            string sourceCompanyName = sessionService.loggedInUser.Name;
+            var fromAddress = new MailAddress("carla.draghiciu@cnglsibiu.ro", sourceCompanyName);
             if (destinationCompany.Email != null) 
             {
                 var toAddress = new MailAddress(destinationCompany.Email, destinationCompany.Name);
                 const string fromPassword = "angxokbiqoyodwgm";
                 const string subject = "Event Invitation";
-                string sourceCompanyName = sessionService.loggedInUser.Name;
                 string body = $"Hello, you have been invited to collaborate on {sourceCompanyName}'s event: {Title}\nPlease reply to this email within 7 days from receiving it, if you would like to accept the invitation.";
 
                 var smtp = new SmtpClient
@@ -115,6 +123,14 @@ namespace OurApp.Core.ViewModels
             }
         }
 
+        private void AddAllCollaboratorsWhenEventCreated(Event eventOfCollaboration)
+        {
+            foreach(Company invitedCompany in SelectedCollaborators)
+            {
+                this.collaboratorsService.AddCollaborator(eventOfCollaboration, invitedCompany);
+            }
+        }
+
 
         /// <summary>
         /// Function that tries to create a new event
@@ -135,9 +151,10 @@ namespace OurApp.Core.ViewModels
                 DateTime eventEndDateTime = endDate.Value.DateTime;
 
                 int hostId = sessionService.loggedInUser.CompanyId;
-                eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, hostId, SelectedCollaborators.ToList());
+                Event createdEvent = eventsService.AddEvent(Photo, Title, Description, eventStartDateTime, eventEndDateTime, Location, hostId, SelectedCollaborators.ToList());
                 eventCreatedSuccessfully = true;
 
+                AddAllCollaboratorsWhenEventCreated(createdEvent);
                 SendInvitations();
             }
             catch (Exception exception)
@@ -334,13 +351,6 @@ namespace OurApp.Core.ViewModels
                     SelectedCollaborators.Remove(selectedCompany);
                 }
             }
-            //var collaborator = SelectedCollaborators
-            //    .FirstOrDefault(c => string.Equals(c.Name, companyName, StringComparison.OrdinalIgnoreCase));
-
-            //if (collaborator != null)
-            //{
-            //    SelectedCollaborators.Remove(collaborator);
-            //}
         }
     }
 }

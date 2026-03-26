@@ -62,7 +62,16 @@ namespace OurApp.Core.Repositories
             {
                 sqlConnection.Open();
 
-                string queryToBeRun = "SELECT * FROM companies c inner join collaborators c2 on c.company_id = c2.company_id inner join events e on e.event_id = c2.event_id WHERE e.host_company_id = @HostID";
+                string queryToBeRun = @"
+                    SELECT *
+                    FROM companies
+                    WHERE company_id IN (
+                        SELECT c2.company_id
+                        FROM collaborators c2
+                        INNER JOIN events e ON e.event_id = c2.event_id
+                        WHERE e.host_company_id = @HostID
+                    )
+                    ";
 
                 SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
 

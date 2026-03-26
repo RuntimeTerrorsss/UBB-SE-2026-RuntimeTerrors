@@ -33,10 +33,11 @@ namespace OurApp.Core.Services
         /// <param name="eventEndDate"> the event's ending date </param>
         /// <param name="eventLocation"> the event's location </param>
         /// <param name="collaborators"> a list of all the companies collaborating on the event </param>
-        public void AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, int hostId, List<Company> collaborators)
+        public Event AddEvent(string eventPhoto, string eventTitle, string eventDescription, DateTime eventStartDate, DateTime eventEndDate, string eventLocation, int hostId, List<Company> collaborators)
         {
             Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, hostId, collaborators ?? new List<Company>());
             this.eventsRepository.AddEventToRepo(eventToBeAdded);
+            return eventToBeAdded;
         }
 
         /// <summary>
