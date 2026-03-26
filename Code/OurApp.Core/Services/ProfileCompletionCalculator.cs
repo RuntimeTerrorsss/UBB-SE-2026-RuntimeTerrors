@@ -13,12 +13,7 @@ namespace OurApp.Core.Services
         //    this.Logo_url = logo_url;
         //    this.Location = location;
         //    this.Email = email;
-
-        public Game game;
-
-        public ProfileCompletionCalculator(Company company, Game game) {
-            this.game = game;
-        }
+        
 
         public (int percentage, List<string> remainingTasks) Calculate(Company company)
         {
@@ -38,7 +33,7 @@ namespace OurApp.Core.Services
             if (company.CollaboratorsCount >= 2 || company.Collaborators.Count >= 2) done++;
             else tasks.Add("Add 2 collaborators");
 
-            if (IsMiniGameComplete(this.game)) done++;
+            if (IsMiniGameComplete(company.game)) done++;
             else tasks.Add("Complete mini-game");
 
             return ((done * 100) / total, tasks);
