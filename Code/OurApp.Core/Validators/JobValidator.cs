@@ -1,7 +1,8 @@
-﻿using iss_project.UI.ViewModels.Jobs;
+﻿using iss_project.Code.OurApp.Core.ViewModels.Jobs;
+using iss_project.UI.ViewModels.Jobs;
 using System;
 using System.Collections.Generic;
-using iss_project.Code.OurApp.Core.ViewModels.Jobs;
+using System.Linq;
 
 namespace iss_project.UI.Validators
 {
@@ -88,6 +89,16 @@ namespace iss_project.UI.Validators
                     errors.Add("Scheduled date must be in the future.");
             }
 
+            // Skills validation
+            var selectedSkills = model.Skills
+                .Where(s => s.IsSelected)
+                .ToList();
+
+            if (selectedSkills.Count == 0)
+            {
+                errors.Add("At least one skill is required.");
+            }
+
             return errors;
         }
 
@@ -164,7 +175,15 @@ namespace iss_project.UI.Validators
             //        errors.Add("Expiration days must be greater than 0 when automatic expiration is enabled.");
             //}
 
-            
+            // Skills validation
+            var selectedSkills = model.Skills
+                .Where(s => s.IsSelected)
+                .ToList();
+
+            if (selectedSkills.Count == 0)
+            {
+                errors.Add("At least one skill is required.");
+            }
 
             return errors;
         }
