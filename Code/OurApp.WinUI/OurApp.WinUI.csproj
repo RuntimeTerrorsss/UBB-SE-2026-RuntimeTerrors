@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -11,7 +11,18 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+	<SelfContained>true</SelfContained>
+	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="GamePage.xaml" />
+    <None Remove="CreateEventPage.xaml" />
+    <None Remove="EditEventPage.xaml" />
+    <None Remove="OurEventsPage.xaml" />
+    <None Remove="PastEventsPage.xaml" />
+    <None Remove="EditProfilePage.xaml" />
+    <None Remove="ViewProfilePage.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -36,8 +47,41 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="GamePage.xaml">
+	      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="EditEventPage.xaml">
+	      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="EditProfilePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PastEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="OurEventsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="CreateEventPage.xaml">
+	      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="ViewProfilePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--
