@@ -59,11 +59,13 @@
     <Page Update="GamePage.xaml">
 	      <Generator>MSBuild:Compile</Generator>
     </Page>
+	  </ItemGroup>
+	<ItemGroup>
     <Page Update="EditEventPage.xaml">
 		<Generator>MSBuild:Compile</Generator>
 	</Page>
   </ItemGroup>
-    <ItemGroup>
+   <ItemGroup>
     <Page Update="EditProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

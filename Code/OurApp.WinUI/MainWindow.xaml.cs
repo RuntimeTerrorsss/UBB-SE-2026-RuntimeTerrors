@@ -31,11 +31,20 @@ namespace OurApp.WinUI
         /// <summary>
         /// MainWindow constructor that initialize the repositories and services
         /// </summary>
+
+
+        public GameService gameService;
+
+
         public MainWindow()
         {
             string connectionString = "Data Source=TEA\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
             ICompanyRepo repo = new CompanyRepo(connectionString);
             this.companyService = new CompanyService(repo);
+
+
+            IGameRepo game_repo = new GameMemoryRepo();
+            this.gameService = new GameService(game_repo);
 
             ICollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
             this.collabsService = new CollaboratorsService(collabRepo);
@@ -75,6 +84,11 @@ namespace OurApp.WinUI
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
             RootFrame.Navigate(typeof(OurEventsPage));
         }
+        private void NavigateToEditGame_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Clicked to editgame");
+            RootFrame.Navigate(typeof(EditGame), gameService);
+        }
 
         /// <summary>
         /// Function that navigates to a different page: "Past Events" page
@@ -84,6 +98,11 @@ namespace OurApp.WinUI
         private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(PastEventsPage));
+        }
+
+        private void NavigateToGamePage_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(typeof(GamePage));
         }
 
         /// <summary>
@@ -104,6 +123,8 @@ namespace OurApp.WinUI
         private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
         {
             RootFrame.Navigate(typeof(EditProfilePage), 1);
+            System.Diagnostics.Debug.WriteLine("Clicked to nav");
+
         }
     }
 }

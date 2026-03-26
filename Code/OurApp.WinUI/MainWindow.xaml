@@ -26,6 +26,8 @@
             <AppBarButton Label="Past jobs"/>
             <AppBarButton Label="Our events" Click="NavigateToOurEvents_Click"/>
             <AppBarButton Label="Past events" Click="NavigateToPastEvents_Click"/>
+            <AppBarButton Label="Game" Click="NavigateToGamePage_Click"/>
+            <AppBarButton Label="Edit Game" Click="NavigateToEditGame_Click"/>
         </CommandBar>
 
         <Frame x:Name="rootFrame" Margin="0,30,0,0"/>
