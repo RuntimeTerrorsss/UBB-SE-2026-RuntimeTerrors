@@ -15,19 +15,18 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using iss_project;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace OurApp.WinUI
+namespace iss_project
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
     public partial class App : Application
     {
-        //private Window? _window;
+        private Window? _window;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -38,16 +37,14 @@ namespace OurApp.WinUI
             InitializeComponent();
         }
 
-        public static MainWindow mainWindow { get; private set; }
-
         /// <summary>
         /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            mainWindow = new MainWindow();
-            mainWindow.Activate();
+            _window = new MainWindow();
+            _window.Activate();
         }
     }
 }

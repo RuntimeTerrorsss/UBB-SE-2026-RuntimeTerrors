@@ -1,7 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using iss_project.Code.OurApp.Core.Data;
+using iss_project.Code.OurApp.Core.Models;
+using iss_project.Code.OurApp.Core.Repositories;
+using iss_project.Code.OurApp.Core.Services;
+using iss_project.UI.Views;
+using iss_project.UI.Views.Jobs;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using OurApp.Core.Repositories;

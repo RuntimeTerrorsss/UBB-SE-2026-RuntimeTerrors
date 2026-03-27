@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "iss_project (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "iss_project (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

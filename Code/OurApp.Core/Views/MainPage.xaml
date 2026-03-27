@@ -1,0 +1,23 @@
+<Page
+    x:Class="iss_project.UI.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:views="using:iss_project.UI.Views">
+
+    <Grid Padding="20">
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="15">
+
+            <Button Content="View Current Jobs"
+                    Width="200"
+                    Height="50"
+                    Click="GoToJobsList"/>
+			<Button Content="View Past Jobs"
+                    Width="200"
+                    Height="50"
+                    Click="GoToPastJobs"/>
+
+        </StackPanel>
+    </Grid>
+</Page>
