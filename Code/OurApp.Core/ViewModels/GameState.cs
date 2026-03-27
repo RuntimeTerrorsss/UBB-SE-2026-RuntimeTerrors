@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace OurApp.Core.ViewModels
 {
     public enum GameState
-    {
+    {   
+        NotCompleted,
         Start,
         Choices1,
         Reaction1,

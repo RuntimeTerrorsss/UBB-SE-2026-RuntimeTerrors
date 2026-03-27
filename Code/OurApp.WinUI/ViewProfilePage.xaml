@@ -159,18 +159,70 @@
 
                     <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
                         <StackPanel Spacing="8">
-                            <TextBlock Text="here comes the game" FontSize="20" FontWeight="Bold" />
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <TextBlock Text="Buddy:" FontWeight="SemiBold" />
-                                <TextBlock Text="{Binding Company.BuddyName}" TextWrapping="Wrap" />
+                            <StackPanel Padding="40" Spacing="25" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Visibility="{Binding IncompleteGame, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock>Game not completed</TextBlock>
+                                </StackPanel>
+
+                                <StackPanel Visibility="{Binding IsStartVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                    <Image
+                                        Source="{Binding BuddyImagePath}"
+                                        Width="230"
+                                        Height="140"
+                                        Stretch="UniformToFill"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,4,0,0" /> 
+                                    <TextBlock Text="{Binding WelcomeMessage, Mode=OneWay}" 
+                                        FontSize="28" FontWeight="Bold" Foreground="{ThemeResource SystemAccentColor}" 
+                                        TextAlignment="Center" Margin="0,0,0,20"/>
+                                    <Button Content="Start" Command="{Binding StartGameCommand}" HorizontalAlignment="Center" Padding="20,10"/>
+                                </StackPanel>
+
+                                <StackPanel Visibility="{Binding IsChoiceActive, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                    <Image
+                                        Source="{Binding BuddyImagePath}"
+                                        Width="230"
+                                        Height="140"
+                                        Stretch="UniformToFill"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,4,0,0" /> 
+                                    <TextBlock Text="{Binding CurrentQuestion, Mode=OneWay}" 
+                                        FontSize="18" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="500" Margin="0,0,0,20"/>
+
+                                    <ItemsControl ItemsSource="{Binding CurrentChoices, Mode=OneWay}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="x:String">
+                                                <Button Content="{Binding}" Margin="0,5,0,5" HorizontalAlignment="Stretch"
+                                                        Command="{Binding ElementName=PageRoot, Path=ViewModel.SelectChoiceCommand}"
+                                                        CommandParameter="{Binding}"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+
+                                <StackPanel Visibility="{Binding IsReactionActive, Mode=OneWay, Converter={StaticResource BoolToVis}}" Spacing="20">
+                                    <Image
+                                        Source="{Binding BuddyImagePath}"
+                                        Width="230"
+                                        Height="140"
+                                        Stretch="UniformToFill"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,4,0,0" />     
+                                    <TextBlock Text="Reaction:" FontSize="14" Foreground="Gray" TextAlignment="Center"/>
+                                    <TextBlock Text="{Binding Feedback, Mode=OneWay}" 
+                                        FontSize="20" FontStyle="Italic" Foreground="LightGreen" 
+                                        TextAlignment="Center" TextWrapping="Wrap" MaxWidth="450"/>
+                                    <Button Content="Continue" Command="{Binding GoToNextStepCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Visibility="{Binding IsConclusionVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock Text="Conclusion" FontSize="28" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,20"/>
+                                    <TextBlock Text="{Binding Feedback, Mode=OneWay}" FontSize="18" TextAlignment="Center" MaxWidth="500"/>
+                                    <Button Content="Ieșire" Command="{Binding ExitCommand}" HorizontalAlignment="Center" Margin="0,30,0,0"/>
+                                </StackPanel>
+    
                             </StackPanel>
-                            <TextBlock Text="Scenario 1" FontWeight="SemiBold" />
-                            <TextBlock Text="{Binding Company.Scenario1Text}" TextWrapping="Wrap" />
-                            <TextBlock Text="Scenario 2" FontWeight="SemiBold" />
-                            <TextBlock Text="{Binding Company.Scenario2Text}" TextWrapping="Wrap" />
-                            <TextBlock Text="Closing quote" FontWeight="SemiBold" Opacity="0.9" />
-                            <TextBlock Text="{Binding Company.FinalQuote}" TextWrapping="Wrap" Opacity="0.8" />
-                        </StackPanel>
+                            </StackPanel>
                     </Border>
                 </StackPanel>
 

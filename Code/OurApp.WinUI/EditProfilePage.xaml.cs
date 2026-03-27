@@ -21,7 +21,7 @@ public sealed partial class EditProfilePage : Page
     public EditProfilePage()
     {
         var mainWindow = App.mainWindow;
-        ViewModel = new EditCompanyProfileViewModel(mainWindow.companyService);
+        ViewModel = new EditCompanyProfileViewModel(mainWindow.companyService, mainWindow.gameService);
         InitializeComponent();
         DataContext = ViewModel;
     }

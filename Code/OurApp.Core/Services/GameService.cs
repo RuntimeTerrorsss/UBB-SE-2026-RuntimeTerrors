@@ -22,7 +22,10 @@ namespace OurApp.Core.Services
                 throw new InvalidOperationException("No game is available from the repository.");
             return game;
         }
-
+        public int getBuddyId()
+        {
+            return LoadedGame().Buddy.Id;
+        }
         public void Save(Game game)
         {
             if (game == null) throw new ArgumentNullException(nameof(game));
@@ -32,6 +35,12 @@ namespace OurApp.Core.Services
         public Game GetStoredGame()
         {
             return _repository.Get() ?? new Game();
+        }
+        public bool isPublished()
+        {
+            var game = _repository.Get();
+            return game != null && game.IsPublished;
+
         }
 
         public string ShowCoworker()

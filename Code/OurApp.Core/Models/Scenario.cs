@@ -33,6 +33,18 @@ namespace OurApp.Core.Models
             return adviceTexts;
         }
 
+        public List<string> GetAdviceReactions()
+        {
+            List<string> adviceReactions = new List<string>();
+
+            for (int i = 0; i < choices.Count; i++)
+            {
+                adviceReactions.Add(choices[i].Feedback);
+            }
+
+            return adviceReactions;
+        }
+
         public string SelectChoice(int index)
         {
             if (index < 0 || index >= choices.Count)
