@@ -1,0 +1,238 @@
+using OurApp.Core.Models;
+using OurApp.Core.Repositories;
+using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.ObjectModel;
+
+namespace OurApp.Core.Repositories
+{
+    public class CompanyRepo : ICompanyRepo
+    {
+        ObservableCollection<Company> companies;
+        private readonly string _connectionString;
+        private readonly GameRepo _gameRepo;
+
+        public CompanyRepo(string connectionString)
+        {
+            companies = new ObservableCollection<Company>();
+            _connectionString = connectionString;
+            _gameRepo = new GameRepo();
+        }
+
+        private void ValidateRequiredFields(Company c)
+        {
+            if (c is null) throw new ArgumentNullException(nameof(c));
+            if (string.IsNullOrWhiteSpace(c.Name)) throw new ArgumentException("Company name is required.", nameof(c));
+            if (string.IsNullOrWhiteSpace(c.CompanyLogoPath)) throw new ArgumentException("Company logo url/path is required.", nameof(c));
+        }
+
+        private static object DbValue(string? value) => value is null ? DBNull.Value : value;
+        private static object DbValue(int? value) => value.HasValue ? value.Value : DBNull.Value;
+
+        private Company MapCompany(SqlDataReader reader)
+        {
+            var company = new Company(
+            name: reader["company_name"]?.ToString() ?? "",
+            aboutus: reader["about_us"] is DBNull ? "" : reader["about_us"]?.ToString() ?? "",
+            pfpUrl: reader["profile_picture_url"] is DBNull ? "" : reader["profile_picture_url"]?.ToString() ?? "",
+            logoUrl: reader["logo_picture_url"]?.ToString() ?? "",
+            location: reader["location"] is DBNull ? "" : reader["location"]?.ToString() ?? "",
+            email: reader["email"] is DBNull ? "" : reader["email"]?.ToString() ?? "",
+            companyId: Convert.ToInt32(reader["company_id"]),
+            postedJobsCount: reader["posted_jobs_count"] is DBNull ? 0 : Convert.ToInt32(reader["posted_jobs_count"]),
+            collaboratorsCount: reader["collaborators_count"] is DBNull ? 0 : Convert.ToInt32(reader["collaborators_count"])
+            );
+
+            company.game = _gameRepo.MapGame(reader);
+
+            return company;
+        }
+
+        private void RefreshCompaniesFromDatabase()
+        {
+            var list = new ObservableCollection<Company>();
+
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            var cmd = new SqlCommand(
+                @"SELECT c.company_id, c.company_name, c.about_us, c.profile_picture_url, c.logo_picture_url, c.location, c.email,
+                         c.buddy_name, c.avatar_id, c.final_quote, c.scen_1_text, c.scen1_answer1, c.scen1_answer2, c.scen1_answer3,
+                         c.scen1_reaction1, c.scen1_reaction2, c.scen1_reaction3, c.scen2_text, c.scen2_answer1, c.scen2_answer2,
+                         c.scen2_answer3, c.scen2_reaction1, c.scen2_reaction2, c.scen2_reaction3,
+                         (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id) AS posted_jobs_count,
+                         (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id) AS collaborators_count
+                  FROM companies AS c;",
+                conn);
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(MapCompany(reader));
+            }
+
+            companies = list;
+        }
+
+        public void PrintAll()
+        {
+            RefreshCompaniesFromDatabase();
+            foreach (var c in companies)
+                System.Diagnostics.Debug.WriteLine($"{c} ");
+        }
+
+        ObservableCollection<Company> ICompanyRepo.GetAll()
+        {
+            RefreshCompaniesFromDatabase();
+            return companies;
+        }
+
+        Company? ICompanyRepo.GetById(int companyId)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            var cmd = new SqlCommand(
+                @"SELECT c.company_id, c.company_name, c.about_us, c.profile_picture_url,
+                   c.logo_picture_url, c.location, c.email,
+                   c.buddy_name, c.avatar_id, c.final_quote,
+                   c.scen_1_text, c.scen1_answer1, c.scen1_answer2, c.scen1_answer3,
+                   c.scen1_reaction1, c.scen1_reaction2, c.scen1_reaction3,
+                   c.scen2_text, c.scen2_answer1, c.scen2_answer2, c.scen2_answer3,
+                   c.scen2_reaction1, c.scen2_reaction2, c.scen2_reaction3,
+                   (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id) AS posted_jobs_count,
+                   (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id) AS collaborators_count
+                  FROM companies c
+                  WHERE c.company_id = @CompanyId;",
+                conn);
+            cmd.Parameters.AddWithValue("@CompanyId", companyId);
+
+            using var reader = cmd.ExecuteReader();
+            if (!reader.Read())
+                return null;
+
+            return MapCompany(reader);
+        }
+
+        void ICompanyRepo.Add(Company c)
+        {
+            ValidateRequiredFields(c);
+
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            using var tx = conn.BeginTransaction();
+            var nextIdCmd = new SqlCommand(
+                @"SELECT COALESCE(MAX(company_id), 0) + 1
+                  FROM companies WITH (UPDLOCK, HOLDLOCK);",
+                conn,
+                tx);
+            int nextId = (int)nextIdCmd.ExecuteScalar();
+
+            var insertCmd = new SqlCommand(
+                @"INSERT INTO companies
+                  (company_id, company_name, about_us, profile_picture_url, logo_picture_url, location, email,
+                   buddy_name, avatar_id, final_quote, scen_1_text, scen1_answer1, scen1_answer2, scen1_answer3,
+                   scen1_reaction1, scen1_reaction2, scen1_reaction3, scen2_text, scen2_answer1, scen2_answer2,
+                   scen2_answer3, scen2_reaction1, scen2_reaction2, scen2_reaction3)
+                  VALUES
+                  (@CompanyId, @Name, @AboutUs, @ProfilePictureUrl, @LogoPictureUrl, @Location, @Email,
+                   @BuddyName, @AvatarId, @FinalQuote, @Scenario1Text, @Scenario1Answer1, @Scenario1Answer2, @Scenario1Answer3,
+                   @Scenario1Reaction1, @Scenario1Reaction2, @Scenario1Reaction3, @Scenario2Text, @Scenario2Answer1, @Scenario2Answer2,
+                   @Scenario2Answer3, @Scenario2Reaction1, @Scenario2Reaction2, @Scenario2Reaction3);",
+                conn,
+                tx);
+
+            insertCmd.Parameters.AddWithValue("@CompanyId", nextId);
+            insertCmd.Parameters.AddWithValue("@Name", c.Name);
+            insertCmd.Parameters.AddWithValue("@AboutUs", DbValue(c.AboutUs));
+            insertCmd.Parameters.AddWithValue("@ProfilePictureUrl", DbValue(c.ProfilePicturePath));
+            insertCmd.Parameters.AddWithValue("@LogoPictureUrl", c.CompanyLogoPath);
+            insertCmd.Parameters.AddWithValue("@Location", DbValue(c.Location));
+            insertCmd.Parameters.AddWithValue("@Email", DbValue(c.Email));
+
+            insertCmd.ExecuteNonQuery();
+            c.CompanyId = nextId;
+
+            tx.Commit();
+            RefreshCompaniesFromDatabase();
+        }
+
+        void ICompanyRepo.Remove(int companyId)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            var deleteCmd = new SqlCommand(
+                @"DELETE FROM companies
+                  WHERE company_id = @CompanyId;",
+                conn);
+            deleteCmd.Parameters.AddWithValue("@CompanyId", companyId);
+            deleteCmd.ExecuteNonQuery();
+
+            RefreshCompaniesFromDatabase();
+        }
+
+        void ICompanyRepo.Update(Company c)
+        {
+            ValidateRequiredFields(c);
+
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            var cmd = new SqlCommand(
+                @"UPDATE companies
+                  SET company_name = @Name,
+                      about_us = @AboutUs,
+                      profile_picture_url = @ProfilePictureUrl,
+                      logo_picture_url = @LogoPictureUrl,
+                      location = @Location,
+                      email = @Email,
+                  WHERE company_id = @CompanyId;",
+                conn);
+
+            cmd.Parameters.AddWithValue("@CompanyId", c.CompanyId);
+            cmd.Parameters.AddWithValue("@Name", c.Name);
+            cmd.Parameters.AddWithValue("@AboutUs", DbValue(c.AboutUs));
+            cmd.Parameters.AddWithValue("@ProfilePictureUrl", DbValue(c.ProfilePicturePath));
+            cmd.Parameters.AddWithValue("@LogoPictureUrl", c.CompanyLogoPath);
+            cmd.Parameters.AddWithValue("@Location", DbValue(c.Location));
+            cmd.Parameters.AddWithValue("@Email", DbValue(c.Email));
+
+            int affected = cmd.ExecuteNonQuery();
+            if (affected == 0)
+                throw new InvalidOperationException($"No company found with id '{c.CompanyId}' to update.");
+
+            RefreshCompaniesFromDatabase();
+        }
+
+
+        /// <summary>
+        /// Function that searches a company by name and returns it
+        /// </summary>
+        /// <param name="companyName"> the name of the company being searched </param>
+        /// <returns> the company if found, else null </returns>
+
+        public Company? GetCompanyByName(string companyName)
+        {
+            if (string.IsNullOrWhiteSpace(companyName))
+                return null;
+
+            using var sqlConnection = new SqlConnection(_connectionString);
+            sqlConnection.Open();
+
+            string query = "SELECT * FROM companies WHERE company_name = @Name";
+
+            using var sqlCommand = new SqlCommand(query, sqlConnection);
+            sqlCommand.Parameters.AddWithValue("@Name", companyName);
+
+            using var reader = sqlCommand.ExecuteReader();
+
+            if (reader.Read())
+            {
+                return MapCompany(reader);
+            }
+
+            return null;
+        }
+    }
+}

@@ -26,7 +26,7 @@ namespace OurApp.WinUI
     /// </summary>
     public partial class App : Application
     {
-        private Window? _window;
+        //private Window? _window;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -37,14 +37,16 @@ namespace OurApp.WinUI
             InitializeComponent();
         }
 
+        public static MainWindow mainWindow { get; private set; }
+
         /// <summary>
         /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            _window = new MainWindow();
-            _window.Activate();
+            mainWindow = new MainWindow();
+            mainWindow.Activate();
         }
     }
 }

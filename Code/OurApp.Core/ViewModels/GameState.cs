@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.ViewModels
 {
-    internal class Class4
+    public enum GameState
     {
+        Start,
+        Choices1,
+        Reaction1,
+        Choices2, 
+        Reaction2,
+        Conclusion
     }
 }
