@@ -49,7 +49,6 @@ namespace OurApp.Core.Repositories
                 }
             }
 
-            // Load JobSkills mapping for the NLP module
             using (var conn = DbConnectionHelper.GetConnection())
             {
                 conn.Open();

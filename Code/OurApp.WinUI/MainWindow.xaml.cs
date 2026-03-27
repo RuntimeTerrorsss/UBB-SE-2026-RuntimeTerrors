@@ -36,6 +36,11 @@ namespace OurApp.WinUI
             service = new EventsService(repo);
         }
 
+        private void NavigateToOurJobs_Click(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(typeof(OurJobsPage));
+        }
+
         private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Clicked to nav");
