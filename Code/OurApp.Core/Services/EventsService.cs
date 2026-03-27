@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using System;
@@ -20,10 +20,10 @@ namespace OurApp.Core.Services
 
         public void AddEvent(string photo, string title, string description, DateTime start, DateTime end, string location)
         {
-            Event e = new Event(photo, title, description, start, end, location, 1, 1);
+            Event e = new Event { Photo = photo, Title = title, Description = description, StartDate = start, EndDate = end, Location = location};
             this.repository.Add(e);
         }
-
+        
         public void printAll()
         {
             this.repository.printAll();

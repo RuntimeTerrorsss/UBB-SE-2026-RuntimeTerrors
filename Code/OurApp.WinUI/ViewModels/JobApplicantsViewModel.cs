@@ -160,7 +160,7 @@ namespace OurApp.WinUI.ViewModels
 
         public void GoBackFromDetails()
         {
-            SelectedApplicant = null; // This will trigger the setter to collapse details and show table
+            SelectedApplicant = null;
         }
 
         public void RemoveApplicant(Applicant applicant)
