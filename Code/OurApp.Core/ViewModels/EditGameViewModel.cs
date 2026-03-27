@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-
 namespace OurApp.Core.ViewModels
 {
     public partial class EditGameViewModel : ObservableObject
@@ -18,8 +17,20 @@ namespace OurApp.Core.ViewModels
 
         public ObservableCollection<ScenarioInput> Scenarios { get; } = new ObservableCollection<ScenarioInput>();
 
+        public ObservableCollection<int> AvailableBuddyIds { get; } = new ObservableCollection<int> { 0, 1 };
+
         [ObservableProperty]
-        private string _buddyIdText = "1";
+        private int _selectedBuddyId = 1;
+
+       
+        public string BuddyImagePath => BuddyImageProvider.GetImagePathById(SelectedBuddyId);
+
+     
+        partial void OnSelectedBuddyIdChanged(int value)
+        {
+            OnPropertyChanged(nameof(BuddyImagePath));
+        }
+
 
         [ObservableProperty]
         private string _buddyName = string.Empty;
@@ -56,7 +67,7 @@ namespace OurApp.Core.ViewModels
             if (game == null)
                 return;
 
-            BuddyIdText = game.Buddy.Id.ToString();
+            SelectedBuddyId = game.Buddy.Id;
             BuddyName = game.Buddy.Name ?? string.Empty;
             BuddyIntroduction = game.Buddy.Introduction ?? string.Empty;
             Conclusion = game.Conclusion ?? string.Empty;
@@ -81,10 +92,6 @@ namespace OurApp.Core.ViewModels
         {
             try
             {
-                int buddyId = 1;
-                if (!int.TryParse(BuddyIdText, out buddyId))
-                    buddyId = 1;
-
                 var scenarioTuples = Scenarios
                     .Select(s => (
                         scenarioText: s.ScenarioText ?? string.Empty,
@@ -99,7 +106,7 @@ namespace OurApp.Core.ViewModels
                 _gameValidator.ValidateForActivation(scenarioTuples, Conclusion ?? string.Empty);
 
                 var game = _service.CreateGameFromInput(
-                    buddyId: buddyId,
+                    buddyId: SelectedBuddyId,
                     buddyName: BuddyName,
                     buddyIntroduction: BuddyIntroduction,
                     scenarios: scenarioTuples,
