@@ -8,10 +8,12 @@ using System.Net;
 
 namespace OurApp.Core.Services
 {
+    
     public class PaymentService
     {
+        public const string connectionString = "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
         private readonly PaymentValidator _validator = new PaymentValidator();
-        private readonly PaymentRepository _repository = new PaymentRepository();
+        public readonly PaymentRepository _repository = new PaymentRepository(connectionString);
 
         public string ProcessPayment(int jobId, int amount, string name, string cardNum, string exp, string cvv)
         {

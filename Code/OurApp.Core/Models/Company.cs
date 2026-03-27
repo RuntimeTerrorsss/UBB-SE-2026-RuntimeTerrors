@@ -22,6 +22,7 @@ namespace OurApp.Core.Models
 
         public List<string> Collaborators { get; set; } = new();
 
+        public Company() { }
         public Company(
             string name,
             string aboutus,

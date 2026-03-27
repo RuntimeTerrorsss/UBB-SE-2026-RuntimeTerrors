@@ -11,8 +11,14 @@ namespace OurApp.Core.Repositories
     public class PaymentRepository
     {
         //change it to your own 
-        private readonly string _connectionString =
-            "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
+        // private readonly string _connectionString =
+        //     "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
+
+       public string _connectionString;
+       public PaymentRepository(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
         public void UpdateJobPayment(int jobId, int paymentAmount)
         {

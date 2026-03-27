@@ -103,6 +103,10 @@ namespace OurApp.Core.Services
         {
             existingGame.Unpublish();
         }
+        public int getBuddyId()
+        {
+            return LoadedGame().Buddy.Id;
+        }
 
     }
 }

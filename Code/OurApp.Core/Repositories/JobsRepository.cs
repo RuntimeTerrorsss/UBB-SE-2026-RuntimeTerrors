@@ -37,11 +37,15 @@ namespace OurApp.Core.Repositories
 
                         if (!reader.IsDBNull(reader.GetOrdinal("company_id")))
                         {
-                            job.Company = new Company 
-                            { 
-                                CompanyId = reader.GetInt32(reader.GetOrdinal("company_id")),
-                                CompanyName = reader.GetString(reader.GetOrdinal("company_name"))
-                            };
+                            job.Company = new Company(
+    reader.GetString(reader.GetOrdinal("company_name")), // name
+    "rftgyhuj",                                          // aboutus
+    "fgyhujik",                                          // pfpUrl
+    "esdrtgh",                                           // logoUrl
+    "rdfghj",                                            // location
+    "fghj@gmail.com",                                    // email
+    reader.GetInt32(reader.GetOrdinal("company_id"))     // companyId (optional param)
+);
                         }
 
                         list.Add(job);
