@@ -15,6 +15,7 @@
 	<WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="PaymentWindow.xaml" />
 	<None Remove="Assets\AvatarFemale.png" />
 	<None Remove="Assets\AvatarMale.png" />
 	<None Remove="CollaboratorsPage.xaml" />
@@ -58,6 +59,7 @@
     <ProjectReference Include="..\OurApp.Core\OurApp.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="PaymentWindow.xaml">
     <Page Update="GamePage.xaml">
 	      <Generator>MSBuild:Compile</Generator>
     </Page>
