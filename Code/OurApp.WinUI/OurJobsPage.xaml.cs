@@ -28,10 +28,10 @@ namespace OurApp.WinUI
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Frame.CanGoBack)
-            {
-                Frame.GoBack();
-            }
+            if (ViewModel.CurrentStage == OurJobsViewModel.PageStage.Jobs)
+                MainWindow.Instance.ShowMain();
+            else
+                ViewModel.GoBack();
         }
     }
 }

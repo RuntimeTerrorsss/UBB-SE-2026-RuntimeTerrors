@@ -15,13 +15,12 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--Back Button -->
+        <!-- Header: always-visible back + title -->
         <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
-            <Button Content="&#xE72B;" 
-                    FontFamily="Segoe Fluent Icons" 
-                    Click="BackButton_Click"
-                    Visibility="{x:Bind ViewModel.BackButtonVisibility, Mode=OneWay}"/>
-            <TextBlock Text="Our Jobs" VerticalAlignment="Center"/>
+            <Button Content="&#xE72B;"
+                    FontFamily="Segoe Fluent Icons"
+                    Click="BackButton_Click"/>
+            <TextBlock Text="Our Jobs" VerticalAlignment="Center" FontSize="18"/>
         </StackPanel>
 
         <!-- Jobs List -->

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using OurApp.Core.Models;
 using OurApp.Core.Database;
@@ -76,7 +76,7 @@ namespace OurApp.Core.Repositories
                                     SkillName = reader.GetString(reader.GetOrdinal("skill_name"))
                                 }
                             };
-                            targetJob.JobSkills.Add(js);
+                            targetJob.RequiredSkills.Add(js);
                         }
                     }
                 }

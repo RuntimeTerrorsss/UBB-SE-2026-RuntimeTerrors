@@ -14,8 +14,8 @@ GO
     VALUES (1, 'Tech Corp', 'IT Company', 'pfp.png', 'logo.png', 'Local', 'contact@tech.com');
 
 -- Seed Jobs
-    INSERT INTO jobs (job_id, company_id, job_title, industry_field, job_type, experience_level, job_description, job_location, available_positions)
-    VALUES (1, 1, 'Software Engineer', 'IT', 'Full Time', 'Junior', 'Write code', 'Local', 5);
+    INSERT INTO jobs (job_id, company_id, job_title, industry_field, job_type, experience_level, job_description, job_location, available_positions, posted_at)
+    VALUES (1, 1, 'Software Engineer', 'IT', 'Full Time', 'Junior', 'Write code', 'Local', 5, GETDATE());
 
 -- Seed Skills
     SET IDENTITY_INSERT skills ON;

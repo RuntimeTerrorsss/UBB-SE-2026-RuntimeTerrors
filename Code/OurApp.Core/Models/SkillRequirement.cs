@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Models
 {
-    public class Skill
+    public class SkillRequirement
     {
         public int SkillId { get; set; }
         public string SkillName { get; set; }
-        
+
+        public bool IsSelected { get; set; }  // checkbox
+        public int Percentage { get; set; }   // user input
     }
 }

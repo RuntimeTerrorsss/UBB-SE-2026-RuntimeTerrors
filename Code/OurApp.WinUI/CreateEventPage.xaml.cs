@@ -1,4 +1,4 @@
-using Microsoft.UI;
+ï»¿using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -7,8 +7,8 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
-using OurApp.Core.Validators;
-using OurApp.Core.ViewModels;
+using OurApp.WinUI.Validators;
+using OurApp.WinUI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -101,7 +101,7 @@ namespace OurApp.WinUI
                 popup = new ContentDialog
                 {
                     Title = "Oops!",
-                    Content = "We’re sorry, an error occurred. The event was not created. Please try again.",
+                    Content = "Weï¿½re sorry, an error occurred. The event was not created. Please try again.",
                     CloseButtonText = "Close",
                     XamlRoot = this.XamlRoot
                 };

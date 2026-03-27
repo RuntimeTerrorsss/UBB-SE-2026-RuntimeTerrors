@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
@@ -223,9 +223,9 @@ namespace OurApp.Core.Services
             }
 
             List<string> expectedKeywords = new List<string>();
-            if (applicant.Job != null && applicant.Job.JobSkills != null)
+            if (applicant.Job != null && applicant.Job.RequiredSkills != null)
             {
-                foreach (var js in applicant.Job.JobSkills)
+                foreach (var js in applicant.Job.RequiredSkills)
                 {
                     if (js.Skill != null && !string.IsNullOrWhiteSpace(js.Skill.SkillName))
                     {
