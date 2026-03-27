@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 using iss_project.Code.OurApp.Core.Data;
 using iss_project.Code.OurApp.Core.Models;
 using iss_project.Code.OurApp.Core.Repositories;
@@ -11,7 +10,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
-=======
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,16 +17,12 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
->>>>>>> parent of 017019e (small modifications)
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-<<<<<<< HEAD
 using OurApp.Core.Models;
-=======
->>>>>>> parent of 017019e (small modifications)
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -42,7 +36,6 @@ namespace OurApp.WinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-<<<<<<< HEAD
         public Frame RootFrame => rootFrame;
         public IEventsService eventsService { get; }
         public ICompanyService companyService { get; }
@@ -59,7 +52,7 @@ namespace OurApp.WinUI
 
         public MainWindow()
         {
-            string connectionString = "Data Source=TEA\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+            string connectionString = "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
             ICompanyRepo repo = new CompanyRepo(connectionString);
             this.companyService = new CompanyService(repo);
 
@@ -156,11 +149,5 @@ namespace OurApp.WinUI
         //    <AppBarButton Label = "Game" Click="NavigateToGamePage_Click"/>
         //    <AppBarButton Label = "Edit Game" Click="NavigateToEditGame_Click"/>
         //<MenuFlyoutItem Text="Edit Profile" Click="NavigateToEditProfile_Click"/>
-=======
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
->>>>>>> parent of 017019e (small modifications)
     }
 }

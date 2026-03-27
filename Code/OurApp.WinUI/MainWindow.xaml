@@ -7,11 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-<<<<<<< HEAD
     Title="Company Profile">
-=======
-    Title="OurApp.WinUI">
->>>>>>> parent of 017019e (small modifications)
 
     <Window.SystemBackdrop>
         <MicaBackdrop Kind="BaseAlt" />
