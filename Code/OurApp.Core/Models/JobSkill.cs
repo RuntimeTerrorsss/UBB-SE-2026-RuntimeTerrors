@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
-namespace iss_project.Code.OurApp.Core.Models
+namespace OurApp.Core.Models
 {
     public class JobSkill
     {
-        public string SkillName { get; set; }
-        public int Percentage { get; set; }
+        public Skill Skill { get; set; }
+        
+        public JobPosting Job { get; set; }
+        
+        public int RequiredPercentage { get; set; }
     }
 }

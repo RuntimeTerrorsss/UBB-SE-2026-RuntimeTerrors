@@ -27,10 +27,6 @@ public class Game
         Conclusion = conclusion ?? string.Empty;
         IsPublished = isPublished;
     }
-    public Scenario GetScenario(int index)
-    {
-        return scenarios[index];
-    }
 
     public void AddScenario(Scenario scenario)
     {

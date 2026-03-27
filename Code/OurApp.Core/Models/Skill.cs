@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace iss_project.Code.OurApp.Core.Models
+namespace OurApp.Core.Models
 {
     public class Skill
     {
         public int SkillId { get; set; }
         public string SkillName { get; set; }
+        
+        public ICollection<JobSkill> JobSkills { get; set; }
     }
 }
