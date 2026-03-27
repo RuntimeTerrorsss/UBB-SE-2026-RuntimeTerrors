@@ -1,31 +1,37 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OurApp.Core.Models
 {
     public class Company
     {
-        public string Name { get; set; }
+        public int CompanyId { get; set; }
+        public string CompanyName { get; set; }
         public string AboutUs { get; set; }
-        public string Pfp_url { get; set; }
-        public string Logo_url { get; set; }
+        public string ProfilePictureUrl { get; set; }
+        public string LogoPictureUrl { get; set; }
         public string Location { get; set; }
         public string Email { get; set; }
-        public Company( string name, string aboutus, string pfp_url, string logo_url, string location, string email) {
-            this.Name = name;
-            this.AboutUs = aboutus;
-            this.Pfp_url = pfp_url;
-            this.Logo_url = logo_url;
-            this.Location = location;
-            this.Email = email;
-        }
+        public string BuddyName { get; set; }
+        public int? AvatarId { get; set; }
+        public string FinalQuote { get; set; }
+        
+        public string Scen1Text { get; set; }
+        public string Scen1Answer1 { get; set; }
+        public string Scen1Answer2 { get; set; }
+        public string Scen1Answer3 { get; set; }
+        public string Scen1Reaction1 { get; set; }
+        public string Scen1Reaction2 { get; set; }
+        public string Scen1Reaction3 { get; set; }
+        
+        public string Scen2Text { get; set; }
+        public string Scen2Answer1 { get; set; }
+        public string Scen2Answer2 { get; set; }
+        public string Scen2Answer3 { get; set; }
+        public string Scen2Reaction1 { get; set; }
+        public string Scen2Reaction2 { get; set; }
+        public string Scen2Reaction3 { get; set; }
 
-        public override string ToString()
-        {
-            return "Company: " + Name + "\n" + AboutUs + "\n" + Pfp_url + Logo_url + Location + Email;
-        }
+        public Company() { }
     }
 }

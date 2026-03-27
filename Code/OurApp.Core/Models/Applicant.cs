@@ -18,5 +18,6 @@ namespace OurApp.Core.Models
         //"Failed", "On Hold", "Accepted", "Recommended"
         public string ApplicationStatus { get; set; } = null;
         public DateTime AppliedAt { get; set; }
+        public Company RecommendedFromCompany { get; set; }
     }
 }
