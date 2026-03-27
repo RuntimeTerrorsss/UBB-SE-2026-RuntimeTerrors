@@ -7,62 +7,137 @@ using iss_project.UI.Views.Jobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
-using System;
-using WinRT.Interop;
+using Microsoft.UI.Xaml.Controls;
+using OurApp.Core.Repositories;
+using OurApp.Core.Services;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+using OurApp.Core.Models;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 
-namespace iss_project
+// To learn more about WinUI, the WinUI project structure,
+// and more about our project templates, see: http://aka.ms/winui-project-info.
+
+namespace OurApp.WinUI
 {
     public sealed partial class MainWindow : Window
     {
-        public static MainWindow Instance { get; private set; }
-        public static IServiceProvider Services { get; private set; }
+        public Frame RootFrame => rootFrame;
+        public IEventsService eventsService { get; }
+        public ICompanyService companyService { get; }
+        public SessionService sessionService { get; }
+        public ICollaboratorsService collabsService { get; }
+
+        /// <summary>
+        /// MainWindow constructor that initialize the repositories and services
+        /// </summary>
+
+
+        public GameService gameService;
+
 
         public MainWindow()
         {
-            this.InitializeComponent();
+            string connectionString = "Data Source=TEA\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+            ICompanyRepo repo = new CompanyRepo(connectionString);
+            this.companyService = new CompanyService(repo);
 
-            var hwnd = WindowNative.GetWindowHandle(this);
-            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
-            var appWindow = AppWindow.GetFromWindowId(windowId);
 
-            appWindow.Resize(new Windows.Graphics.SizeInt32(1200, 800));
+            IGameRepo game_repo = new GameMemoryRepo();
+            this.gameService = new GameService(game_repo);
 
-            Instance = this;
+            ICollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
+            this.collabsService = new CollaboratorsService(collabRepo);
 
-            var services = new ServiceCollection();
+            Company c1 = new Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.addCompany("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.addCompany("ndj2", "dnis", "dnjs", "hdjd", "sybau", "dj@");
+            //companyService.printAll();
+            InitializeComponent();
 
-            services.AddSingleton<DbConnectionFactory>();
-            services.AddScoped<IJobRepository, JobPostingRepository>();
-            services.AddScoped<IJobService, JobService>();
+            IEventsRepo eventsRepo = new EventsRepo(connectionString);
 
-            Services = services.BuildServiceProvider();
+            // hardcode events
+            //Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            //Event ev2 = new Event("", "Event2", "This is another event. You should attend.", new DateTime(2026, 3, 21, 14, 0, 0), new DateTime(2026, 3, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());
+            //Event ev3 = new Event("", "Event3", "Join us.", new DateTime(2026, 5, 21, 14, 0, 0), new DateTime(2026, 5, 21, 18, 0, 0), "Sibiu, Sibiu", 1, new List<Company>());
+            //Event ev4 = new Event("", "Event4", "", new DateTime(2026, 3, 18, 14, 0, 0), new DateTime(2026, 3, 19, 18, 0, 0), "Bucuresti", 1, new List<Company>());
 
-            ShowMain();
+            //eventsRepo.AddEventToRepo(ev1);
+            //eventsRepo.AddEventToRepo(ev2);
+            //eventsRepo.AddEventToRepo(ev3);
+            //eventsRepo.AddEventToRepo(ev4);
+
+            //eventsRepo.printAll();
+            eventsService = new EventsService(eventsRepo);
+            sessionService = new SessionService(c1); // hardcode user = c1
+
         }
 
-        public void ShowCreateJob()
+        /// <summary>
+        /// Function that navigates to a different page: "Our Events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void NavigateToOurEvents_Click(object sender, RoutedEventArgs e)
+        //{
+        //    System.Diagnostics.Debug.WriteLine("Clicked to nav");
+        //    RootFrame.Navigate(typeof(OurEventsPage));
+        //}
+        //private void NavigateToEditGame_Click(object sender, RoutedEventArgs e)
+        //{
+        //    System.Diagnostics.Debug.WriteLine("Clicked to editgame");
+        //    RootFrame.Navigate(typeof(EditGame), gameService);
+        //}
+
+        /// <summary>
+        /// Function that navigates to a different page: "Past Events" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void NavigateToPastEvents_Click(object sender, RoutedEventArgs e)
+        //{
+        //    RootFrame.Navigate(typeof(PastEventsPage));
+        //}
+
+        //private void NavigateToGamePage_Click(object sender, RoutedEventArgs e)
+        //{
+        //    RootFrame.Navigate(typeof(GamePage));
+        //}
+
+        /// <summary>
+        /// Function that navigates to a different page: "View Profile" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NavigateToViewProfile_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new CreateJobPage();
+            RootFrame.Navigate(typeof(ViewProfilePage), 1);
         }
 
-        public void ShowJobs()
-        {
-            this.Content = new JobsListPage();
-        }
+        /// <summary>
+        /// Function that navigates to a different page: "Edit Profile" page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void NavigateToEditProfile_Click(object sender, RoutedEventArgs e)
+        //{
+        //    RootFrame.Navigate(typeof(EditProfilePage), 1);
+        //    System.Diagnostics.Debug.WriteLine("Clicked to nav");
 
-        public void ShowMain()
-        {
-            this.Content = new MainPage();
-        }
+        //}
 
-        public void ShowEditJob(JobPosting job, bool isRepost = false)
-        {
-            this.Content = new EditJobPage(job, isRepost);
-        }
-
-        public void ShowPastJobs()
-        {
-            this.Content = new PastJobsPage();
-        }
+        // OLD CONECTIONS
+        //<AppBarButton Label = "Our jobs" />
+        //    < AppBarButton Label="Past jobs"/>
+        //    <AppBarButton Label = "Our events" Click="NavigateToOurEvents_Click"/>
+        //    <AppBarButton Label = "Past events" Click="NavigateToPastEvents_Click"/>
+        //    <AppBarButton Label = "Game" Click="NavigateToGamePage_Click"/>
+        //    <AppBarButton Label = "Edit Game" Click="NavigateToEditGame_Click"/>
+        //<MenuFlyoutItem Text="Edit Profile" Click="NavigateToEditProfile_Click"/>
     }
 }
