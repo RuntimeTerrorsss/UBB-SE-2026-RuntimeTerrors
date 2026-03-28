@@ -13,8 +13,8 @@ DELETE FROM companies;
 GO
 
 -- Seed Companies
---INSERT INTO companies (company_id, company_name, about_us, profile_picture_url, logo_picture_url, location, email)
---VALUES (1, 'Tech Corp', 'IT Company', 'pfp.png', 'logo.png', 'Local', 'contact@tech.com');
+INSERT INTO companies (company_id, company_name, about_us, profile_picture_url, logo_picture_url, location, email)
+VALUES (1, 'Tech Corp', 'IT Company', 'pfp.png', 'logo.png', 'Local', 'contact@tech.com');
 
 -- Seed Jobs
 INSERT INTO jobs (job_id, company_id, job_title, industry_field, job_type, experience_level, job_description, job_location, available_positions)
