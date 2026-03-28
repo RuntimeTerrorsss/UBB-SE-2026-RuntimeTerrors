@@ -41,7 +41,7 @@ public partial class CompanyProfileViewModel : ObservableObject
     private string _currentQuestion = string.Empty;
 
     [ObservableProperty]
-    private List<string>? _currentChoices;
+    private ObservableCollection<string> _currentChoices = new();
 
     [ObservableProperty]
     private string _feedback = string.Empty;
@@ -113,7 +113,6 @@ public partial class CompanyProfileViewModel : ObservableObject
         _gameService = gameService;
         _companyService = companyService;
         _calculator = calculator;
-        gamePreview();
         this.eventService = eventService;
         this.sessionService = sessionService;
         this.collabService = collaboratorsService;
@@ -136,6 +135,7 @@ public partial class CompanyProfileViewModel : ObservableObject
         LoadMessage = "";
         RefreshProfileStatistics();
         FillPreviewSections();
+        gamePreview();
     }
 
     public void RefreshProfileStatistics()
@@ -222,11 +222,14 @@ public partial class CompanyProfileViewModel : ObservableObject
 
     private void UpdateScenario()
     {
-
         if (_currentScenarioIndex < 2)
         {
             CurrentQuestion = _gameService.ShowScenarioText(_currentScenarioIndex);
-            CurrentChoices = _gameService.ShowChoices(_currentScenarioIndex);
+
+            CurrentChoices.Clear();
+            var choices = _gameService.ShowChoices(_currentScenarioIndex);
+            foreach (var choice in choices)
+                CurrentChoices.Add(choice);
         }
 
 
@@ -236,9 +239,17 @@ public partial class CompanyProfileViewModel : ObservableObject
         if (_gameService.isPublished())
         {
             WelcomeMessage = _gameService.ShowCoworker();
-            UpdateScenario();
+            CurrentState = GameState.Start;
+            _currentScenarioIndex = 0;      
+            UpdateScenario();               
         }
 
+    }
+
+    [RelayCommand]
+    private void RetryGame()
+    {
+        gamePreview();
     }
 
 

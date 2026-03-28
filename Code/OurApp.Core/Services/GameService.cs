@@ -10,16 +10,17 @@ namespace OurApp.Core.Services
 {
     public class GameService
     {
-        private readonly CompanyRepo _repository;
+        private readonly ICompanyRepo _repository;
+        public SessionService sessionService;
 
-        public GameService(CompanyRepo repository)
+        public GameService(ICompanyRepo repository)
         {
             _repository = repository;
         }
 
         public Game LoadedGame()
         {
-            var game = _repository.MapGame(SqlDataReader reader);
+            var game = _repository.GetGame();
             if (game == null)
                 throw new InvalidOperationException("No game is available from the repository.");
             return game;
@@ -37,11 +38,11 @@ namespace OurApp.Core.Services
 
         public Game GetStoredGame()
         {
-            return _repository.MapGame() ?? new Game();
+            return _repository.GetGame() ?? new Game();
         }
         public bool isPublished()
         {
-            var game = _repository.MapGame();
+            var game = _repository.GetGame();
             return game != null && game.IsPublished;
 
         }

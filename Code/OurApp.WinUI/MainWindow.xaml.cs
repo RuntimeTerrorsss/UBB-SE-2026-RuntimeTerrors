@@ -43,7 +43,6 @@ namespace OurApp.WinUI
             this.companyService = new CompanyService(repo);
 
 
-            IGameRepo game_repo = new GameMemoryRepo();
             this.gameService = new GameService(repo);
 
             ICollaboratorsRepo collabRepo = new CollaboratorsRepo();

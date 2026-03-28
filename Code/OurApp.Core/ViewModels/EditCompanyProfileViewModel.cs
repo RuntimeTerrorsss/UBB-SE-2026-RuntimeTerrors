@@ -8,84 +8,84 @@ using System.Collections.ObjectModel;
 
 namespace OurApp.Core.ViewModels;
 
-    /// <summary>
-    /// Form state for the company edit-profile page. Saves through <see cref="ICompanyService.UpdateCompany"/>.
-    /// </summary>
-    public partial class EditCompanyProfileViewModel : ObservableObject
+/// <summary>
+/// Form state for the company edit-profile page. Saves through <see cref="ICompanyService.UpdateCompany"/>.
+/// </summary>
+public partial class EditCompanyProfileViewModel : ObservableObject
+{
+    private readonly ICompanyService _companyService;
+    private readonly GameService _gameService;
+    private readonly CompanyValidator _validator = new();
+
+    [ObservableProperty]
+    private int _companyId;
+
+    [ObservableProperty]
+    private string _name = "";
+
+    [ObservableProperty]
+    private string _aboutUs = "";
+
+    [ObservableProperty]
+    public string profilePicturePath = "";
+
+    [ObservableProperty]
+    public string companyLogoPath = "";
+
+    [ObservableProperty]
+    private string _location = "";
+
+    [ObservableProperty]
+    private string _email = "";
+
+    [ObservableProperty]
+    private string _statusMessage = "";
+
+    public EditGame editGame { get; }
+
+    public EditCompanyProfileViewModel(ICompanyService companyService, GameService gameService)
     {
-        private readonly ICompanyService _companyService;
-        private readonly GameService _gameService;
-        private readonly CompanyValidator _validator = new();
+        _companyService = companyService;
 
-        [ObservableProperty]
-        private int _companyId;
+        _gameService = gameService;
 
-        [ObservableProperty]
-        private string _name = "";
+        editGame = new EditGame(_gameService);
+    }
 
-        [ObservableProperty]
-        private string _aboutUs = "";
-
-        [ObservableProperty]
-        public string profilePicturePath = "";
-
-        [ObservableProperty]
-        public string companyLogoPath = "";
-
-        [ObservableProperty]
-        private string _location = "";
-
-        [ObservableProperty]
-        private string _email = "";
-
-        [ObservableProperty]
-        private string _statusMessage = "";
-
-        public EditGame editGame { get; }
-
-        public EditCompanyProfileViewModel(ICompanyService companyService, GameService gameService)
+    public void Load(int companyId)
+    {
+        CompanyId = companyId;
+        StatusMessage = "";
+        var c = _companyService.GetCompanyById(companyId);
+        if (c is null)
         {
-            _companyService = companyService;
-
-            _gameService = gameService;
-
-            editGame = new EditGame(_gameService);
+            StatusMessage = "Company not found.";
+            return;
         }
 
-        public void Load(int companyId)
-        {
-            CompanyId = companyId;
-            StatusMessage = "";
-            var c = _companyService.GetCompanyById(companyId);
-            if (c is null)
-            {
-                StatusMessage = "Company not found.";
-                return;
-            }
+        Name = c.Name;
+        AboutUs = c.AboutUs;
+        ProfilePicturePath = c.ProfilePicturePath;
+        CompanyLogoPath = c.CompanyLogoPath;
+        Location = c.Location;
+        Email = c.Email;
+    }
 
-            Name = c.Name;
-            AboutUs = c.AboutUs;
-            ProfilePicturePath = c.ProfilePicturePath;
-            CompanyLogoPath = c.CompanyLogoPath;
-            Location = c.Location;
-            Email = c.Email;
-        }
+    private Company ToCompany(int postedJobs, int collaborators)
+    {
+        return new Company(
+            name: Name,
+            aboutus: AboutUs,
+            pfpUrl: ProfilePicturePath,
+            logoUrl: CompanyLogoPath,
+            location: Location,
+            email: Email,
+            companyId: CompanyId,
+            postedJobsCount: postedJobs,
+            collaboratorsCount: collaborators);
+    }
 
-        private Company ToCompany(int postedJobs, int collaborators)
-        {
-            return new Company(
-                name: Name,
-                aboutus: AboutUs,
-                pfpUrl: ProfilePicturePath,
-                logoUrl: CompanyLogoPath,
-                location: Location,
-                email: Email,
-                companyId: CompanyId,
-                postedJobsCount: postedJobs,
-                collaboratorsCount: collaborators);
-        }
-
-    /// <summary>Validates and persists. Returns null on success, or an error message.</summary>
+   
     public string? TrySave()
     {
         StatusMessage = "";
@@ -98,16 +98,7 @@ namespace OurApp.Core.ViewModels;
         try
         {
             _validator.NameValidator(Name);
-            _validator.AboutUsValidator(AboutUs);
-            _validator.PfpValidator(ProfilePicturePath);
-            _validator.LogoValidator(CompanyLogoPath);
-            _validator.LocationValidator(Location);
-            _validator.EmailValidator(Email);
-
-            var updated = ToCompany(posted, collab);
-            updated.Collaborators = copy;
-            _companyService.UpdateCompany(updated);
-
+            
             var scenarioTuples = editGame.Scenarios
                 .Select(s => (
                     scenarioText: s.ScenarioText ?? string.Empty,
@@ -119,22 +110,30 @@ namespace OurApp.Core.ViewModels;
                 ))
                 .ToList();
 
+          
             var gameValidator = new GameValidator();
-            gameValidator.ValidateForActivation(
-                scenarioTuples,
-                editGame.Conclusion ?? string.Empty
-            );
+            gameValidator.ValidateForActivation(scenarioTuples, editGame.Conclusion ?? string.Empty);
 
+            
             var game = _gameService.CreateGameFromInput(
                 buddyId: editGame.SelectedBuddyId,
                 buddyName: editGame.BuddyName,
                 buddyIntroduction: editGame.BuddyIntroduction,
                 scenarios: scenarioTuples,
                 conclusion: editGame.Conclusion ?? string.Empty,
-                publish: false
+                publish: true
             );
 
-            _gameService.Save(game);
+          
+            var updated = ToCompany(posted, collab);
+            updated.Collaborators = copy;
+            updated.game = game; 
+
+          
+            _companyService.UpdateCompany(updated);
+
+           
+             _gameService.Save(game); 
 
             return null;
         }

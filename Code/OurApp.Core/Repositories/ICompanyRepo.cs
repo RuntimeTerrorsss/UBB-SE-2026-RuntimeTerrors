@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ namespace OurApp.Core.Repositories
         void Remove(int companyID);
         Company? GetCompanyByName(string companyName);
         void Update(Company c);
+        Game? GetGame();
+        void SaveGame(Game game);
+ 
 
     }
 }
