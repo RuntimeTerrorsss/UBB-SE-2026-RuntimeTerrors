@@ -11,22 +11,10 @@ namespace OurApp.WinUI.Views
         {
             this.InitializeComponent();
         }
-
-        private void GoToAddJob(object sender, RoutedEventArgs e)
-        {
-            MainWindow.Instance.ShowCreateJob();
-        }
-
         private void GoToJobsList(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.ShowJobs();
         }
-
-        public void ShowEditJob(JobPosting job)
-        {
-            MainWindow.Instance.ShowEditJob(job);
-        }
-
         private void GoToPastJobs(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.ShowPastJobs();

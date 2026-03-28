@@ -1,6 +1,6 @@
-﻿using iss_project.Code.OurApp.Core.Models;
-using iss_project.Code.OurApp.Core.Repositories.iss_project.Code.OurApp.Core.Repositories;
-using iss_project.Code.OurApp.Core.Services;
+﻿using OurApp.Core.Models;
+using OurApp.Core.Repositories;
+using OurApp.Core.Services;
 using iss_project.UI.Validators;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using OurApp.WinUI;
 
 namespace iss_project.UI.ViewModels.Jobs
 {

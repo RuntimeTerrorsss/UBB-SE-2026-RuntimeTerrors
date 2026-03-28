@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace iss_project.Code.OurApp.Core.Models
+namespace OurApp.Core.Models
 {
     public class JobSkill
     {

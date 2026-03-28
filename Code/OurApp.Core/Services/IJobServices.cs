@@ -1,10 +1,10 @@
-﻿using iss_project.Code.OurApp.Core.Models;
-using iss_project.Code.OurApp.Core.Repositories;
+﻿using OurApp.Core.Models;
+using OurApp.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace iss_project.Code.OurApp.Core.Services
+namespace OurApp.Core.Services
 {
     public interface IJobService
     {

@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using global::iss_project.Code.OurApp.Core.Data;
+using global::OurApp.Core.Models;
+using Microsoft.Data.SqlClient;
 
-namespace iss_project.Code.OurApp.Core.Repositories
+namespace OurApp.Core.Repositories
 {
-    using global::iss_project.Code.OurApp.Core.Data;
-    using global::iss_project.Code.OurApp.Core.Models;
-    using Microsoft.Data.SqlClient;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
 
-    namespace iss_project.Code.OurApp.Core.Repositories
-    {
-        public class SkillRepository
+        public class SkillRepository : ISkillRepository
         {
             private readonly string _connectionString;
 
@@ -50,5 +46,4 @@ namespace iss_project.Code.OurApp.Core.Repositories
                 return skills;
             }
         }
-    }
 }

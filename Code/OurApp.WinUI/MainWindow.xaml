@@ -7,22 +7,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="Company Profile">
+    Title="iss_project">
 
     <Window.SystemBackdrop>
-        <MicaBackdrop Kind="BaseAlt" />
+        <MicaBackdrop />
     </Window.SystemBackdrop>
-    <Grid>
-        <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" VerticalAlignment="Top">
-            <AppBarButton Label="Profile">
-                <AppBarButton.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="View Profile" Click="NavigateToViewProfile_Click"/>
-                    </MenuFlyout>
-                </AppBarButton.Flyout>
-            </AppBarButton>
-        </CommandBar>
-        <Frame x:Name="rootFrame" Margin="0,30,0,0"/>
-    </Grid>
 
+    <Grid>
+
+    </Grid>
 </Window>

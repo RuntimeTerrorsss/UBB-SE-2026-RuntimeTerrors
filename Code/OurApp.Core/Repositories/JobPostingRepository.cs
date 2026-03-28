@@ -1,11 +1,11 @@
-﻿using iss_project.Code.OurApp.Core.Models;
+﻿using OurApp.Core.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using iss_project.Code.OurApp.Core.Data;
 
-namespace iss_project.Code.OurApp.Core.Repositories
+namespace OurApp.Core.Repositories
 {
     public class JobPostingRepository : IJobRepository
     {
@@ -24,10 +24,10 @@ namespace iss_project.Code.OurApp.Core.Repositories
             await connection.OpenAsync();
 
             string query = @"
-SELECT s.skill_name, js.required_percentage
-FROM job_skills js
-JOIN skills s ON js.skill_id = s.skill_id
-WHERE js.job_id = @JobId";
+                SELECT s.skill_name, js.required_percentage
+                FROM job_skills js
+                JOIN skills s ON js.skill_id = s.skill_id
+                WHERE js.job_id = @JobId";
 
             using var command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@JobId", jobId);
@@ -47,17 +47,17 @@ WHERE js.job_id = @JobId";
             {
                 await connection.OpenAsync();
 
-                // 🔥 Get inserted job_id
+    
                 string query = @"
-INSERT INTO jobs
-(company_id, photo, job_title, industry_field, job_type, experience_level,
- start_date, end_date, job_description, job_location, available_positions,
- posted_at, salary, amount_payed, deadline, scheduled_at)
-OUTPUT INSERTED.job_id
-VALUES
-(@CompanyId, @Photo, @JobTitle, @IndustryField, @JobType, @ExperienceLevel,
- @StartDate, @EndDate, @JobDescription, @JobLocation, @AvailablePositions,
- @PostedAt, @Salary, @AmountPayed, @Deadline, @ScheduledAt)";
+                    INSERT INTO jobs
+                    (company_id, photo, job_title, industry_field, job_type, experience_level,
+                     start_date, end_date, job_description, job_location, available_positions,
+                     posted_at, salary, amount_payed, deadline, scheduled_at)
+                    OUTPUT INSERTED.job_id
+                    VALUES
+                    (@CompanyId, @Photo, @JobTitle, @IndustryField, @JobType, @ExperienceLevel,
+                     @StartDate, @EndDate, @JobDescription, @JobLocation, @AvailablePositions,
+                     @PostedAt, @Salary, @AmountPayed, @Deadline, @ScheduledAt)";
 
                 int jobId;
 
@@ -83,14 +83,14 @@ VALUES
                     jobId = (int)await command.ExecuteScalarAsync();
                 }
 
-                // 🔥 Insert into job_skills
+             
                 if (skills != null)
                 {
                     foreach (var skill in skills)
                     {
                         string skillQuery = @"
-INSERT INTO job_skills (job_id, skill_id, required_percentage)
-VALUES (@JobId, @SkillId, @Percentage)";
+                            INSERT INTO job_skills (job_id, skill_id, required_percentage)
+                            VALUES (@JobId, @SkillId, @Percentage)";
 
                         using (SqlCommand cmd = new SqlCommand(skillQuery, connection))
                         {
@@ -139,10 +139,10 @@ VALUES (@JobId, @SkillId, @Percentage)";
                 await connection.OpenAsync();
 
                 string query = @"
-SELECT * FROM jobs
-WHERE company_id = @CompanyId
-AND deadline IS NOT NULL
-AND deadline < GETDATE()";
+                    SELECT * FROM jobs
+                    WHERE company_id = @CompanyId
+                    AND deadline IS NOT NULL
+                    AND deadline < GETDATE()";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -170,16 +170,16 @@ AND deadline < GETDATE()";
                 await connection.OpenAsync();
 
                 string query = @"
-SELECT * FROM jobs
-WHERE company_id = @CompanyId
-AND (
-    scheduled_at IS NULL
-    OR scheduled_at <= GETDATE()
-)
-AND (
-    deadline IS NULL
-    OR deadline > GETDATE()
-)";
+                    SELECT * FROM jobs
+                    WHERE company_id = @CompanyId
+                    AND (
+                        scheduled_at IS NULL
+                        OR scheduled_at <= GETDATE()
+                    )
+                    AND (
+                        deadline IS NULL
+                        OR deadline > GETDATE()
+                    )";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -203,25 +203,25 @@ AND (
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            // 1️⃣ Update jobs table
+         
             string query = @"
-UPDATE jobs
-SET photo = @Photo,
-    job_title = @JobTitle,
-    industry_field = @IndustryField,
-    job_type = @JobType,
-    experience_level = @ExperienceLevel,
-    start_date = @StartDate,
-    end_date = @EndDate,
-    job_description = @JobDescription,
-    job_location = @JobLocation,
-    available_positions = @AvailablePositions,
-    salary = @Salary,
-    amount_payed = @AmountPayed,
-    deadline = @Deadline,
-    posted_at = @PostedAt,
-    scheduled_at = @ScheduledAt
-WHERE job_id = @JobId";
+                UPDATE jobs
+                SET photo = @Photo,
+                    job_title = @JobTitle,
+                    industry_field = @IndustryField,
+                    job_type = @JobType,
+                    experience_level = @ExperienceLevel,
+                    start_date = @StartDate,
+                    end_date = @EndDate,
+                    job_description = @JobDescription,
+                    job_location = @JobLocation,
+                    available_positions = @AvailablePositions,
+                    salary = @Salary,
+                    amount_payed = @AmountPayed,
+                    deadline = @Deadline,
+                    posted_at = @PostedAt,
+                    scheduled_at = @ScheduledAt
+                WHERE job_id = @JobId";
 
             using (var cmd = new SqlCommand(query, connection))
             {
@@ -245,7 +245,7 @@ WHERE job_id = @JobId";
                 await cmd.ExecuteNonQueryAsync();
             }
 
-            // 2️⃣ Delete old skills
+        
             string deleteSkills = "DELETE FROM job_skills WHERE job_id = @JobId";
             using (var cmd = new SqlCommand(deleteSkills, connection))
             {
@@ -253,14 +253,14 @@ WHERE job_id = @JobId";
                 await cmd.ExecuteNonQueryAsync();
             }
 
-            // 3️⃣ Insert new skills
+         
             foreach (var skill in job.RequiredSkills)
             {
                 string insertSkill = @"
-INSERT INTO job_skills (job_id, skill_id, required_percentage)
-SELECT @JobId, skill_id, @Percentage
-FROM skills
-WHERE skill_name = @SkillName";
+                    INSERT INTO job_skills (job_id, skill_id, required_percentage)
+                    SELECT @JobId, skill_id, @Percentage
+                    FROM skills
+                    WHERE skill_name = @SkillName";
 
                 using (var cmd = new SqlCommand(insertSkill, connection))
                 {
@@ -310,7 +310,7 @@ WHERE skill_name = @SkillName";
                 AmountPayed = reader["amount_payed"] == DBNull.Value ? null : (int?)reader["amount_payed"],
                 Deadline = reader["deadline"] == DBNull.Value ? null : (DateTime?)reader["deadline"],
                 ScheduledAt = reader["scheduled_at"] == DBNull.Value ? null : (DateTime?)reader["scheduled_at"]
-                // RequiredSkills will be loaded separately via GetSkillsForJobAsync
+                
             };
         }
 
@@ -322,22 +322,22 @@ WHERE skill_name = @SkillName";
             await connection.OpenAsync();
 
             string query = @"
-WITH SkillCounts AS (
-    SELECT s.skill_name, COUNT(DISTINCT js.job_id) AS job_count
-    FROM job_skills js
-    JOIN skills s ON js.skill_id = s.skill_id
-    GROUP BY s.skill_name
-),
-Total AS (
-    SELECT SUM(job_count) AS total_count FROM SkillCounts
-)
-SELECT 
-    sc.skill_name,
-    sc.job_count,
-    CAST(sc.job_count * 100.0 / t.total_count AS FLOAT) AS percentage
-FROM SkillCounts sc
-CROSS JOIN Total t
-ORDER BY sc.job_count DESC";
+                WITH SkillCounts AS (
+                    SELECT s.skill_name, COUNT(DISTINCT js.job_id) AS job_count
+                    FROM job_skills js
+                    JOIN skills s ON js.skill_id = s.skill_id
+                    GROUP BY s.skill_name
+                ),
+                Total AS (
+                    SELECT SUM(job_count) AS total_count FROM SkillCounts
+                )
+                SELECT 
+                    sc.skill_name,
+                    sc.job_count,
+                    CAST(sc.job_count * 100.0 / t.total_count AS FLOAT) AS percentage
+                FROM SkillCounts sc
+                CROSS JOIN Total t
+                ORDER BY sc.job_count DESC";
 
             using var command = new SqlCommand(query, connection);
 

@@ -1,9 +1,11 @@
-﻿using iss_project.Code.OurApp.Core.Models;
+﻿using OurApp.Core.Models;
 using iss_project.Code.OurApp.Core.ViewModels.Jobs;
 using iss_project.UI.ViewModels.Jobs;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using OurApp.WinUI;
+using OurApp.WinUI;
 
 namespace iss_project.UI.Views.Jobs
 {

@@ -1,5 +1,5 @@
 ﻿using OurApp.Core.Models;
-using OurApp.Core.Repositories.OurApp.Core.Repositories;
+using OurApp.Core.Repositories;
 using OurApp.Core.Services;
 using OurApp.WinUI.Validators;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,4 +1,4 @@
-﻿using iss_project.Code.OurApp.Core.Models;
+﻿using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Services
 {
-    public class SessionService
+    internal interface ISkillServices
     {
-        public Company loggedInUser { get; }
-
-        public SessionService(Company user)
-        {
-            this.loggedInUser = user;
-        }
+        Task<List<Skill>> GetAllSkillsAsync();
     }
 }

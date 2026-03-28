@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using iss_project.Code.OurApp.Core.Models;
+using OurApp.Core.Models;
 
-namespace iss_project.Code.OurApp.Core.Repositories
+namespace OurApp.Core.Repositories
 {
     public interface IJobRepository
     {

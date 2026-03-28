@@ -1,3 +1,4 @@
+﻿using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace OurApp.Core.Repositories
 {
-    public interface IGameRepo
+    internal interface ISkillRepository
     {
-        Game Get();
-        void Save(Game game);
+        Task<List<Skill>> GetAllAsync();
     }
 }
