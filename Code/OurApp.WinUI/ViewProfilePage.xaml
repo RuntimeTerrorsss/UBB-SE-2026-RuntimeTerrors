@@ -110,6 +110,45 @@
                     <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
                         <StackPanel Spacing="12">
                             <Grid>
+                                <TextBlock Text="Collaborators" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding Top3CollabsPreviews}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:CompanyCollabListRow">
+                                        <StackPanel Margin="0,0,0,12" Spacing="4">
+                                            <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Button Content="See all >" Click="SeeAllCollaboratorsButton_Click" Style="{ThemeResource AccentButtonStyle}" HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="24">
+                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Trending skills" FontSize="20" FontWeight="Bold" />
+                            <ItemsControl ItemsSource="{Binding TrendingSkills}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:CompanyTrendingSkillRow">
+                                        <StackPanel Margin="0,0,0,16" Spacing="4">
+                                            <TextBlock FontWeight="SemiBold">
+                            <Run Text="{x:Bind Rank}" /><Run Text=". " /><Run Text="{x:Bind SkillName}" />
+                                            </TextBlock>
+                                            <TextBlock Text="{x:Bind Detail}" FontSize="12" Opacity="0.8" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="12">
+                            <Grid>
                                 <TextBlock Text="Jobs" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
                             </Grid>
 
@@ -123,12 +162,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
-                            <Button Content="See all >" 
-                                    Click="SeeAllJobsButton_Click" 
-                                    Style="{ThemeResource AccentButtonStyle}" 
-                                    HorizontalAlignment="Stretch"/>
-
+                            <Button Content="See all >" Click="SeeAllJobsButton_Click" Style="{ThemeResource AccentButtonStyle}" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
 
@@ -148,125 +182,82 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
-                            <Button Content="See all >" 
-                                Click="SeeAllEventsButton_Click" 
-                                Style="{ThemeResource AccentButtonStyle}" 
-                                HorizontalAlignment="Stretch"/>
-
-                        </StackPanel>
-                    </Border>
-
-                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
-                        <StackPanel Spacing="8">
-                            <StackPanel Padding="40" Spacing="25" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <StackPanel Visibility="{Binding IncompleteGame, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                                        <TextBlock>Game not completed</TextBlock>
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{Binding IsStartVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                                        <Image
-                                        Source="{Binding BuddyImagePath}"
-                                        Width="230"
-                                        Height="140"
-                                        Stretch="UniformToFill"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,4,0,0" />
-                                        <TextBlock Text="{Binding WelcomeMessage, Mode=OneWay}" 
-                                        FontSize="28" FontWeight="Bold" Foreground="{ThemeResource SystemAccentColor}" 
-                                        TextAlignment="Center" Margin="0,0,0,20"/>
-                                        <Button Content="Start" Command="{Binding StartGameCommand}" HorizontalAlignment="Center" Padding="20,10"/>
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{Binding IsChoiceActive, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                                        <Image
-                                        Source="{Binding BuddyImagePath}"
-                                        Width="230"
-                                        Height="140"
-                                        Stretch="UniformToFill"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,4,0,0" />
-                                        <TextBlock Text="{Binding CurrentQuestion, Mode=OneWay}" 
-                                        FontSize="18" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="500" Margin="0,0,0,20"/>
-
-                                        <ItemsControl ItemsSource="{Binding CurrentChoices, Mode=OneWay}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate x:DataType="x:String">
-                                                    <Button Content="{Binding}" Margin="0,5,0,5" HorizontalAlignment="Stretch"
-                                                        Command="{Binding ElementName=PageRoot, Path=ViewModel.SelectChoiceCommand}"
-                                                        CommandParameter="{Binding}"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{Binding IsReactionActive, Mode=OneWay, Converter={StaticResource BoolToVis}}" Spacing="20">
-                                        <Image
-                                        Source="{Binding BuddyImagePath}"
-                                        Width="230"
-                                        Height="140"
-                                        Stretch="UniformToFill"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,4,0,0" />
-                                        <TextBlock Text="Reaction:" FontSize="14" Foreground="Gray" TextAlignment="Center"/>
-                                        <TextBlock Text="{Binding Feedback, Mode=OneWay}" 
-                                        FontSize="20" FontStyle="Italic" Foreground="LightGreen" 
-                                        TextAlignment="Center" TextWrapping="Wrap" MaxWidth="450"/>
-                                        <Button Content="Continue" Command="{Binding GoToNextStepCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}"/>
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{Binding IsConclusionVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                                        <TextBlock Text="Conclusion" FontSize="28" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,20"/>
-                                        <TextBlock Text="{Binding Feedback, Mode=OneWay}" FontSize="18" TextAlignment="Center" MaxWidth="500"/>
-                                        <Button Content="Ieșire" Command="{Binding ExitCommand}" HorizontalAlignment="Center" Margin="0,30,0,0"/>
-                                    </StackPanel>
-
-                                </StackPanel>
-                            </StackPanel>
-                    </Border>
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="24">
-
-                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
-                        <StackPanel Spacing="12">
-                            <TextBlock Text="Contact" FontSize="20" FontWeight="Bold" />
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="Location" FontWeight="SemiBold" />
-                                <TextBlock Text="{Binding Company.Location}" TextWrapping="Wrap" />
-                            </StackPanel>
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="Email" FontWeight="SemiBold" />
-                                <TextBlock Text="{Binding Company.Email}" TextWrapping="Wrap" />
-                            </StackPanel>
-                            <ItemsControl ItemsSource="{Binding CollaboratorLines}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,8,0,0" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
-                        <StackPanel Spacing="12">
-                            <TextBlock Text="Trending skills" FontSize="20" FontWeight="Bold" />
-                            <ItemsControl ItemsSource="{Binding TrendingSkills}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="vm:CompanyTrendingSkillRow">
-                                        <StackPanel Margin="0,0,0,16" Spacing="4">
-                                            <TextBlock FontWeight="SemiBold">
-                                                <Run Text="{x:Bind Rank}" /><Run Text=". " /><Run Text="{x:Bind SkillName}" />
-                                            </TextBlock>
-                                            <TextBlock Text="{x:Bind Detail}" FontSize="12" Opacity="0.8" TextWrapping="Wrap" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <Button Content="See all >" Click="SeeAllEventsButton_Click" Style="{ThemeResource AccentButtonStyle}" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
             </Grid>
+
+            <StackPanel>
+                <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
+                    <StackPanel Spacing="8">
+                        <StackPanel Padding="40" Spacing="25" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel Visibility="{Binding IncompleteGame, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                <TextBlock>Game not completed</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Visibility="{Binding IsStartVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                <Image
+                                    Source="{Binding BuddyImagePath}"
+                                    Width="230"
+                                    Height="140"
+                                    Stretch="UniformToFill"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,4,0,0" />
+                                <TextBlock Text="{Binding WelcomeMessage, Mode=OneWay}" 
+                                    FontSize="28" FontWeight="Bold" Foreground="{ThemeResource SystemAccentColor}" 
+                                    TextAlignment="Center" Margin="0,0,0,20"/>
+                                <Button Content="Start" Command="{Binding StartGameCommand}" HorizontalAlignment="Center" Padding="20,10"/>
+                            </StackPanel>
+
+                            <StackPanel Visibility="{Binding IsChoiceActive, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                <Image
+                                    Source="{Binding BuddyImagePath}"
+                                    Width="230"
+                                    Height="140"
+                                    Stretch="UniformToFill"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,4,0,0" />
+                                <TextBlock Text="{Binding CurrentQuestion, Mode=OneWay}" 
+                                    FontSize="18" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="500" Margin="0,0,0,20"/>
+
+                                <ItemsControl ItemsSource="{Binding CurrentChoices, Mode=OneWay}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="x:String">
+                                            <Button Content="{Binding}" Margin="0,5,0,5" HorizontalAlignment="Stretch"
+                                                Command="{Binding ElementName=PageRoot, Path=ViewModel.SelectChoiceCommand}"
+                                                CommandParameter="{Binding}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
+                            <StackPanel Visibility="{Binding IsReactionActive, Mode=OneWay, Converter={StaticResource BoolToVis}}" Spacing="20">
+                                <Image
+                                    Source="{Binding BuddyImagePath}"
+                                    Width="230"
+                                    Height="140"
+                                    Stretch="UniformToFill"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,4,0,0" />
+                                <TextBlock Text="Reaction:" FontSize="14" Foreground="Gray" TextAlignment="Center"/>
+                                <TextBlock Text="{Binding Feedback, Mode=OneWay}" 
+                                    FontSize="20" FontStyle="Italic" Foreground="LightGreen" 
+                                    TextAlignment="Center" TextWrapping="Wrap" MaxWidth="450"/>
+                                <Button Content="Continue" Command="{Binding GoToNextStepCommand}" HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}"/>
+                            </StackPanel>
+
+                            <StackPanel Visibility="{Binding IsConclusionVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                <TextBlock Text="Conclusion" FontSize="28" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,20"/>
+                                <TextBlock Text="{Binding Feedback, Mode=OneWay}" FontSize="18" TextAlignment="Center" MaxWidth="500"/>
+                                <Button Content="Ieșire" Command="{Binding ExitCommand}" HorizontalAlignment="Center" Margin="0,30,0,0"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            
         </StackPanel>
     </ScrollViewer>
 </Page>

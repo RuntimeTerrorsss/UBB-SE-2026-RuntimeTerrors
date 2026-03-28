@@ -45,7 +45,7 @@ namespace OurApp.WinUI
         private void NavigateBack_Click(object sender, RoutedEventArgs e)
         {
             var mainW = App.mainWindow;
-            mainW.RootFrame.Navigate(typeof(OurEventsPage));
+            mainW.RootFrame.Navigate(typeof(ViewProfilePage));
         }
     }
 }

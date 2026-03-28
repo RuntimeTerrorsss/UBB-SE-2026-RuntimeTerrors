@@ -19,7 +19,7 @@ public sealed partial class ViewProfilePage : Page
     public ViewProfilePage()
     {
         var mainWindow = App.mainWindow;
-        ViewModel = new CompanyProfileViewModel(mainWindow.companyService, new ProfileCompletionCalculator(), mainWindow.gameService, mainWindow.eventsService, mainWindow.sessionService);
+        ViewModel = new CompanyProfileViewModel(mainWindow.companyService, new ProfileCompletionCalculator(), mainWindow.gameService, mainWindow.eventsService, mainWindow.sessionService, mainWindow.collabsService);
         InitializeComponent();
         DataContext = ViewModel;
         ViewModel.NavigateEditProfileRequested += (_, _) =>
@@ -33,6 +33,10 @@ public sealed partial class ViewProfilePage : Page
         ViewModel.NavigateAllJobsRequested += (_, _) =>
         {
             App.mainWindow.RootFrame.Navigate(typeof(OurEventsPage), ViewModel.CompanyId);
+        };
+        ViewModel.NavigateAllCollaboratorRequested += (_, _) =>
+        {
+            App.mainWindow.RootFrame.Navigate(typeof(CollaboratorsPage), ViewModel.CompanyId);
         };
     }
 
@@ -149,5 +153,9 @@ public sealed partial class ViewProfilePage : Page
     private void SeeAllJobsButton_Click(object sender, RoutedEventArgs e)
     {
         this.Frame.Navigate(typeof(OurJobsPage), ViewModel.CompanyId);
+    }
+    private void SeeAllCollaboratorsButton_Click(object sender, RoutedEventArgs e)
+    {
+        this.Frame.Navigate(typeof(CollaboratorsPage), ViewModel.CompanyId);
     }
 }
