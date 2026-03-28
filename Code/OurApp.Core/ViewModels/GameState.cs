@@ -8,6 +8,7 @@ namespace OurApp.Core.ViewModels
 {
     public enum GameState
     {
+        NotCompleted,
         Start,
         Choices1,
         Reaction1,
