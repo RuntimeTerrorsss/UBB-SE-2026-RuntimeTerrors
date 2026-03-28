@@ -108,6 +108,14 @@
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="CV Grade:" VerticalAlignment="Center" Width="150"/>
                 <TextBox Text="{x:Bind ViewModel.DraftCvGrade, Mode=TwoWay}" Width="100"/>
+                <Button Content="Scan CV"
+                        Click="ScanCv_Click"
+                        IsEnabled="{x:Bind ViewModel.CanScanCv, Mode=OneWay}"
+                        VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind ViewModel.CvScanErrorMessage, Mode=OneWay}"
+                           Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                           VerticalAlignment="Center"
+                           Visibility="{x:Bind ViewModel.CvScanErrorVisibility, Mode=OneWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Company Test Grade:" VerticalAlignment="Center" Width="150"/>

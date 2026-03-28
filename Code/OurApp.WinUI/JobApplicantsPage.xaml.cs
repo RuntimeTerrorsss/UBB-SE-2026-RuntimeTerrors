@@ -41,8 +41,6 @@ namespace OurApp.WinUI
 
         private void ApplicantsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // The ViewModel's SelectedApplicant property update already handles showing details grid,
-            // but we can ensure it is synced here if needed.
             var listView = sender as ListView;
             if (listView?.SelectedItem is Applicant applicant)
             {
@@ -61,6 +59,14 @@ namespace OurApp.WinUI
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.SaveChanges();
+        }
+
+        private async void ScanCv_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel != null)
+            {
+                await ViewModel.ScanCvAsync();
+            }
         }
     }
 

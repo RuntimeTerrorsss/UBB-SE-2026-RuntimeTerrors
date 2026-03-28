@@ -1,6 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using OurApp.Core.Models;
 using OurApp.Core.Services;
@@ -37,6 +39,41 @@ namespace OurApp.WinUI.ViewModels
         private string _draftInterviewGrade;
         public string DraftInterviewGrade { get { return _draftInterviewGrade; } set { if (_draftInterviewGrade != value) { _draftInterviewGrade = value; OnPropertyChanged(nameof(DraftInterviewGrade)); } } }
 
+        private string _cvScanErrorMessage = "";
+        public string CvScanErrorMessage
+        {
+            get => _cvScanErrorMessage;
+            private set
+            {
+                if (_cvScanErrorMessage != value)
+                {
+                    _cvScanErrorMessage = value ?? "";
+                    OnPropertyChanged(nameof(CvScanErrorMessage));
+                    OnPropertyChanged(nameof(CvScanErrorVisibility));
+                }
+            }
+        }
+
+        public Visibility CvScanErrorVisibility =>
+            string.IsNullOrEmpty(_cvScanErrorMessage) ? Visibility.Collapsed : Visibility.Visible;
+
+        private bool _isCvScanning;
+        public bool IsCvScanning
+        {
+            get => _isCvScanning;
+            private set
+            {
+                if (_isCvScanning != value)
+                {
+                    _isCvScanning = value;
+                    OnPropertyChanged(nameof(IsCvScanning));
+                    OnPropertyChanged(nameof(CanScanCv));
+                }
+            }
+        }
+
+        public bool CanScanCv => SelectedApplicant != null && !IsCvScanning;
+
         private Applicant _selectedApplicant;
         public Applicant SelectedApplicant
         {
@@ -58,6 +95,7 @@ namespace OurApp.WinUI.ViewModels
                         TableVisibility = Visibility.Visible;
                     }
                     OnPropertyChanged(nameof(SelectedApplicant));
+                    OnPropertyChanged(nameof(CanScanCv));
                 }
             }
         }
@@ -122,11 +160,42 @@ namespace OurApp.WinUI.ViewModels
 
         private void LoadDraft(Applicant applicant)
         {
+            CvScanErrorMessage = "";
             DraftStatus = applicant.ApplicationStatus;
             DraftAppTestGrade = applicant.AppTestGrade?.ToString() ?? "";
             DraftCvGrade = applicant.CvGrade?.ToString() ?? "";
             DraftCompanyTestGrade = applicant.CompanyTestGrade?.ToString() ?? "";
             DraftInterviewGrade = applicant.InterviewGrade?.ToString() ?? "";
+        }
+
+        public async Task ScanCvAsync()
+        {
+            if (SelectedApplicant == null || IsCvScanning)
+            {
+                return;
+            }
+
+            CvScanErrorMessage = "";
+            IsCvScanning = true;
+            try
+            {
+                var applicant = SelectedApplicant;
+                decimal? grade = await Task.Run(() => _applicantService.ScanCvXml(applicant)).ConfigureAwait(true);
+
+                if (grade.HasValue)
+                {
+                    DraftCvGrade = grade.Value.ToString(CultureInfo.InvariantCulture);
+                    CvScanErrorMessage = "";
+                }
+                else
+                {
+                    CvScanErrorMessage = "Invalid CV";
+                }
+            }
+            finally
+            {
+                IsCvScanning = false;
+            }
         }
 
         public void SaveChanges()

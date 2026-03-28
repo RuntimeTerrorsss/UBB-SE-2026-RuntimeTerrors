@@ -8,11 +8,14 @@ namespace OurApp.Core.Models
         public string Name { get; set; }
         public string Email { get; set; }
 
-        public User(int id, string name, string email)
+        public string? CvXml { get; set; }
+
+        public User(int id, string name, string email, string? cvXml = null)
         {
             Id = id;
             Name = name;
             Email = email;
+            CvXml = cvXml;
         }
     }
 }

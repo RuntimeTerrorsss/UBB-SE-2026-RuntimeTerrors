@@ -7,8 +7,7 @@ namespace OurApp.Core.Models
         public int ApplicantId { get; set; }
         public JobPosting Job { get; set; } = null!;
         public User User { get; set; } = null!;
-        public string CvFileUrl { get; set; } = null!;
-        
+
         // Grades start as null until evaluated
         public decimal? AppTestGrade { get; set; }
         public decimal? CvGrade { get; set; }

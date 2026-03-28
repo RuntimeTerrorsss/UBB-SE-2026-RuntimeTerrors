@@ -148,6 +148,6 @@ public sealed partial class ViewProfilePage : Page
     }
     private void SeeAllJobsButton_Click(object sender, RoutedEventArgs e)
     {
-        this.Frame.Navigate(typeof(OurEventsPage), ViewModel.CompanyId);
+        this.Frame.Navigate(typeof(OurJobsPage), ViewModel.CompanyId);
     }
 }

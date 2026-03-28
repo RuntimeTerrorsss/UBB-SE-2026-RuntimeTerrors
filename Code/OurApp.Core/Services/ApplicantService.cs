@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml.Linq;
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
@@ -53,25 +52,107 @@ namespace OurApp.Core.Services
             }
         }
 
-        private bool IsCvValid(string xmlPath)
+        private static bool TryGetTrimmedElement(XDocument doc, string localName, out string value)
         {
-            if (File.Exists(xmlPath) == false)
+            value = "";
+            var el = doc.Descendants(localName).FirstOrDefault();
+            if (el == null || string.IsNullOrWhiteSpace(el.Value))
             {
-                return false; 
+                return false;
             }
-            
+
+            value = el.Value.Trim();
+            return true;
+        }
+
+        private static bool LooksLikeEmail(string email)
+        {
+            var at = email.IndexOf('@', StringComparison.Ordinal);
+            if (at <= 0 || at >= email.Length - 1)
+            {
+                return false;
+            }
+
+            var domain = email[(at + 1)..];
+            return domain.Contains('.', StringComparison.Ordinal);
+        }
+
+        private static bool HasMeaningfulSkillsText(string skillsText)
+        {
+            if (skillsText.Length < 3)
+            {
+                return false;
+            }
+
+            var parts = skillsText.Split(new[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            return parts.Length >= 1;
+        }
+
+        private static bool HasMeaningfulProjectsText(string projectsText)
+        {
+            if (projectsText.Length < 15)
+            {
+                return false;
+            }
+
+            var parts = projectsText.Split(new[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            return parts.Length >= 2;
+        }
+
+        private static bool HasPlausiblePhone(string phoneText)
+        {
+            var digitCount = phoneText.Count(char.IsDigit);
+            return digitCount >= 8;
+        }
+
+        private bool IsCvValid(string? cvXml)
+        {
+            if (string.IsNullOrWhiteSpace(cvXml))
+            {
+                return false;
+            }
+
             try
             {
-                XDocument doc = XDocument.Load(xmlPath);
-                
-                var nameNode = doc.Descendants("Name").FirstOrDefault();
-                if (nameNode == null || string.IsNullOrWhiteSpace(nameNode.Value))
+                XDocument doc = XDocument.Parse(cvXml);
+
+                if (!TryGetTrimmedElement(doc, "Name", out var name) || name.Length < 2)
                 {
                     return false;
                 }
 
-                var emailNode = doc.Descendants("Email").FirstOrDefault();
-                if (emailNode == null || string.IsNullOrWhiteSpace(emailNode.Value))
+                if (!TryGetTrimmedElement(doc, "Email", out var email) || !LooksLikeEmail(email))
+                {
+                    return false;
+                }
+
+                if (!TryGetTrimmedElement(doc, "Skills", out var skills) || !HasMeaningfulSkillsText(skills))
+                {
+                    return false;
+                }
+
+                if (!TryGetTrimmedElement(doc, "Interests", out var interests) || interests.Length < 3)
+                {
+                    return false;
+                }
+
+                string phone;
+                if (!TryGetTrimmedElement(doc, "Phone", out phone) && !TryGetTrimmedElement(doc, "ContactNumber", out phone))
+                {
+                    return false;
+                }
+
+                if (!HasPlausiblePhone(phone))
+                {
+                    return false;
+                }
+
+                if (!TryGetTrimmedElement(doc, "Summary", out var summary) || summary.Length < 20)
+                {
+                    return false;
+                }
+
+                if (!TryGetTrimmedElement(doc, "Projects", out var projects) || !HasMeaningfulProjectsText(projects))
                 {
                     return false;
                 }
@@ -88,7 +169,6 @@ namespace OurApp.Core.Services
         {
             List<string> stopWords = new List<string> { "the", "and", "is", "a", "an", "in", "to", "of", "for" };
             
-            // Remove punctuation manually
             string cleanText = "";
             foreach (char c in text)
             {
@@ -102,7 +182,6 @@ namespace OurApp.Core.Services
                 }
             }
 
-            // Split into words
             string[] rawWords = cleanText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             List<string> finalWords = new List<string>();
 
@@ -185,6 +264,19 @@ namespace OurApp.Core.Services
             return score * sectionWeight;
         }
 
+        private decimal ScoreCvSection(XDocument doc, string elementName, List<string> expectedKeywords, decimal sectionWeight)
+        {
+            var node = doc.Descendants(elementName).FirstOrDefault();
+            if (node == null || string.IsNullOrWhiteSpace(node.Value))
+            {
+                return 0m;
+            }
+
+            List<string> words = TokenizeAndClean(node.Value);
+            words = ApplySynonyms(words);
+            return CalculateTfIdfGrade(words, expectedKeywords, sectionWeight);
+        }
+
         public void ProcessCv(int applicantId)
         {
             Applicant applicant = _repository.GetApplicantById(applicantId);
@@ -193,7 +285,7 @@ namespace OurApp.Core.Services
                 return;
             }
 
-            // If the file isnt valid, grade remains null
+            // If the CV XML is invalid, grade remains null
             decimal? cvGrade = ScanCvXml(applicant);
             if (cvGrade != null)
             {
@@ -217,7 +309,8 @@ namespace OurApp.Core.Services
 
         public decimal? ScanCvXml(Applicant applicant)
         {
-            if (IsCvValid(applicant.CvFileUrl) == false)
+            var cvXml = applicant.User?.CvXml;
+            if (IsCvValid(cvXml) == false)
             {
                 return null;
             }
@@ -239,26 +332,12 @@ namespace OurApp.Core.Services
                 expectedKeywords = new List<string> { "c#", "java", "sql", "react", "agile", "javascript", ".net", "python", "docker", "azure" };
             }
 
-            XDocument doc = XDocument.Load(applicant.CvFileUrl);
-            decimal totalGrade = 4.0m;
-            
-            XElement skillsNode = doc.Descendants("Skills").FirstOrDefault();
-            
-            if (skillsNode != null)
-            {
-                List<string> words = TokenizeAndClean(skillsNode.Value);
-                words = ApplySynonyms(words);
-                totalGrade += CalculateTfIdfGrade(words, expectedKeywords, 1.5m);
-            }
-            
-            XElement interestsNode = doc.Descendants("Interests").FirstOrDefault();
-            
-            if (interestsNode != null)
-            {
-                List<string> words = TokenizeAndClean(interestsNode.Value);
-                words = ApplySynonyms(words);
-                totalGrade += CalculateTfIdfGrade(words, expectedKeywords, 0.5m);
-            }
+            XDocument doc = XDocument.Parse(cvXml!);
+            decimal totalGrade = 3.5m;
+            totalGrade += ScoreCvSection(doc, "Skills", expectedKeywords, 1.35m);
+            totalGrade += ScoreCvSection(doc, "Interests", expectedKeywords, 0.55m);
+            totalGrade += ScoreCvSection(doc, "Summary", expectedKeywords, 1.15m);
+            totalGrade += ScoreCvSection(doc, "Projects", expectedKeywords, 1.35m);
 
             if (totalGrade > 10.0m)
             {
