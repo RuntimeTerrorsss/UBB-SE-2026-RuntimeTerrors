@@ -20,6 +20,7 @@ namespace OurApp.Core.Services
         {
             CompanyRepo = repo;
             _companyValidator = new CompanyValidator();
+            _gameValidator = new GameValidator();
         }
 
         private void ValidateCompany(Company company)

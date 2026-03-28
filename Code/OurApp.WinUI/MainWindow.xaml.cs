@@ -38,18 +38,15 @@ namespace OurApp.WinUI
 
         public MainWindow()
         {
-            //Cip DB
-            string connectionString = @"Server=(localdb)\ProjectModels;Database=MyDb;Trusted_Connection=True;TrustServerCertificate=True;";
-
-            //string connectionString = "Data Source=TEA\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
-            ICompanyRepo repo = new CompanyRepo(connectionString);
+            
+            ICompanyRepo repo = new CompanyRepo();
             this.companyService = new CompanyService(repo);
 
 
             IGameRepo game_repo = new GameMemoryRepo();
-            this.gameService = new GameService(game_repo);
+            this.gameService = new GameService(repo);
 
-            ICollaboratorsRepo collabRepo = new CollaboratorsRepo(connectionString);
+            ICollaboratorsRepo collabRepo = new CollaboratorsRepo();
             this.collabsService = new CollaboratorsService(collabRepo);
 
             Company c1 = new Company("ndj", "dnis", "dnjs", "hdjd", "sybau", "dj@");
@@ -58,7 +55,7 @@ namespace OurApp.WinUI
             //companyService.printAll();
             InitializeComponent();
 
-            IEventsRepo eventsRepo = new EventsRepo(connectionString);
+            IEventsRepo eventsRepo = new EventsRepo();
 
             // hardcode events
             //Event ev1 = new Event("", "Event1", "This is such a cool event. You should attend.", new DateTime(2026, 1, 21, 14, 0, 0), new DateTime(2026, 1, 24, 18, 0, 0), "Cluj-Napoca, Cluj", 1, new List<Company>());

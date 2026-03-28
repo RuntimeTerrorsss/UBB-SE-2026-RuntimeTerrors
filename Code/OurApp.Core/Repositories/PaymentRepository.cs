@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using OurApp.Core.Database;
 using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -14,17 +15,11 @@ namespace OurApp.Core.Repositories
         // private readonly string _connectionString =
         //     "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Trust Server Certificate=True";
 
-       public string _connectionString;
-       public PaymentRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
-
         public void UpdateJobPayment(int jobId, int paymentAmount)
         {
             string query = "UPDATE jobs SET amount_payed = @amount WHERE job_id = @jobId";
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = DbConnectionHelper.GetConnection())
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -49,7 +44,7 @@ namespace OurApp.Core.Repositories
                 INNER JOIN companies c ON j.company_id = c.company_id
                 WHERE j.job_type = @jobType AND j.experience_level = @expLevel";
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = DbConnectionHelper.GetConnection())
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -88,7 +83,7 @@ namespace OurApp.Core.Repositories
                   AND j.experience_level = (SELECT experience_level FROM jobs WHERE job_id = @jobId)
                   AND (j.amount_payed IS NULL OR j.amount_payed < @amount)";
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = DbConnectionHelper.GetConnection())
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {

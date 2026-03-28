@@ -1,19 +1,19 @@
-﻿using OurApp.Core.Validators;
-using OurApp.Core.Repositories;
+﻿using OurApp.Core.Database;
 using OurApp.Core.Models;
+using OurApp.Core.Repositories;
+using OurApp.Core.Validators;
 using System;
 using System.Collections.Generic;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace OurApp.Core.Services
 {
     public class PaymentService
     {
-        public const string connectionString = "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
         private readonly PaymentValidator _validator = new PaymentValidator();
-        private readonly PaymentRepository _repository = new PaymentRepository(connectionString);
+        private readonly PaymentRepository _repository = new PaymentRepository();
 
         public async Task<string> ProcessPaymentAsync(int jobId, int amount, string name, string cardNum, string exp, string cvv)
         {

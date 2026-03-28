@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using OurApp.Core.Database;
 using OurApp.Core.Models;
 using System;
 using System.Collections;
@@ -13,16 +14,6 @@ namespace OurApp.Core.Repositories
 {
     public class EventsRepo : IEventsRepo
     {
-        private string connectionString {  get; set; }
-
-        /// <summary>
-        /// Event repository constructor
-        /// </summary>
-        /// <param name="connectionString"> database conection string </param>
-        public EventsRepo(string connectionString) 
-        {
-            this.connectionString = connectionString;
-        }
 
         /// <summary>
         /// Function that returns the event id with the maximum value out of the database
@@ -30,7 +21,7 @@ namespace OurApp.Core.Repositories
         /// <returns></returns>
         public int GetMaxEventId()
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
             {
                 sqlConnection.Open();
 
@@ -53,7 +44,7 @@ namespace OurApp.Core.Repositories
         /// <param name="eventToBeAdded"> event to be inserted into the database </param>
         public void AddEventToRepo(Event eventToBeAdded)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
             {
                 sqlConnection.Open();
 
@@ -86,7 +77,7 @@ namespace OurApp.Core.Repositories
         /// <param name="eventToBeRemoved"> the event selected to be removed </param>
         public void RemoveEventFromRepo(Event eventToBeRemoved)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DbConnectionHelper.GetConnection())
             {
                 conn.Open();
 
@@ -110,7 +101,7 @@ namespace OurApp.Core.Repositories
 
             try
             {
-                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
                 {
                     sqlConnection.Open();
 
@@ -159,7 +150,7 @@ namespace OurApp.Core.Repositories
         {
             var pastEvents = new ObservableCollection<Event>();
 
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
             {
                 sqlConnection.Open();
 
@@ -207,7 +198,7 @@ namespace OurApp.Core.Repositories
         /// <param name="newEventLocation"> the updated location of the event </param>
         public void UpdateEventToRepo(int eventIdToBeUpdated, string newEventPhoto, string newEventTitle, string newEventDescription, DateTime newEventStartDate, DateTime newEventEndDate, string newEventLocation)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
             {
                 sqlConnection.Open();
 

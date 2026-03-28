@@ -1,6 +1,7 @@
+using Microsoft.Data.SqlClient;
+using OurApp.Core.Database;
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
-using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.ObjectModel;
 
@@ -9,14 +10,10 @@ namespace OurApp.Core.Repositories
     public class CompanyRepo : ICompanyRepo
     {
         ObservableCollection<Company> companies;
-        private readonly string _connectionString;
-        private readonly GameRepo _gameRepo;
 
-        public CompanyRepo(string connectionString)
+        public CompanyRepo()
         {
             companies = new ObservableCollection<Company>();
-            _connectionString = connectionString;
-            _gameRepo = new GameRepo();
         }
 
         private void ValidateRequiredFields(Company c)
@@ -43,16 +40,83 @@ namespace OurApp.Core.Repositories
             collaboratorsCount: reader["collaborators_count"] is DBNull ? 0 : Convert.ToInt32(reader["collaborators_count"])
             );
 
-            company.game = _gameRepo.MapGame(reader);
+            //company.game = MapGame(reader);
 
             return company;
+        }
+
+        public Game MapGame(SqlDataReader reader)
+        {
+            var buddy = new Buddy(
+            reader["avatar_id"] is DBNull ? 0 : Convert.ToInt32(reader["avatar_id"]),
+            reader["buddy_name"]?.ToString() ?? "",
+            ""
+            );
+
+            var scenarios = new List<Scenario>();
+
+            if (!(reader["scen_1_text"] is DBNull))
+            {
+                var scen1 = new Scenario(reader["scen_1_text"].ToString());
+
+                scen1.AddChoice(new AdviceChoice(
+                    reader["scen1_answer1"]?.ToString() ?? "",
+                    reader["scen1_reaction1"]?.ToString() ?? ""
+                ));
+
+                scen1.AddChoice(new AdviceChoice(
+                    reader["scen1_answer2"]?.ToString() ?? "",
+                    reader["scen1_reaction2"]?.ToString() ?? ""
+                ));
+
+                scen1.AddChoice(new AdviceChoice(
+                    reader["scen1_answer3"]?.ToString() ?? "",
+                    reader["scen1_reaction3"]?.ToString() ?? ""
+                ));
+
+                scenarios.Add(scen1);
+            }
+
+            if (!(reader["scen2_text"] is DBNull))
+            {
+                var scen2 = new Scenario(reader["scen2_text"].ToString());
+
+                scen2.AddChoice(new AdviceChoice(
+                    reader["scen2_answer1"]?.ToString() ?? "",
+                    reader["scen2_reaction1"]?.ToString() ?? ""
+                ));
+
+                scen2.AddChoice(new AdviceChoice(
+                    reader["scen2_answer2"]?.ToString() ?? "",
+                    reader["scen2_reaction2"]?.ToString() ?? ""
+                ));
+
+                scen2.AddChoice(new AdviceChoice(
+                    reader["scen2_answer3"]?.ToString() ?? "",
+                    reader["scen2_reaction3"]?.ToString() ?? ""
+                ));
+
+                scenarios.Add(scen2);
+            }
+
+            return new Game(
+                buddy,
+                scenarios,
+                reader["final_quote"]?.ToString() ?? "",
+                true
+            );
+        }
+
+        public Game GetGame()
+        {
+            return company.game;
         }
 
         private void RefreshCompaniesFromDatabase()
         {
             var list = new ObservableCollection<Company>();
 
-            using var conn = new SqlConnection(_connectionString);
+            using var conn = DbConnectionHelper.GetConnection();
             conn.Open();
 
             var cmd = new SqlCommand(
@@ -89,7 +153,7 @@ namespace OurApp.Core.Repositories
 
         Company? ICompanyRepo.GetById(int companyId)
         {
-            using var conn = new SqlConnection(_connectionString);
+            using var conn = DbConnectionHelper.GetConnection();
             conn.Open();
 
             var cmd = new SqlCommand(
@@ -118,7 +182,7 @@ namespace OurApp.Core.Repositories
         {
             ValidateRequiredFields(c);
 
-            using var conn = new SqlConnection(_connectionString);
+            using var conn = DbConnectionHelper.GetConnection();
             conn.Open();
             using var tx = conn.BeginTransaction();
             var nextIdCmd = new SqlCommand(
@@ -177,7 +241,7 @@ namespace OurApp.Core.Repositories
 
         void ICompanyRepo.Remove(int companyId)
         {
-            using var conn = new SqlConnection(_connectionString);
+            using var conn = DbConnectionHelper.GetConnection();
             conn.Open();
 
             var deleteCmd = new SqlCommand(
@@ -194,7 +258,7 @@ namespace OurApp.Core.Repositories
         {
             ValidateRequiredFields(c);
 
-            using var conn = new SqlConnection(_connectionString);
+            using var conn = DbConnectionHelper.GetConnection();
             conn.Open();
 
             var cmd = new SqlCommand(
@@ -205,6 +269,23 @@ namespace OurApp.Core.Repositories
                       logo_picture_url = @LogoPictureUrl,
                       location = @Location,
                       email = @Email,
+                      buddy_name = @BuddyName, 
+                      avatar_id = @AvatarId, 
+                      final_quote = @FinalQuote, 
+                      scen_1_text = @Scenario1Text,
+                      scen1_answer1 = @Scenario1Answer1, 
+                      scen1_answer2 = @Scenario1Answer2, 
+                      scen1_answer3 = @Scenario1Answer3,
+                      scen1_reaction1 = @Scenario1Reaction1, 
+                      scen1_reaction2 = @Scenario1Reaction2, 
+                      scen1_reaction3 = @Scenario1Reaction3, 
+                      scen2_text = @Scenario2Text, 
+                      scen2_answer1 = @Scenario2Answer1, 
+                      scen2_answer2 = @Scenario2Answer2,
+                      scen2_answer3 = @Scenario2Answer3, 
+                      scen2_reaction1 = @Scenario2Reaction1, 
+                      scen2_reaction2 = @Scenario2Reaction2, 
+                      scen2_reaction3 = @Scenario2Reaction3
                   WHERE company_id = @CompanyId;",
                 conn);
 
@@ -215,6 +296,24 @@ namespace OurApp.Core.Repositories
             cmd.Parameters.AddWithValue("@LogoPictureUrl", c.CompanyLogoPath);
             cmd.Parameters.AddWithValue("@Location", DbValue(c.Location));
             cmd.Parameters.AddWithValue("@Email", DbValue(c.Email));
+
+            cmd.Parameters.AddWithValue("@BuddyName", DbValue(c.game.Buddy.Name));
+            cmd.Parameters.AddWithValue("@AvatarId", DbValue(c.game.Buddy.Id));
+            cmd.Parameters.AddWithValue("@FinalQuote", DbValue(c.game.Conclusion));
+            cmd.Parameters.AddWithValue("@Scenario1Text", DbValue(c.game.GetScenario(0).Description));
+            cmd.Parameters.AddWithValue("@Scenario1Answer1", DbValue(c.game.GetScenario(0).GetAdviceTexts()[0]));
+            cmd.Parameters.AddWithValue("@Scenario1Answer2", DbValue(c.game.GetScenario(0).GetAdviceTexts()[1]));
+            cmd.Parameters.AddWithValue("@Scenario1Answer3", DbValue(c.game.GetScenario(0).GetAdviceTexts()[2]));
+            cmd.Parameters.AddWithValue("@Scenario1Reaction1", DbValue(c.game.GetScenario(0).GetAdviceReactions()[0]));
+            cmd.Parameters.AddWithValue("@Scenario1Reaction2", DbValue(c.game.GetScenario(0).GetAdviceReactions()[1]));
+            cmd.Parameters.AddWithValue("@Scenario1Reaction3", DbValue(c.game.GetScenario(0).GetAdviceReactions()[2]));
+            cmd.Parameters.AddWithValue("@Scenario2Text", DbValue(c.game.GetScenario(1).Description));
+            cmd.Parameters.AddWithValue("@Scenario2Answer1", DbValue(c.game.GetScenario(1).GetAdviceTexts()[0]));
+            cmd.Parameters.AddWithValue("@Scenario2Answer2", DbValue(c.game.GetScenario(1).GetAdviceTexts()[1]));
+            cmd.Parameters.AddWithValue("@Scenario2Answer3", DbValue(c.game.GetScenario(1).GetAdviceTexts()[2]));
+            cmd.Parameters.AddWithValue("@Scenario2Reaction1", DbValue(c.game.GetScenario(1).GetAdviceReactions()[0]));
+            cmd.Parameters.AddWithValue("@Scenario2Reaction2", DbValue(c.game.GetScenario(1).GetAdviceReactions()[1]));
+            cmd.Parameters.AddWithValue("@Scenario2Reaction3", DbValue(c.game.GetScenario(1).GetAdviceReactions()[2]));
 
             int affected = cmd.ExecuteNonQuery();
             if (affected == 0)
@@ -235,7 +334,7 @@ namespace OurApp.Core.Repositories
             if (string.IsNullOrWhiteSpace(companyName))
                 return null;
 
-            using var sqlConnection = new SqlConnection(_connectionString);
+            using var sqlConnection = DbConnectionHelper.GetConnection();
             sqlConnection.Open();
 
             string query = "SELECT * FROM companies WHERE company_name = @Name";
@@ -252,5 +351,7 @@ namespace OurApp.Core.Repositories
 
             return null;
         }
+
     }
+
 }
