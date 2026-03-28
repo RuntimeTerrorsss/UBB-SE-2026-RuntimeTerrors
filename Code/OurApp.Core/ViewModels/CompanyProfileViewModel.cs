@@ -7,6 +7,11 @@ using System.Collections.ObjectModel;
 
 namespace OurApp.Core.ViewModels;
 
+public sealed class CompanyCollabListRow
+{
+    public string Name { get; set; } = "";
+}
+
 /// <summary>Rows for the "Posted jobs" / "Events" preview lists on the company view profile page.</summary>
 public sealed class CompanyProfileListRow
 {
@@ -28,6 +33,7 @@ public partial class CompanyProfileViewModel : ObservableObject
     private readonly GameService _gameService;
     IEventsService eventService;
     SessionService sessionService;
+    ICollaboratorsService collabService;
     private readonly ProfileCompletionCalculator _calculator;
     private int _currentScenarioIndex;
 
@@ -50,9 +56,6 @@ public partial class CompanyProfileViewModel : ObservableObject
 
     [ObservableProperty]
     private Company? _company;
-
-    //[ObservableProperty]
-    //private Event? _event;
 
     [ObservableProperty]
     private string _loadMessage = "";
@@ -90,16 +93,22 @@ public partial class CompanyProfileViewModel : ObservableObject
                 Subtitle = e.Description
             });
 
-    [ObservableProperty]
-    private ObservableCollection<string> _collaboratorLines = new();
-
+    public IEnumerable<CompanyCollabListRow> Top3CollabsPreviews => collabService
+            .GetAllCollaborators(sessionService.loggedInUser.CompanyId)
+            .Take(3)
+            .Select(e => new CompanyCollabListRow
+            {
+                Name = e.Name
+            });
+   
+    public event EventHandler? NavigateAllCollaboratorRequested;
     public event EventHandler? NavigateEditProfileRequested;
     public event EventHandler? NavigateAllEventsRequested;
     public event EventHandler? NavigateAllJobsRequested;
 
     public int CompanyId { get; private set; }
 
-    public CompanyProfileViewModel(ICompanyService companyService, ProfileCompletionCalculator calculator, GameService gameService, IEventsService eventService, SessionService sessionService)
+    public CompanyProfileViewModel(ICompanyService companyService, ProfileCompletionCalculator calculator, GameService gameService, IEventsService eventService, SessionService sessionService, ICollaboratorsService collaboratorsService)
     {
         _gameService = gameService;
         _companyService = companyService;
@@ -107,9 +116,9 @@ public partial class CompanyProfileViewModel : ObservableObject
         gamePreview();
         this.eventService = eventService;
         this.sessionService = sessionService;
+        this.collabService = collaboratorsService;
 
     }
-
 
     public void Load(int companyId)
     {
@@ -150,22 +159,20 @@ public partial class CompanyProfileViewModel : ObservableObject
         if (Company is null)
             return;
 
-        CollaboratorLines.Clear();
-        if (Company.CollaboratorsCount > 0 || Company.Collaborators.Count > 0)
-        {
-            var n = Math.Max(Company.CollaboratorsCount, Company.Collaborators.Count);
-            CollaboratorLines.Add($"{n} collaborator compan{(n == 1 ? "y" : "ies")} (see Events to manage invitations).");
-        }
-        else
-            CollaboratorLines.Add("No collaborators yet — collaborate on an event to connect with other companies.");
-
         TrendingSkills.Clear();
-        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "1", SkillName = "—", Detail = "Hook job_skills + skills API" });
-        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "2", SkillName = "—", Detail = "Top skills across all postings" });
-        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "3", SkillName = "—", Detail = "Will rank by frequency" });
+        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "1", SkillName = "—", Detail = "percent" });
+        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "2", SkillName = "—", Detail = "percent" });
+        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "3", SkillName = "—", Detail = "percent" });
 
         OnPropertyChanged(nameof(Top3JobPreviews));
         OnPropertyChanged(nameof(Top3EventPreviews));
+        OnPropertyChanged(nameof(Top3CollabsPreviews));
+    }
+
+    [RelayCommand]
+    private void SeeAllCollaborators()
+    {
+        NavigateAllCollaboratorRequested?.Invoke(this, EventArgs.Empty);
     }
 
     [RelayCommand]
@@ -186,9 +193,8 @@ public partial class CompanyProfileViewModel : ObservableObject
         NavigateAllJobsRequested?.Invoke(this, EventArgs.Empty);
     }
 
+
     //Game
-
-
 
     partial void OnCurrentStateChanged(GameState value)
     {
@@ -213,16 +219,6 @@ public partial class CompanyProfileViewModel : ObservableObject
 
     public bool IsChoiceActive => IsChoice1Visible || IsChoice2Visible;
     public bool IsReactionActive => IsReaction1Visible || IsReaction2Visible;
-
-
-
-    //public GameViewModel(GameService gameService, Action? exitApplication = null)
-    //{
-    //    _gameService = gameService;
-    //    _exitApplication = exitApplication;
-    //    WelcomeMessage = _gameService.ShowCoworker();
-    //    UpdateScenario();
-    //}
 
     private void UpdateScenario()
     {
