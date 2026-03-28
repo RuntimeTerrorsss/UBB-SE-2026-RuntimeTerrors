@@ -46,7 +46,6 @@ namespace OurApp.Core.Services
         {
             try
             {
-                // Using your colleague's exact credentials and setup
                 var fromAddress = new MailAddress("carla.draghiciu@cnglsibiu.ro", "Job Portal Admin");
                 const string fromPassword = "angxokbiqoyodwgm";
 
@@ -80,7 +79,6 @@ namespace OurApp.Core.Services
             }
             catch (Exception ex)
             {
-                // Log the error but don't crash the app if the email fails
                 System.Diagnostics.Debug.WriteLine($"Failed to send email: {ex.Message}");
             }
         }
