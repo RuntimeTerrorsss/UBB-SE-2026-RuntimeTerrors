@@ -38,7 +38,7 @@ namespace OurApp.WinUI
 
         public MainWindow()
         {
-            string connectionString = "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+            string connectionString = "Data Source=TEA\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
             ICompanyRepo repo = new CompanyRepo(connectionString);
             this.companyService = new CompanyService(repo);
 

@@ -90,7 +90,7 @@
                             <StackPanel Spacing="10" Padding="10">
                                 <TextBox
                                     Header="Scenario text"
-                                    Text="{Binding EditGame.ScenarioText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding ScenarioText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     PlaceholderText="Scenario description" />
 
                                 <ListView ItemsSource="{Binding Choices}">
@@ -98,15 +98,15 @@
                                         <DataTemplate>
                                             <StackPanel Spacing="8" Margin="0,0,0,10">
                                                 <TextBox
-                                    Header="Advice"
-                                    Text="{Binding Advice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    PlaceholderText="Advice text" />
+                                                    Header="Advice"
+                                                    Text="{Binding Advice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    PlaceholderText="Advice text" />
                                                 <TextBox
-                                    Header="Feedback"
-                                    Text="{Binding Feedback, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    PlaceholderText="Feedback text"
-                                    AcceptsReturn="True"
-                                    MinHeight="60" />
+                                                    Header="Feedback"
+                                                    Text="{Binding Feedback, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    PlaceholderText="Feedback text"
+                                                    AcceptsReturn="True"
+                                                    MinHeight="60" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

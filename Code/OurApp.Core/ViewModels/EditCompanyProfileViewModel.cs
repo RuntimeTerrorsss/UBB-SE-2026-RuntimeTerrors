@@ -41,8 +41,7 @@ namespace OurApp.Core.ViewModels;
         [ObservableProperty]
         private string _statusMessage = "";
 
-        [ObservableProperty]
-        private EditGame _editGame;
+        public EditGame editGame { get; }
 
         public EditCompanyProfileViewModel(ICompanyService companyService, GameService gameService)
         {
@@ -50,7 +49,7 @@ namespace OurApp.Core.ViewModels;
 
             _gameService = gameService;
 
-            _editGame = new EditGame(_gameService);
+            editGame = new EditGame(_gameService);
         }
 
         public void Load(int companyId)
@@ -86,36 +85,66 @@ namespace OurApp.Core.ViewModels;
                 collaboratorsCount: collaborators);
         }
 
-        /// <summary>Validates and persists. Returns null on success, or an error message.</summary>
-        public string? TrySave()
+    /// <summary>Validates and persists. Returns null on success, or an error message.</summary>
+    public string? TrySave()
+    {
+        StatusMessage = "";
+
+        var existing = _companyService.GetCompanyById(CompanyId);
+        var posted = existing?.PostedJobsCount ?? 0;
+        var collab = existing?.CollaboratorsCount ?? 0;
+        var copy = existing?.Collaborators ?? new System.Collections.Generic.List<string>();
+
+        try
         {
-            StatusMessage = "";
-            var existing = _companyService.GetCompanyById(CompanyId);
-            var posted = existing?.PostedJobsCount ?? 0;
-            var collab = existing?.CollaboratorsCount ?? 0;
-            var copy = existing?.Collaborators ?? new System.Collections.Generic.List<string>();
+            _validator.NameValidator(Name);
+            _validator.AboutUsValidator(AboutUs);
+            _validator.PfpValidator(ProfilePicturePath);
+            _validator.LogoValidator(CompanyLogoPath);
+            _validator.LocationValidator(Location);
+            _validator.EmailValidator(Email);
 
-            try
-            {
-                _validator.NameValidator(Name);
-                _validator.AboutUsValidator(AboutUs);
-                _validator.PfpValidator(ProfilePicturePath);
-                _validator.LogoValidator(CompanyLogoPath);
-                _validator.LocationValidator(Location);
-                _validator.EmailValidator(Email);
+            var updated = ToCompany(posted, collab);
+            updated.Collaborators = copy;
+            _companyService.UpdateCompany(updated);
 
-                var updated = ToCompany(posted, collab);
-                updated.Collaborators = copy;
-                _companyService.UpdateCompany(updated);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = ex.Message;
-                return ex.Message;
-            }
+            var scenarioTuples = editGame.Scenarios
+                .Select(s => (
+                    scenarioText: s.ScenarioText ?? string.Empty,
+                    choices: (IReadOnlyList<(string advice, string feedback)>)s.Choices
+                        .Select(c => (
+                            advice: c.Advice ?? string.Empty,
+                            feedback: c.Feedback ?? string.Empty))
+                        .ToList()
+                ))
+                .ToList();
+
+            var gameValidator = new GameValidator();
+            gameValidator.ValidateForActivation(
+                scenarioTuples,
+                editGame.Conclusion ?? string.Empty
+            );
+
+            var game = _gameService.CreateGameFromInput(
+                buddyId: editGame.SelectedBuddyId,
+                buddyName: editGame.BuddyName,
+                buddyIntroduction: editGame.BuddyIntroduction,
+                scenarios: scenarioTuples,
+                conclusion: editGame.Conclusion ?? string.Empty,
+                publish: false
+            );
+
+            _gameService.Save(game);
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = ex.Message;
+            return ex.Message;
         }
     }
+}
 
     public partial class EditGame : ObservableObject
     {

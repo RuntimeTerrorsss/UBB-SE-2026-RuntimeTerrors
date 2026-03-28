@@ -14,12 +14,7 @@
     </Window.SystemBackdrop>
     <Grid>
         <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" VerticalAlignment="Top">
-            <AppBarButton Label="Profile">
-                <AppBarButton.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="View Profile" Click="NavigateToViewProfile_Click"/>
-                    </MenuFlyout>
-                </AppBarButton.Flyout>
+            <AppBarButton Label="Profile" Click="NavigateToViewProfile_Click">
             </AppBarButton>
         </CommandBar>
         <Frame x:Name="rootFrame" Margin="0,30,0,0"/>
