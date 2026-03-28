@@ -47,7 +47,7 @@ namespace OurApp.Core.ViewModels
         }
 
         [RelayCommand]
-        private void Pay()
+        private async Task Pay() 
         {
             if (!int.TryParse(AmountToPayText, out int amountToPay) || amountToPay <= 0)
             {
@@ -55,9 +55,7 @@ namespace OurApp.Core.ViewModels
                 return;
             }
 
-            int currentJobId = CurrentJobId; // Example ID
-
-            string resultMessage = _paymentService.ProcessPayment(currentJobId, amountToPay, CardHolderName, CardNumber, ExpDate, Cvv);
+            string resultMessage = await _paymentService.ProcessPaymentAsync(CurrentJobId, amountToPay, CardHolderName, CardNumber, ExpDate, Cvv);
 
             if (!string.IsNullOrEmpty(resultMessage))
             {
@@ -67,7 +65,7 @@ namespace OurApp.Core.ViewModels
             {
                 ShowMessageAction?.Invoke("Success", $"Payment of ${amountToPay} processed successfully. Emails dispatched!");
                 LoadData();
-                AmountToPayText = string.Empty; 
+                AmountToPayText = string.Empty;
             }
         }
 

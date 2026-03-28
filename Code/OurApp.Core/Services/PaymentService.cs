@@ -5,33 +5,33 @@ using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace OurApp.Core.Services
 {
-    
     public class PaymentService
     {
         public const string connectionString = "Data Source=Aron\\SQLEXPRESS;Initial Catalog=iss_project;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
         private readonly PaymentValidator _validator = new PaymentValidator();
-        public readonly PaymentRepository _repository = new PaymentRepository(connectionString);
+        private readonly PaymentRepository _repository = new PaymentRepository(connectionString);
 
-        public string ProcessPayment(int jobId, int amount, string name, string cardNum, string exp, string cvv)
+        public async Task<string> ProcessPaymentAsync(int jobId, int amount, string name, string cardNum, string exp, string cvv)
         {
             string validationError = _validator.Validate(name, cardNum, exp, cvv);
             if (!string.IsNullOrEmpty(validationError)) return validationError;
 
             try
             {
-                //  Save to database
+                // 1. Save to database
                 _repository.UpdateJobPayment(jobId, amount);
 
-                //  Fetch emails to notify
+                // 2. Fetch emails to notify
                 List<string> emailsToNotify = _repository.GetCompaniesToNotify(jobId, amount);
 
-                //  Send Emails (Fire and forget)
+                // 3. Send Emails using your colleague's credentials
                 if (emailsToNotify.Count > 0)
                 {
-                    SendNotificationEmailsAsync(emailsToNotify, amount);
+                    await SendNotificationEmailsAsync(emailsToNotify, amount);
                 }
 
                 return string.Empty;
