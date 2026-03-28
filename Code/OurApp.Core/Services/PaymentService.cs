@@ -31,7 +31,7 @@ namespace OurApp.Core.Services
                 //  Send Emails (Fire and forget)
                 if (emailsToNotify.Count > 0)
                 {
-                    SendNotificationEmails(emailsToNotify, amount);
+                    SendNotificationEmailsAsync(emailsToNotify, amount);
                 }
 
                 return string.Empty;
@@ -42,30 +42,45 @@ namespace OurApp.Core.Services
             }
         }
 
-        private void SendNotificationEmails(List<string> emails, int newAmount)
+        private async Task SendNotificationEmailsAsync(List<string> emails, int newAmount)
         {
             try
             {
-                // TODO: Set up and smtp from where the emails are sent
-                using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
-                {
-                    smtpClient.Credentials = new NetworkCredential("your_email@gmail.com", "your_app_password");
-                    smtpClient.EnableSsl = true;
+                // Using your colleague's exact credentials and setup
+                var fromAddress = new MailAddress("carla.draghiciu@cnglsibiu.ro", "Job Portal Admin");
+                const string fromPassword = "angxokbiqoyodwgm";
 
+                using (var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 60000
+                })
+                {
                     foreach (string email in emails)
                     {
-                        MailMessage mail = new MailMessage();
-                        mail.From = new MailAddress("your_email@gmail.com", "Job Portal Admin");
-                        mail.To.Add(email);
-                        mail.Subject = "A competitor just outbid your job posting!";
-                        mail.Body = $"Hello! Just letting you know that a competitor has placed a bid of ${newAmount} on a job that shares the same Type and Experience Level as yours. Consider increasing your budget to stay competitive!";
+                        var toAddress = new MailAddress(email);
+                        string subject = "Job Promotion Alert!";
+                        string body = $"Hello, \n\nJust letting you know that a competitor has placed a bid of ${newAmount} on a job that shares the same Type and Experience Level as yours. Consider increasing your budget to stay competitive!";
 
-                        smtpClient.Send(mail);
+                        using (var message = new MailMessage(fromAddress, toAddress)
+                        {
+                            Subject = subject,
+                            Body = body
+                        })
+                        {
+                            await smtp.SendMailAsync(message);
+                            System.Diagnostics.Debug.WriteLine($"Email sent to {email}!");
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
+                // Log the error but don't crash the app if the email fails
                 System.Diagnostics.Debug.WriteLine($"Failed to send email: {ex.Message}");
             }
         }
