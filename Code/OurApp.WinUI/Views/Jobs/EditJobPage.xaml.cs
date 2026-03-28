@@ -3,7 +3,6 @@ using OurApp.WinUI.ViewModels.Jobs;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using iss_project.UI.Views;
 
 namespace OurApp.WinUI.Views.Jobs
 {

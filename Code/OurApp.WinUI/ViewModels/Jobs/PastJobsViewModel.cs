@@ -28,7 +28,21 @@ namespace OurApp.WinUI.ViewModels.Jobs
 
             Jobs.Clear();
             foreach (var job in jobs)
+            {
+                // Load skills from DB
+                var skills = await _jobService.GetSkillsForJobAsync(job.JobId);
+
+                // Map to JobSkill objects
+                job.RequiredSkills = skills
+                    .Select(s => new SkillRequirement
+                    {
+                        SkillName = s.SkillName,
+                        Percentage = s.Percentage
+                    })
+                    .ToList();
+
                 Jobs.Add(job);
+            }
         }
 
         public async Task<(bool Success, string Message)> RepostJob(JobPosting job)

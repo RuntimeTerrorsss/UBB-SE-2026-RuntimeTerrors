@@ -32,7 +32,7 @@ namespace OurApp.WinUI.ViewModels.Jobs
 
                 // Map to JobSkill objects
                 job.RequiredSkills = skills
-                    .Select(s => new JobSkill
+                    .Select(s => new SkillRequirement
                     {
                         SkillName = s.SkillName,
                         Percentage = s.Percentage

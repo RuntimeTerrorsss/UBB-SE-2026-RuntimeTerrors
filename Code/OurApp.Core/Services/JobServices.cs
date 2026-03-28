@@ -19,7 +19,7 @@ namespace OurApp.Core.Services
         {
             return await _jobRepository.GetSkillUsageAsync();
         }
-        public async Task CreateJobAsync(JobPosting job, List<(int SkillId, int Percentage)> skills)
+        public async Task CreateJobAsync(JobPosting job, List<SkillRequirement> skills)
         {
             Validate(job);
 
@@ -28,7 +28,7 @@ namespace OurApp.Core.Services
             await _jobRepository.AddAsync(job, skills);
         }
 
-        public async Task<List<(string SkillName, int Percentage)>> GetSkillsForJobAsync(int jobId)
+        public async Task<List<SkillRequirement>> GetSkillsForJobAsync(int jobId)
         {
             return await _jobRepository.GetSkillsForJobAsync(jobId);
         }

@@ -11,28 +11,6 @@ using OurApp.WinUI.Validators;
 
 namespace OurApp.WinUI.ViewModels.Jobs
 {
-    public class SkillRequirement : INotifyPropertyChanged
-    {
-        public int SkillId { get; set; }
-        public string SkillName { get; set; }
-        private bool _isSelected;
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set { _isSelected = value; OnPropertyChanged(); }
-        }
-        private int _percentage = 100;
-        public int Percentage
-        {
-            get => _percentage;
-            set { _percentage = value; OnPropertyChanged(); }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string name = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-
     public class EditJobViewModel : INotifyPropertyChanged
     {
         private readonly IJobService _jobService;
@@ -131,7 +109,7 @@ namespace OurApp.WinUI.ViewModels.Jobs
                 // Map selected skills
                 Job.RequiredSkills = Skills
                     .Where(s => s.IsSelected)
-                    .Select(s => new JobSkill { SkillName = s.SkillName, Percentage = s.Percentage })
+                    .Select(s => new SkillRequirement { SkillName = s.SkillName, Percentage = s.Percentage })
                     .ToList();
 
                 await _jobService.UpdateJobAsync(Job);

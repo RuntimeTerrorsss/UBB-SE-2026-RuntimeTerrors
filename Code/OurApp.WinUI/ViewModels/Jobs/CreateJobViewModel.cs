@@ -150,7 +150,7 @@ public bool UseScheduledPosting
 
                 var selectedSkills = Skills
                 .Where(s => s.IsSelected)
-                .Select(s => (s.SkillId, s.Percentage))
+                .Select(s => new SkillRequirement() { SkillId = s.SkillId, Percentage = s.Percentage })
                 .ToList();
 
                 await _jobService.CreateJobAsync(job, selectedSkills);

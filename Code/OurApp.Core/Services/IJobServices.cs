@@ -8,9 +8,9 @@ namespace OurApp.Core.Services
 {
     public interface IJobService
     {
-        Task CreateJobAsync(JobPosting job, List<(int SkillId, int Percentage)> skills);
+        Task CreateJobAsync(JobPosting job, List<SkillRequirement> skills);
         Task<List<SkillUsage>> GetSkillUsageAsync();
-        Task<List<(string SkillName, int Percentage)>> GetSkillsForJobAsync(int jobId);
+        Task<List<SkillRequirement>> GetSkillsForJobAsync(int jobId);
         Task UpdateJobAsync(JobPosting job);
         Task DeleteJobAsync(int id);
 

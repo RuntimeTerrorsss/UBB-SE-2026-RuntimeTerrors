@@ -16,9 +16,9 @@ namespace OurApp.Core.Repositories
             _connectionString = DbConfig.ConnectionString;
         }
 
-        public async Task<List<(string SkillName, int Percentage)>> GetSkillsForJobAsync(int jobId)
+        public async Task<List<SkillRequirement>> GetSkillsForJobAsync(int jobId)
         {
-            var skills = new List<(string SkillName, int Percentage)>();
+            var skills = new List<SkillRequirement>();
 
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
@@ -35,13 +35,13 @@ namespace OurApp.Core.Repositories
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                skills.Add((reader.GetString(0), reader.GetInt32(1)));
+                skills.Add(new SkillRequirement() { SkillName = reader.GetString(0), Percentage = reader.GetInt32(1) });
             }
 
             return skills;
         }
 
-        public async Task AddAsync(JobPosting job, List<(int SkillId, int Percentage)> skills)
+        public async Task AddAsync(JobPosting job, List<SkillRequirement> skills)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

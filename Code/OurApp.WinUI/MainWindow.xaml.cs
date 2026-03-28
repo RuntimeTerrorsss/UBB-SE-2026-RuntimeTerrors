@@ -1,14 +1,13 @@
 using iss_project.Code.OurApp.Core.Data;
-using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using OurApp.Core.Services;
-using iss_project.UI.Views;
-using iss_project.UI.Views.Jobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
 using WinRT.Interop;
+using OurApp.WinUI.Views.Jobs;
+using OurApp.WinUI.Views;
 
 namespace OurApp.WinUI
 {

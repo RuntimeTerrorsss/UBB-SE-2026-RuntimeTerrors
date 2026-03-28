@@ -35,11 +35,7 @@ public class JobPosting
     public DateTime? ScheduledAt { get; set; }
 
     // Skills
-    public List<JobSkill> RequiredSkills { get; set; } = new();
-
-    // ==========================
-    // Display-friendly fields
-    // ==========================
+    public List<SkillRequirement> RequiredSkills { get; set; } = new();
 
     public string StartDateDisplay => StartDate.HasValue ? $"Start: {StartDate.Value:dd/MM/yyyy}" : null;
     public string EndDateDisplay => EndDate.HasValue ? $"End: {EndDate.Value:dd/MM/yyyy}" : null;
