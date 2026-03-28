@@ -19,7 +19,7 @@ public sealed partial class ViewProfilePage : Page
     public ViewProfilePage()
     {
         var mainWindow = App.mainWindow;
-        ViewModel = new CompanyProfileViewModel(mainWindow.companyService, new ProfileCompletionCalculator());
+        ViewModel = new CompanyProfileViewModel(mainWindow.companyService, new ProfileCompletionCalculator(), mainWindow.gameService, mainWindow.eventsService, mainWindow.sessionService);
         InitializeComponent();
         DataContext = ViewModel;
         ViewModel.NavigateEditProfileRequested += (_, _) =>

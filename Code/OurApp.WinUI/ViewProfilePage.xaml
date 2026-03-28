@@ -1,4 +1,4 @@
- @ -1,176 +1,228 @@<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="OurApp.WinUI.ViewProfilePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -225,3 +225,48 @@
                             </StackPanel>
                     </Border>
                 </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="24">
+
+                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Contact" FontSize="20" FontWeight="Bold" />
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Location" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Company.Location}" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Email" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Company.Email}" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ItemsControl ItemsSource="{Binding CollaboratorLines}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,8,0,0" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Trending skills" FontSize="20" FontWeight="Bold" />
+                            <ItemsControl ItemsSource="{Binding TrendingSkills}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:CompanyTrendingSkillRow">
+                                        <StackPanel Margin="0,0,0,16" Spacing="4">
+                                            <TextBlock FontWeight="SemiBold">
+                                                <Run Text="{x:Bind Rank}" /><Run Text=". " /><Run Text="{x:Bind SkillName}" />
+                                            </TextBlock>
+                                            <TextBlock Text="{x:Bind Detail}" FontSize="12" Opacity="0.8" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
