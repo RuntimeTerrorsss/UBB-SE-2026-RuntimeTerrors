@@ -37,5 +37,11 @@ namespace OurApp.WinUI
             ViewModel = new PastEventsViewModel(mainWindow.eventsService, mainWindow.sessionService);
             this.DataContext = ViewModel;
         }
+
+        private void NavigateBack_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = App.mainWindow;
+            mainWindow.RootFrame.Navigate(typeof(OurEventsPage));
+        }
     }
 }

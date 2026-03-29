@@ -56,6 +56,12 @@ public sealed partial class OurEventsPage : Page
         mainWindow.RootFrame.Navigate(typeof(CreateEventPage));
     }
 
+    private void PastEventsButton_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = App.mainWindow;
+        mainWindow.RootFrame.Navigate(typeof(PastEventsPage));
+    }
+
     /// <summary>
     /// Function that navigates the user to the "Edit Event" page when clicking
     /// the 3-dot button next to the event
