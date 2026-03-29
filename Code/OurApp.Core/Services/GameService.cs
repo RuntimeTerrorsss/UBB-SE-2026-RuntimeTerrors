@@ -1,23 +1,26 @@
+using Microsoft.Data.SqlClient;
 using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 
 namespace OurApp.Core.Services
 {
     public class GameService
     {
-        private readonly IGameRepo _repository;
+        private readonly ICompanyRepo _repository;
+        public SessionService sessionService;
 
-        public GameService(IGameRepo repository)
+        public GameService(ICompanyRepo repository)
         {
             _repository = repository;
         }
 
         public Game LoadedGame()
         {
-            var game = _repository.Get();
+            var game = _repository.GetGame();
             if (game == null)
                 throw new InvalidOperationException("No game is available from the repository.");
             return game;
@@ -30,16 +33,16 @@ namespace OurApp.Core.Services
         public void Save(Game game)
         {
             if (game == null) throw new ArgumentNullException(nameof(game));
-            _repository.Save(game);
+            _repository.SaveGame(game);
         }
 
         public Game GetStoredGame()
         {
-            return _repository.Get() ?? new Game();
+            return _repository.GetGame() ?? new Game();
         }
         public bool isPublished()
         {
-            var game = _repository.Get();
+            var game = _repository.GetGame();
             return game != null && game.IsPublished;
 
         }

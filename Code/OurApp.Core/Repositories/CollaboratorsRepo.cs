@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using OurApp.Core.Database;
 using OurApp.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,6 @@ namespace OurApp.Core.Repositories
 {
     public class CollaboratorsRepo : ICollaboratorsRepo
     {
-        private string connectionString { get; set; }
-
-        /// <summary>
-        /// Collaborators repository constructor
-        /// </summary>
-        /// <param name="connection"> database connection string </param>
-        public CollaboratorsRepo(string connection)
-        {
-            this.connectionString = connection;
-        }
 
         /// <summary>
         /// Function that adds a collaborator to the collaborators table
@@ -31,7 +22,7 @@ namespace OurApp.Core.Repositories
         /// <param name="collaboratorToBeAdded"> the company that has been invited to collaborate </param>
         public void AddCollaboratorToRepo(Event eventOfCollaboration, Company collaboratorToBeAdded)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
             {
                 sqlConnection.Open();
 
@@ -58,7 +49,7 @@ namespace OurApp.Core.Repositories
         {
             var usersCollaborators = new List<Company>();
 
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
             {
                 sqlConnection.Open();
 
