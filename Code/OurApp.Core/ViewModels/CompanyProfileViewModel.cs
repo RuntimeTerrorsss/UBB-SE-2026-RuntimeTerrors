@@ -72,7 +72,7 @@ public partial class CompanyProfileViewModel : ObservableObject
     private ObservableCollection<string> _remainingTasks = new();
 
     [ObservableProperty]
-    private string _applicantSummary = "Applicant trends (vs last month) will show here when connected to reporting.";
+    private string _applicantSummary;
 
     [ObservableProperty]
     private ObservableCollection<CompanyTrendingSkillRow> _trendingSkills = new();
@@ -134,6 +134,8 @@ public partial class CompanyProfileViewModel : ObservableObject
             RemainingTasks.Clear();
             return;
         }
+
+        ApplicantSummary = _calculator.applicantsMessage(companyId);
 
         LoadMessage = "";
         RefreshProfileStatistics();

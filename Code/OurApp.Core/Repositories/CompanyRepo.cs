@@ -36,9 +36,9 @@ namespace OurApp.Core.Repositories
                 logoUrl: reader["logo_picture_url"]?.ToString() ?? "",
                 location: reader["location"] is DBNull ? "" : reader["location"]?.ToString() ?? "",
                 email: reader["email"] is DBNull ? "" : reader["email"]?.ToString() ?? "",
-                companyId: Convert.ToInt32(reader["company_id"]),
-                postedJobsCount: reader["posted_jobs_count"] is DBNull ? 0 : Convert.ToInt32(reader["posted_jobs_count"]),
-                collaboratorsCount: reader["collaborators_count"] is DBNull ? 0 : Convert.ToInt32(reader["collaborators_count"])
+                companyId: Convert.ToInt32(reader["company_id"])
+                //postedJobsCount: reader["posted_jobs_count"] is DBNull ? 0 : Convert.ToInt32(reader["posted_jobs_count"]),
+                //collaboratorsCount: reader["collaborators_count"] is DBNull ? 0 : Convert.ToInt32(reader["collaborators_count"])
             );
 
             company.game = MapGame(reader);
