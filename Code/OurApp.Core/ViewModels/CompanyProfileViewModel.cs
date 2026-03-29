@@ -46,11 +46,7 @@ public partial class CompanyProfileViewModel : ObservableObject
     [ObservableProperty]
     private string _feedback = string.Empty;
 
-    /// <summary>
-    /// Uses <see cref="GameService.GetStoredGame"/> so bindings do not call <see cref="GameService.LoadedGame"/>
-    /// before <see cref="CompanyRepo.GetById"/> has set the repo's current company (otherwise LoadedGame throws).
-    /// </summary>
-    public string BuddyImagePath => BuddyImageProvider.GetImagePathById(_gameService.GetStoredGame().Buddy.Id);
+    public string BuddyImagePath => BuddyImageProvider.GetImagePathById(_gameService.getBuddyId());
 
     [ObservableProperty]
     private string _welcomeMessage = string.Empty;
@@ -139,7 +135,6 @@ public partial class CompanyProfileViewModel : ObservableObject
         LoadMessage = "";
         RefreshProfileStatistics();
         FillPreviewSections();
-        OnPropertyChanged(nameof(BuddyImagePath));
         gamePreview();
     }
 
@@ -241,28 +236,14 @@ public partial class CompanyProfileViewModel : ObservableObject
     }
     public void gamePreview()
     {
-        if (!_gameService.isPublished())
+        if (_gameService.isPublished())
         {
-            return;
-        }
-
-        try
-        {
-            var game = _gameService.GetStoredGame();
-            if (game.Scenarios.Count == 0)
-            {
-                return;
-            }
-
             WelcomeMessage = _gameService.ShowCoworker();
             CurrentState = GameState.Start;
-            _currentScenarioIndex = 0;
-            UpdateScenario();
+            _currentScenarioIndex = 0;      
+            UpdateScenario();               
         }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"gamePreview: {ex.Message}");
-        }
+
     }
 
     [RelayCommand]
