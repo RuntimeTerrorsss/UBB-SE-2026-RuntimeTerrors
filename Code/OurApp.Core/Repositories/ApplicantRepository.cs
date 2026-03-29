@@ -63,7 +63,7 @@ namespace OurApp.Core.Repositories
                         while (reader.Read())
                         {
                             var applicant = MapReaderToApplicant(reader);
-                            applicant.Job = job; // Retain object reference
+                            applicant.Job = job;
                             list.Add(applicant);
                         }
                     }

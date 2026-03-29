@@ -24,7 +24,14 @@ namespace OurApp.WinUI
             }
         }
 
-
+        private void PayToPromoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is JobPosting job)
+            {
+                var paymentWindow = new PaymentWindow(job.JobId);
+                paymentWindow.Activate();
+            }
+        }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {

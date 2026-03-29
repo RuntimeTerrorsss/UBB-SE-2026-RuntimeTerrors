@@ -23,6 +23,7 @@ namespace OurApp.Core.ViewModels
 
         public Action<string, string> ShowMessageAction { get; set; }
         public Action CloseWindowAction { get; set; }
+        public int CurrentJobId { get; set; }
 
         public PaymentViewModel()
         {
@@ -54,7 +55,7 @@ namespace OurApp.Core.ViewModels
                 return;
             }
 
-            int currentJobId = 1; // Example ID
+            int currentJobId = CurrentJobId; // Example ID
 
             string resultMessage = _paymentService.ProcessPayment(currentJobId, amountToPay, CardHolderName, CardNumber, ExpDate, Cvv);
 

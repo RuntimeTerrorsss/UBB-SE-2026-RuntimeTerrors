@@ -7,17 +7,17 @@ namespace OurApp.WinUI
 {
     public sealed partial class PaymentWindow : Window
     {
-        // Expose the ViewModel to the XAML
         public PaymentViewModel ViewModel { get; }
 
-        public PaymentWindow()
+        public PaymentWindow(int jobId)
         {
             this.InitializeComponent();
 
             ViewModel = new PaymentViewModel();
 
-            ViewModel.ShowMessageAction = ShowMessage;
+            ViewModel.CurrentJobId = jobId;
 
+            ViewModel.ShowMessageAction = ShowMessage;
             ViewModel.CloseWindowAction = () => this.Close();
         }
 

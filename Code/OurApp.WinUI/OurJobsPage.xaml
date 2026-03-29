@@ -35,21 +35,26 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Vertical">
+
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock Text="{x:Bind JobTitle}"/>
                             <TextBlock Text="{x:Bind JobType}"/>
                         </StackPanel>
-                        <!-- Applicants Button -->
-                        <Button Grid.Column="1" 
-                                Content="View Applicants" 
-                                Click="ViewApplicantsButton_Click" 
-                                Tag="{x:Bind}" 
-                                VerticalAlignment="Center"/>
+
+                        <!-- Action Buttons -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <Button Content="Pay to Promote" 
+                                    Click="PayToPromoteButton_Click" 
+                                    Tag="{x:Bind}"/>
+
+                            <Button Content="View Applicants" 
+                                    Click="ViewApplicantsButton_Click" 
+                                    Tag="{x:Bind}"/>
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
 
     </Grid>
 </Page>
