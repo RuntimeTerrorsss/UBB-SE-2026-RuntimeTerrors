@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!--Back Button -->
@@ -56,5 +57,11 @@
             </ListView.ItemTemplate>
         </ListView>
 
+        <Button Grid.Row="2"
+                Content="Create job"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Margin="0,16,0,0"
+                Click="CreateJobButton_Click"/>
     </Grid>
 </Page>

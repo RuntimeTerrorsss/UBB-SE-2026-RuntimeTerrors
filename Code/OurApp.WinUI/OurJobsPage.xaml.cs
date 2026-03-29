@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Navigation;
 using OurApp.Core.Models;
 using OurApp.WinUI.ViewModels;
 
@@ -14,6 +15,20 @@ namespace OurApp.WinUI
         {
             this.InitializeComponent();
             ViewModel = new OurJobsViewModel();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                ViewModel.ReloadJobs();
+            }
+        }
+
+        private void CreateJobButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(CreateJobPage));
         }
 
         private void ViewApplicantsButton_Click(object sender, RoutedEventArgs e)

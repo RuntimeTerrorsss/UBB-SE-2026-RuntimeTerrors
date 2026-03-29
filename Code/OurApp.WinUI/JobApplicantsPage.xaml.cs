@@ -23,7 +23,7 @@ namespace OurApp.WinUI
 
             if (e.Parameter is JobPosting job)
             {
-                ViewModel = new JobApplicantsViewModel(job);
+                ViewModel = new JobApplicantsViewModel(job, App.mainWindow?.sessionService);
             }
         }
 
@@ -67,6 +67,24 @@ namespace OurApp.WinUI
             {
                 await ViewModel.ScanCvAsync();
             }
+        }
+
+        private async void SendStatusMail_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            var (ok, message) = await ViewModel.SendStatusMailAsync();
+            var dialog = new ContentDialog
+            {
+                Title = ok ? "Email sent" : "Could not send email",
+                Content = message,
+                CloseButtonText = "OK",
+                XamlRoot = XamlRoot
+            };
+            await dialog.ShowAsync();
         }
     }
 

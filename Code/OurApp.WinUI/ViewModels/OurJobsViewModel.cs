@@ -18,11 +18,12 @@ namespace OurApp.WinUI.ViewModels
 
         public OurJobsViewModel()
         {
-            LoadJobs();
+            ReloadJobs();
         }
 
-        private void LoadJobs()
+        public void ReloadJobs()
         {
+            Jobs.Clear();
             IJobsRepository jobsRepo = new JobsRepository();
             try
             {

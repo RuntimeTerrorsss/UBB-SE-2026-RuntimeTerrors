@@ -2,6 +2,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using OurApp.Core.Models;
@@ -15,6 +17,7 @@ namespace OurApp.WinUI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly IApplicantService _applicantService;
+        private readonly SessionService? _sessionService;
 
         public JobPosting SelectedJob { get; private set; }
 
@@ -128,13 +131,79 @@ namespace OurApp.WinUI.ViewModels
             }
         }
 
-        public JobApplicantsViewModel(JobPosting job)
+        public JobApplicantsViewModel(JobPosting job, SessionService? sessionService)
         {
             SelectedJob = job;
+            _sessionService = sessionService;
             IApplicantRepository repo = new ApplicantRepository();
             _applicantService = new ApplicantService(repo);
 
             LoadApplicants();
+        }
+
+        /// <summary>
+        /// Sends the current draft application status to the applicant by email (same SMTP setup as event invitations).
+        /// </summary>
+        public async Task<(bool Ok, string Message)> SendStatusMailAsync()
+        {
+            if (_sessionService?.loggedInUser == null)
+            {
+                return (false, "No company session; cannot send mail.");
+            }
+
+            if (SelectedApplicant?.User == null)
+            {
+                return (false, "No applicant selected.");
+            }
+
+            var email = SelectedApplicant.User.Email?.Trim();
+            if (string.IsNullOrEmpty(email))
+            {
+                return (false, "This applicant has no email address on file.");
+            }
+
+            var statusForMail = string.IsNullOrWhiteSpace(DraftStatus) ? "Pending" : DraftStatus;
+            var jobTitle = SelectedJob?.JobTitle ?? "the position";
+            var sourceName = _sessionService.loggedInUser.Name ?? "Our company";
+            var applicantName = string.IsNullOrWhiteSpace(SelectedApplicant.User.Name) ? "Applicant" : SelectedApplicant.User.Name;
+
+            const string fromPassword = "angxokbiqoyodwgm";
+            var fromAddress = new MailAddress("carla.draghiciu@cnglsibiu.ro", sourceName);
+            var toAddress = new MailAddress(email, applicantName);
+            const string subject = "Application status update";
+            string body =
+                $"Hello {applicantName},\n\n" +
+                $"Your application status for \"{jobTitle}\" at {sourceName} is: {statusForMail}.\n\n" +
+                "If you have questions, please reply to this email.\n";
+
+            try
+            {
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 60000
+                };
+
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    await smtp.SendMailAsync(message).ConfigureAwait(true);
+                }
+
+                System.Diagnostics.Debug.WriteLine("Status email sent to applicant.");
+                return (true, $"Status \"{statusForMail}\" was sent to {email}.");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
         }
 
         private void LoadApplicants()

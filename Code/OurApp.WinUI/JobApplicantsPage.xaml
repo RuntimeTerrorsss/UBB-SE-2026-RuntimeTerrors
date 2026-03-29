@@ -97,6 +97,9 @@
                 <ComboBox ItemsSource="{x:Bind ViewModel.ApplicationStatusOptions}" 
                           SelectedItem="{x:Bind ViewModel.DraftStatus, Mode=TwoWay}" 
                           Width="200"/>
+                <Button Content="Send a status mail"
+                        Click="SendStatusMail_Click"
+                        VerticalAlignment="Center"/>
             </StackPanel>
 
             <TextBlock Text="Grades" Margin="0,20,0,0"/>

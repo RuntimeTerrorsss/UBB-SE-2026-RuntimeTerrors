@@ -27,7 +27,7 @@ namespace OurApp.Core.Models
         public DateTime? Deadline { get; set; }
         public System.Collections.Generic.ICollection<JobSkill> JobSkills { get; set; } = new System.Collections.Generic.List<JobSkill>();
 
-        //*Required skills: dropdown menu with skills options (Python, Java, C++, etc.) and a corresponding percentage representing the minimum required knowledge for the job;
+        //*Required skills: checkboxes with different skills options (Python, Java, C++, etc.) and a corresponding percentage representing the minimum required knowledge for the job;
 
     }
 }
