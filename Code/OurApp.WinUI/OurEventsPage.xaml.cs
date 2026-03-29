@@ -38,6 +38,12 @@ public sealed partial class OurEventsPage : Page
         this.DataContext = ViewModel;
     }
 
+    private void NavigateBack_Click(object sender, RoutedEventArgs e)
+    {
+        var mainWindow = App.mainWindow;
+        mainWindow.RootFrame.Navigate(typeof(ViewProfilePage));
+    }
+
     /// <summary>
     /// Function that navigates the user to the "Create Event" page when clicking 
     /// the button "Create Event"

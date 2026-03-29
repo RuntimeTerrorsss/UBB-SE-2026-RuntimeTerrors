@@ -1,4 +1,5 @@
 using OurApp.Core.Models;
+using OurApp.Core.Repositories;
 using System;
 using System.Collections.Generic;
 
@@ -13,9 +14,15 @@ namespace OurApp.Core.Services
         //    this.Logo_url = logo_url;
         //    this.Location = location;
         //    this.Email = email;
-        
 
-        public (int percentage, List<string> remainingTasks) Calculate(Company company)
+        private readonly IJobsRepository _jobsRepository;
+
+        public ProfileCompletionCalculator(IJobsRepository jobsRepository)
+        {
+            _jobsRepository = jobsRepository;
+        }
+
+            public (int percentage, List<string> remainingTasks) Calculate(Company company)
         {
             int total = 5;
             int done = 0;
@@ -42,6 +49,52 @@ namespace OurApp.Core.Services
         private static bool IsMiniGameComplete(Game g)
         {
             return g.IsPublished;
+        }
+
+        public (List<string> skillNames, List<int> percents) GetSkillsTop3(int companyId)
+        {
+            var jobs = _jobsRepository
+                .GetAllJobs()
+                .Where(j => j.Company != null && j.Company.CompanyId == companyId)
+                .ToList();
+
+            var skillCounts = new Dictionary<string, int>();
+            int total = 0;
+
+            foreach (var job in jobs)
+            {
+                if (job.JobSkills == null) continue;
+
+                foreach (var js in job.JobSkills)
+                {
+                    var name = js.Skill?.SkillName;
+                    if (string.IsNullOrEmpty(name)) continue;
+
+                    if (!skillCounts.ContainsKey(name))
+                        skillCounts[name] = 0;
+
+                    skillCounts[name] += js.RequiredPercentage;
+                    total += js.RequiredPercentage;
+                }
+            }
+
+            var skillNames = new List<string>();
+            var percents = new List<int>();
+
+            if (total == 0)
+                return (skillNames, percents);
+
+            var top3 = skillCounts
+                .OrderByDescending(kv => kv.Value)
+                .Take(3);
+
+            foreach (var kv in top3)
+            {
+                skillNames.Add(kv.Key);
+                percents.Add((int)Math.Round((double)kv.Value * 100 / total));
+            }
+
+            return (skillNames, percents);
         }
     }
 }

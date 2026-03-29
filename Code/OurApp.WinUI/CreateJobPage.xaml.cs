@@ -1,7 +1,8 @@
-using System;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using OurApp.WinUI.ViewModels;
+using System;
 
 namespace OurApp.WinUI;
 
@@ -105,6 +106,14 @@ public sealed partial class CreateJobPage : Page
     }
 
     private void Cancel_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (Frame.CanGoBack)
+        {
+            Frame.GoBack();
+        }
+    }
+
+    private void NavigateBack_Click(object sender, RoutedEventArgs e)
     {
         if (Frame.CanGoBack)
         {

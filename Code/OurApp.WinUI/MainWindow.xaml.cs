@@ -28,6 +28,8 @@ namespace OurApp.WinUI
         public SessionService sessionService { get; }
         public ICollaboratorsService collabsService { get; }
 
+        public IJobsRepository jobsRepository { get; }
+
         /// <summary>
         /// MainWindow constructor that initialize the repositories and services
         /// </summary>
@@ -71,6 +73,8 @@ namespace OurApp.WinUI
             eventsService = new EventsService(eventsRepo);
             sessionService = new SessionService(c1); // hardcode user = c1
 
+            IJobsRepository jobsRepo = new JobsRepository();
+            this.jobsRepository = jobsRepo;
         }
 
         /// <summary>

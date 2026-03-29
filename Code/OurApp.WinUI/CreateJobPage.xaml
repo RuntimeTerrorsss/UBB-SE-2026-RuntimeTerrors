@@ -14,6 +14,7 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Padding="24" Spacing="16" MaxWidth="720">
+            <Button Content="Back" HorizontalAlignment="Left" Click="NavigateBack_Click" />
             <TextBlock Text="Create job" FontSize="24" FontWeight="SemiBold"/>
 
             <TextBlock Text="Fields marked * are required (see JobPosting model)." FontSize="12" Opacity="0.8" TextWrapping="Wrap"/>

@@ -39,13 +39,13 @@ namespace OurApp.Core.Repositories
                         if (!reader.IsDBNull(reader.GetOrdinal("company_id")))
                         {
                             job.Company = new Company(
-    reader.GetString(reader.GetOrdinal("company_name")), // name
-    "rftgyhuj",                                          // aboutus
-    "fgyhujik",                                          // pfpUrl
-    "esdrtgh",                                           // logoUrl
-    "rdfghj",                                            // location
-    "fghj@gmail.com",                                    // email
-    reader.GetInt32(reader.GetOrdinal("company_id"))     // companyId (optional param)
+                                reader.GetString(reader.GetOrdinal("company_name")), // name
+                                "Company description",                               // aboutus
+                                "pfp.png",                                           // pfpUrl
+                                "logo.png",                                          // logoUrl
+                                "location here",                                     // location
+                                "company@gmail.com",                                 // email
+                                reader.GetInt32(reader.GetOrdinal("company_id"))     // companyId (optional param)
 );
                         }
 
@@ -111,36 +111,36 @@ namespace OurApp.Core.Repositories
             return list;
         }
 
-        public IReadOnlyList<JobSkill> GetSkillsForJob(int jobId)
-        {
-            var list = new List<JobSkill>();
-            var jobStub = new JobPosting { JobId = jobId };
-            using var conn = DbConnectionHelper.GetConnection();
-            conn.Open();
-            using var cmd = new SqlCommand(
-                @"SELECT js.skill_id, js.required_percentage, s.skill_name
-                  FROM job_skills js
-                  INNER JOIN skills s ON js.skill_id = s.skill_id
-                  WHERE js.job_id = @jobId",
-                conn);
-            cmd.Parameters.AddWithValue("@jobId", jobId);
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                list.Add(new JobSkill
-                {
-                    Job = jobStub,
-                    RequiredPercentage = reader.GetInt32(reader.GetOrdinal("required_percentage")),
-                    Skill = new Skill
-                    {
-                        SkillId = reader.GetInt32(reader.GetOrdinal("skill_id")),
-                        SkillName = reader.GetString(reader.GetOrdinal("skill_name"))
-                    }
-                });
-            }
+        //public IReadOnlyList<JobSkill> GetSkillsForJob(int jobId)
+        //{
+        //    var list = new List<JobSkill>();
+        //    var jobStub = new JobPosting { JobId = jobId };
+        //    using var conn = DbConnectionHelper.GetConnection();
+        //    conn.Open();
+        //    using var cmd = new SqlCommand(
+        //        @"SELECT js.skill_id, js.required_percentage, s.skill_name
+        //          FROM job_skills js
+        //          INNER JOIN skills s ON js.skill_id = s.skill_id
+        //          WHERE js.job_id = @jobId",
+        //        conn);
+        //    cmd.Parameters.AddWithValue("@jobId", jobId);
+        //    using var reader = cmd.ExecuteReader();
+        //    while (reader.Read())
+        //    {
+        //        list.Add(new JobSkill
+        //        {
+        //            Job = jobStub,
+        //            RequiredPercentage = reader.GetInt32(reader.GetOrdinal("required_percentage")),
+        //            Skill = new Skill
+        //            {
+        //                SkillId = reader.GetInt32(reader.GetOrdinal("skill_id")),
+        //                SkillName = reader.GetString(reader.GetOrdinal("skill_name"))
+        //            }
+        //        });
+        //    }
 
-            return list;
-        }
+        //    return list;
+        //}
 
         public int AddJob(JobPosting job, int companyId, IReadOnlyList<(int SkillId, int RequiredPercentage)> skillLinks)
         {

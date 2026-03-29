@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OurApp.Core.Models;
+using OurApp.Core.Repositories;
 using OurApp.Core.Services;
 using System;
 using System.Collections.ObjectModel;
@@ -32,6 +33,7 @@ public partial class CompanyProfileViewModel : ObservableObject
     private readonly ICompanyService _companyService;
     private readonly GameService _gameService;
     IEventsService eventService;
+    IJobsRepository jobsRepository;
     SessionService sessionService;
     ICollaboratorsService collabService;
     private readonly ProfileCompletionCalculator _calculator;
@@ -76,13 +78,13 @@ public partial class CompanyProfileViewModel : ObservableObject
     private ObservableCollection<CompanyTrendingSkillRow> _trendingSkills = new();
 
     public IEnumerable<CompanyProfileListRow> Top3JobPreviews =>
-        eventService
-            .GetCurrentEvents(sessionService.loggedInUser.CompanyId)
+        jobsRepository
+            .GetAllJobs()
             .Take(3)
             .Select(e => new CompanyProfileListRow
             {
-                Title = e.Title,
-                Subtitle = e.Description
+                Title = e.JobTitle,
+                Subtitle = e.JobDescription
             });
     public IEnumerable<CompanyProfileListRow> Top3EventPreviews => eventService
             .GetCurrentEvents(sessionService.loggedInUser.CompanyId)
@@ -95,7 +97,7 @@ public partial class CompanyProfileViewModel : ObservableObject
 
     public IEnumerable<CompanyCollabListRow> Top3CollabsPreviews => collabService
             .GetAllCollaborators(sessionService.loggedInUser.CompanyId)
-            .Take(3)
+            .Take(7)
             .Select(e => new CompanyCollabListRow
             {
                 Name = e.Name
@@ -108,7 +110,7 @@ public partial class CompanyProfileViewModel : ObservableObject
 
     public int CompanyId { get; private set; }
 
-    public CompanyProfileViewModel(ICompanyService companyService, ProfileCompletionCalculator calculator, GameService gameService, IEventsService eventService, SessionService sessionService, ICollaboratorsService collaboratorsService)
+    public CompanyProfileViewModel(ICompanyService companyService, ProfileCompletionCalculator calculator, GameService gameService, IEventsService eventService, SessionService sessionService, ICollaboratorsService collaboratorsService, IJobsRepository jobsRepo)
     {
         _gameService = gameService;
         _companyService = companyService;
@@ -116,6 +118,7 @@ public partial class CompanyProfileViewModel : ObservableObject
         this.eventService = eventService;
         this.sessionService = sessionService;
         this.collabService = collaboratorsService;
+        this.jobsRepository = jobsRepo;
 
     }
 
@@ -160,9 +163,20 @@ public partial class CompanyProfileViewModel : ObservableObject
             return;
 
         TrendingSkills.Clear();
-        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "1", SkillName = "—", Detail = "percent" });
-        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "2", SkillName = "—", Detail = "percent" });
-        TrendingSkills.Add(new CompanyTrendingSkillRow { Rank = "3", SkillName = "—", Detail = "percent" });
+        var (skillNames, percents) = _calculator.GetSkillsTop3(Company.CompanyId);
+
+        for (int i = 0; i < 3; i++)
+        {
+            string skillName = i < skillNames.Count ? skillNames[i] : "—";
+            string percent = i < percents.Count ? $"{percents[i]}%" : "0%";
+
+            TrendingSkills.Add(new CompanyTrendingSkillRow
+            {
+                Rank = (i + 1).ToString(),
+                SkillName = skillName,
+                Detail = percent
+            });
+        }
 
         OnPropertyChanged(nameof(Top3JobPreviews));
         OnPropertyChanged(nameof(Top3EventPreviews));
