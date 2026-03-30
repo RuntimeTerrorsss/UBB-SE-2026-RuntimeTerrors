@@ -30,6 +30,8 @@ namespace OurApp.WinUI
 
         public IJobsRepository jobsRepository { get; }
 
+        public IApplicantRepository applicantsRepository { get; }
+
         /// <summary>
         /// MainWindow constructor that initialize the repositories and services
         /// </summary>
@@ -75,6 +77,9 @@ namespace OurApp.WinUI
 
             IJobsRepository jobsRepo = new JobsRepository();
             this.jobsRepository = jobsRepo;
+
+            IApplicantRepository applicantRepo = new ApplicantRepository();
+            this.applicantsRepository = applicantRepo;
         }
 
         /// <summary>

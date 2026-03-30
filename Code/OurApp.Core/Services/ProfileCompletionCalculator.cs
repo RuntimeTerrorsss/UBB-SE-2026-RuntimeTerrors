@@ -2,6 +2,7 @@ using OurApp.Core.Models;
 using OurApp.Core.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 
 namespace OurApp.Core.Services
 {
@@ -16,10 +17,12 @@ namespace OurApp.Core.Services
         //    this.Email = email;
 
         private readonly IJobsRepository _jobsRepository;
+        private readonly IApplicantRepository _applRepository;
 
-        public ProfileCompletionCalculator(IJobsRepository jobsRepository)
+        public ProfileCompletionCalculator(IJobsRepository jobsRepository, IApplicantRepository applicantRepository)
         {
             _jobsRepository = jobsRepository;
+            _applRepository = applicantRepository;
         }
 
             public (int percentage, List<string> remainingTasks) Calculate(Company company)
@@ -48,7 +51,7 @@ namespace OurApp.Core.Services
 
         private static bool IsMiniGameComplete(Game g)
         {
-            return g.IsPublished;
+            return g != null && g.IsPublished;
         }
 
         public (List<string> skillNames, List<int> percents) GetSkillsTop3(int companyId)
@@ -95,6 +98,35 @@ namespace OurApp.Core.Services
             }
 
             return (skillNames, percents);
+        }
+
+        public string applicantsMessage(int companyId)
+        {
+            var applicants = _applRepository.GetApplicantsByCompany(companyId);
+
+            int current = applicants.Count();
+
+            int previous = applicants
+                .Count(a => a.AppliedAt < DateTime.Now.AddDays(-7));
+
+            if (previous == 0)
+            {
+                if (current == 0)
+                    return "No applicants yet. Start posting jobs!";
+
+                return $"Great start! You have {current} new applicants.";
+            }
+
+            double change = ((double)(current - previous) / previous) * 100;
+
+            if (change < 0)
+            {
+                return $"You have {Math.Abs((int)change)}% fewer applicants than last week.";
+            }
+            else
+            {
+                return $"Congrats! You have {(int)change}% more applicants than last week.";
+            }
         }
     }
 }
