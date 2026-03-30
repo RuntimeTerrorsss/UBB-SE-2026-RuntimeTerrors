@@ -127,7 +127,7 @@ namespace OurApp.Core.ViewModels
         {
             foreach(Company invitedCompany in SelectedCollaborators)
             {
-                this.collaboratorsService.AddCollaborator(eventOfCollaboration, invitedCompany);
+                this.collaboratorsService.AddCollaborator(eventOfCollaboration, invitedCompany, sessionService.loggedInUser.CompanyId);
             }
         }
 

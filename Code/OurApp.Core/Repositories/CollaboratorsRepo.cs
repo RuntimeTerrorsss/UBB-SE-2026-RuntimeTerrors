@@ -20,22 +20,62 @@ namespace OurApp.Core.Repositories
         /// </summary>
         /// <param name="eventOfCollaboration"> the event that the invited company is collaborating on </param>
         /// <param name="collaboratorToBeAdded"> the company that has been invited to collaborate </param>
-        public void AddCollaboratorToRepo(Event eventOfCollaboration, Company collaboratorToBeAdded)
+        /// <param name="loggedInUserID"></param>
+        public void AddCollaboratorToRepo(Event eventOfCollaboration, Company collaboratorToBeAdded, int loggedInUserID)
         {
             using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
             {
                 sqlConnection.Open();
 
-                string queryToBeRun = @"
-                    INSERT INTO collaborators 
-                    VALUES (@EventId, @CompanyId)";
+                using (SqlTransaction transaction = sqlConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        string insertQuery = @"
+                            INSERT INTO collaborators (event_id, company_id)
+                            VALUES (@EventId, @CompanyId)";
 
-                SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
+                        SqlCommand insertCommand = new SqlCommand(insertQuery, sqlConnection, transaction);
+                        insertCommand.Parameters.AddWithValue("@EventId", eventOfCollaboration.Id);
+                        insertCommand.Parameters.AddWithValue("@CompanyId", collaboratorToBeAdded.CompanyId);
 
-                sqlCommand.Parameters.AddWithValue("@EventId", eventOfCollaboration.Id);
-                sqlCommand.Parameters.AddWithValue("@CompanyId", collaboratorToBeAdded.CompanyId);
+                        insertCommand.ExecuteNonQuery();
 
-                sqlCommand.ExecuteNonQuery();
+                        string checkQuery = @"
+                            SELECT COUNT(*)
+                            FROM collaborators c
+                            INNER JOIN events e ON e.event_id = c.event_id
+                            WHERE e.host_company_id = @HostID
+                            AND c.company_id = @CollaboratorId";
+
+                        SqlCommand checkCommand = new SqlCommand(checkQuery, sqlConnection, transaction);
+                        checkCommand.Parameters.AddWithValue("@HostID", loggedInUserID);
+                        checkCommand.Parameters.AddWithValue("@CollaboratorId", collaboratorToBeAdded.CompanyId);
+
+                        int existingCount = (int)checkCommand.ExecuteScalar();
+                        bool isNewCollaborator = existingCount == 1;
+
+                        if (isNewCollaborator)
+                        {
+                            string updateQuery = @"
+                            UPDATE companies
+                            SET collaborators_count = collaborators_count + 1
+                            WHERE company_id = @CompanyId";
+
+                            SqlCommand updateCommand = new SqlCommand(updateQuery, sqlConnection, transaction);
+                            updateCommand.Parameters.AddWithValue("@CompanyId", loggedInUserID);
+
+                            updateCommand.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
         }
 

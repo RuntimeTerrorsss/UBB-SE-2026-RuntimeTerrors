@@ -9,7 +9,7 @@ namespace OurApp.Core.Repositories
 {
     public interface ICollaboratorsRepo
     {
-        void AddCollaboratorToRepo(Event eventOfCollaboration, Company collaboratorToBeAdded);
+        void AddCollaboratorToRepo(Event eventOfCollaboration, Company collaboratorToBeAdded, int loggedInUserID);
         List<Company> GetAllCollaborators(int loggedInCompanyId);
     }
 }

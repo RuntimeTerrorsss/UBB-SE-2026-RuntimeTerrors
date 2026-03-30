@@ -26,9 +26,10 @@ namespace OurApp.Core.Services
         /// </summary>
         /// <param name="eventToBeCollaboratedOn"> the event the company is invited to collaborate on </param>
         /// <param name="companyInvitedToCollaborate"> the company to be added to the list </param>
-        public void AddCollaborator(Event eventToBeCollaboratedOn, Company companyInvitedToCollaborate)
+        /// <param name="loggedInUserID"></param>
+        public void AddCollaborator(Event eventToBeCollaboratedOn, Company companyInvitedToCollaborate, int loggedInUserID)
         {
-            this.collaboratorsRepository.AddCollaboratorToRepo(eventToBeCollaboratedOn, companyInvitedToCollaborate);
+            this.collaboratorsRepository.AddCollaboratorToRepo(eventToBeCollaboratedOn, companyInvitedToCollaborate, loggedInUserID);
         }
 
 
