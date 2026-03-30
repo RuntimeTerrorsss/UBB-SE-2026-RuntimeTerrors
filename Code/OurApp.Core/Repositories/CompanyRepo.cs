@@ -262,14 +262,16 @@ namespace OurApp.Core.Repositories
                    scen_1_text, scen1_answer1, scen1_answer2, scen1_answer3,
                    scen1_reaction1, scen1_reaction2, scen1_reaction3,
                    scen2_text, scen2_answer1, scen2_answer2,
-                   scen2_answer3, scen2_reaction1, scen2_reaction2, scen2_reaction3)
+                   scen2_answer3, scen2_reaction1, scen2_reaction2, scen2_reaction3, posted_jobs_count, collaborators_count)
                   VALUES
                   (@CompanyId, @Name, @AboutUs, @ProfilePictureUrl, @LogoPictureUrl, @Location, @Email,
                    @BuddyName, @BuddyDescription, @AvatarId, @FinalQuote,
                    @Scenario1Text, @Scenario1Answer1, @Scenario1Answer2, @Scenario1Answer3,
                    @Scenario1Reaction1, @Scenario1Reaction2, @Scenario1Reaction3,
                    @Scenario2Text, @Scenario2Answer1, @Scenario2Answer2,
-                   @Scenario2Answer3, @Scenario2Reaction1, @Scenario2Reaction2, @Scenario2Reaction3);",
+                   @Scenario2Answer3, @Scenario2Reaction1, @Scenario2Reaction2, @Scenario2Reaction3, 
+                   (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id), 
+                   (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id)",
                 conn,
                 tx);
 
@@ -353,7 +355,10 @@ namespace OurApp.Core.Repositories
                       scen2_answer3     = @Scenario2Answer3,
                       scen2_reaction1   = @Scenario2Reaction1,
                       scen2_reaction2   = @Scenario2Reaction2,
-                      scen2_reaction3   = @Scenario2Reaction3
+                      scen2_reaction3   = @Scenario2Reaction3,
+                      posted_jobs_count = (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id),
+                      collaborators_count = (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id)
+                      
                   WHERE company_id = @CompanyId;",
                 conn);
 
