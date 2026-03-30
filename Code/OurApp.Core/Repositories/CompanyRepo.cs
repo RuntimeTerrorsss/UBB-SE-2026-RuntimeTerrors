@@ -180,15 +180,21 @@ namespace OurApp.Core.Repositories
             conn.Open();
 
             var cmd = new SqlCommand(
-                @"SELECT c.company_id, c.company_name, c.about_us, c.profile_picture_url, c.logo_picture_url, c.location, c.email,
-                         c.buddy_name, c.buddy_description, c.avatar_id, c.final_quote,
-                         c.scen_1_text, c.scen1_answer1, c.scen1_answer2, c.scen1_answer3,
-                         c.scen1_reaction1, c.scen1_reaction2, c.scen1_reaction3,
-                         c.scen2_text, c.scen2_answer1, c.scen2_answer2,
-                         c.scen2_answer3, c.scen2_reaction1, c.scen2_reaction2, c.scen2_reaction3,
-                         (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id) AS posted_jobs_count,
-                         (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id) AS collaborators_count
-                  FROM companies AS c;",
+                @"SELECT 
+                    c.company_id, c.company_name, c.about_us, c.profile_picture_url, 
+                    c.logo_picture_url, c.location, c.email,
+                    c.buddy_name, c.buddy_description, c.avatar_id, c.final_quote,
+                    c.scen_1_text, c.scen1_answer1, c.scen1_answer2, c.scen1_answer3,
+                    c.scen1_reaction1, c.scen1_reaction2, c.scen1_reaction3,
+                    c.scen2_text, c.scen2_answer1, c.scen2_answer2,
+                    c.scen2_answer3, c.scen2_reaction1, c.scen2_reaction2, c.scen2_reaction3,
+
+                    (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id) AS posted_jobs_count,
+
+                    (SELECT COUNT(DISTINCT ec.company_id)
+                     FROM collaborators ec) AS collaborators_count
+
+                FROM companies c;",
                 conn);
 
             using var reader = cmd.ExecuteReader();
@@ -220,19 +226,19 @@ namespace OurApp.Core.Repositories
 
             var cmd = new SqlCommand(
                 @"SELECT c.company_id, c.company_name, c.about_us, c.profile_picture_url,
-                   c.logo_picture_url, c.location, c.email,
-                   c.buddy_name, c.buddy_description, c.avatar_id, c.final_quote,
-                   c.scen_1_text, c.scen1_answer1, c.scen1_answer2, c.scen1_answer3,
-                   c.scen1_reaction1, c.scen1_reaction2, c.scen1_reaction3,
-                   c.scen2_text, c.scen2_answer1, c.scen2_answer2, c.scen2_answer3,
-                   c.scen2_reaction1, c.scen2_reaction2, c.scen2_reaction3,
-                   (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id) AS posted_jobs_count,
-                   (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id) AS collaborators_count
+                    c.logo_picture_url, c.location, c.email,
+                    c.buddy_name, c.buddy_description, c.avatar_id, c.final_quote,
+                    c.scen_1_text, c.scen1_answer1, c.scen1_answer2, c.scen1_answer3,
+                    c.scen1_reaction1, c.scen1_reaction2, c.scen1_reaction3,
+                    c.scen2_text, c.scen2_answer1, c.scen2_answer2, c.scen2_answer3,
+                    c.scen2_reaction1, c.scen2_reaction2, c.scen2_reaction3,
+                    (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id) AS posted_jobs_count,
+                    (SELECT COUNT(DISTINCT ec.company_id)
+                    FROM collaborators ec) AS collaborators_count
                   FROM companies c
                   WHERE c.company_id = @CompanyId;",
                 conn);
             cmd.Parameters.AddWithValue("@CompanyId", companyId);
-
             using var reader = cmd.ExecuteReader();
             if (!reader.Read())
                 return null;
@@ -257,21 +263,19 @@ namespace OurApp.Core.Repositories
 
             var insertCmd = new SqlCommand(
                 @"INSERT INTO companies
-                  (company_id, company_name, about_us, profile_picture_url, logo_picture_url, location, email,
-                   buddy_name, buddy_description, avatar_id, final_quote,
-                   scen_1_text, scen1_answer1, scen1_answer2, scen1_answer3,
-                   scen1_reaction1, scen1_reaction2, scen1_reaction3,
-                   scen2_text, scen2_answer1, scen2_answer2,
-                   scen2_answer3, scen2_reaction1, scen2_reaction2, scen2_reaction3, posted_jobs_count, collaborators_count)
-                  VALUES
-                  (@CompanyId, @Name, @AboutUs, @ProfilePictureUrl, @LogoPictureUrl, @Location, @Email,
-                   @BuddyName, @BuddyDescription, @AvatarId, @FinalQuote,
-                   @Scenario1Text, @Scenario1Answer1, @Scenario1Answer2, @Scenario1Answer3,
-                   @Scenario1Reaction1, @Scenario1Reaction2, @Scenario1Reaction3,
-                   @Scenario2Text, @Scenario2Answer1, @Scenario2Answer2,
-                   @Scenario2Answer3, @Scenario2Reaction1, @Scenario2Reaction2, @Scenario2Reaction3, 
-                   (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id), 
-                   (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id)",
+                (company_id, company_name, about_us, profile_picture_url, logo_picture_url, location, email,
+                 buddy_name, buddy_description, avatar_id, final_quote,
+                 scen_1_text, scen1_answer1, scen1_answer2, scen1_answer3,
+                 scen1_reaction1, scen1_reaction2, scen1_reaction3,
+                 scen2_text, scen2_answer1, scen2_answer2,
+                 scen2_answer3, scen2_reaction1, scen2_reaction2, scen2_reaction3)
+                VALUES
+                (@CompanyId, @Name, @AboutUs, @ProfilePictureUrl, @LogoPictureUrl, @Location, @Email,
+                 @BuddyName, @BuddyDescription, @AvatarId, @FinalQuote,
+                 @Scenario1Text, @Scenario1Answer1, @Scenario1Answer2, @Scenario1Answer3,
+                 @Scenario1Reaction1, @Scenario1Reaction2, @Scenario1Reaction3,
+                 @Scenario2Text, @Scenario2Answer1, @Scenario2Answer2,
+                 @Scenario2Answer3, @Scenario2Reaction1, @Scenario2Reaction2, @Scenario2Reaction3)",
                 conn,
                 tx);
 
@@ -355,9 +359,7 @@ namespace OurApp.Core.Repositories
                       scen2_answer3     = @Scenario2Answer3,
                       scen2_reaction1   = @Scenario2Reaction1,
                       scen2_reaction2   = @Scenario2Reaction2,
-                      scen2_reaction3   = @Scenario2Reaction3,
-                      posted_jobs_count = (SELECT COUNT(*) FROM jobs j WHERE j.company_id = c.company_id),
-                      collaborators_count = (SELECT COUNT(*) FROM collaborators col WHERE col.company_id = c.company_id)
+                      scen2_reaction3   = @Scenario2Reaction3
                       
                   WHERE company_id = @CompanyId;",
                 conn);

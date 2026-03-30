@@ -40,7 +40,7 @@ namespace OurApp.Core.Services
             if (company.PostedJobsCount >= 5) done++;
             else tasks.Add("Post at least 5 jobs");
 
-            if (company.CollaboratorsCount >= 2 || company.Collaborators.Count >= 2) done++;
+            if (company.CollaboratorsCount >= 2 || company.CollaboratorsCount >= 2) done++;
             else tasks.Add("Add 2 collaborators");
 
             if (IsMiniGameComplete(company.game)) done++;

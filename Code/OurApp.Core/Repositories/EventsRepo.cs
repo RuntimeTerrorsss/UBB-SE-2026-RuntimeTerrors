@@ -42,32 +42,115 @@ namespace OurApp.Core.Repositories
         /// Function that inserts an event into the database repository
         /// </summary>
         /// <param name="eventToBeAdded"> event to be inserted into the database </param>
+        //public void AddEventToRepo(Event eventToBeAdded)
+        //{
+        //    using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
+        //    {
+        //        sqlConnection.Open();
+
+        //        string queryToBeRun = @"
+        //            INSERT INTO events 
+        //            (event_id, photo, title, description, start_date, end_date, location, host_company_id, posted_at)
+        //            VALUES (@Id, @Photo, @Title, @Description, @StartDate, @EndDate, @Location, @Host, @CurrentDateTime)";
+
+        //        SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
+
+        //        int nextIdToBeUsed = GetMaxEventId() + 1;
+        //        sqlCommand.Parameters.AddWithValue("@Id", nextIdToBeUsed);
+        //        sqlCommand.Parameters.AddWithValue("@Photo", eventToBeAdded.Photo ?? (object)DBNull.Value);
+        //        sqlCommand.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
+        //        sqlCommand.Parameters.AddWithValue("@Description", eventToBeAdded.Description ?? (object)DBNull.Value);
+        //        sqlCommand.Parameters.AddWithValue("@StartDate", eventToBeAdded.StartDate);
+        //        sqlCommand.Parameters.AddWithValue("@EndDate", eventToBeAdded.EndDate);
+        //        sqlCommand.Parameters.AddWithValue("@Location", eventToBeAdded.Location);
+        //        sqlCommand.Parameters.AddWithValue("@Host", eventToBeAdded.HostID);
+        //        sqlCommand.Parameters.AddWithValue("@CurrentDateTime", DateTime.Now);
+
+        //        sqlCommand.ExecuteNonQuery();
+        //        eventToBeAdded.Id = nextIdToBeUsed;
+        //    }
+        //}
+
         public void AddEventToRepo(Event eventToBeAdded)
         {
-            using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
-            {
-                sqlConnection.Open();
+            using var conn = DbConnectionHelper.GetConnection();
+            conn.Open();
 
-                string queryToBeRun = @"
+            using var tx = conn.BeginTransaction();
+
+            try
+            {
+                int nextId;
+                using (var idCmd = new SqlCommand(
+                    "SELECT COALESCE(MAX(event_id), 0) + 1 FROM events WITH (UPDLOCK, HOLDLOCK)",
+                    conn, tx))
+                {
+                    nextId = (int)idCmd.ExecuteScalar();
+                }
+
+                using (var insertEventCmd = new SqlCommand(@"
                     INSERT INTO events 
                     (event_id, photo, title, description, start_date, end_date, location, host_company_id, posted_at)
-                    VALUES (@Id, @Photo, @Title, @Description, @StartDate, @EndDate, @Location, @Host, @CurrentDateTime)";
+                    VALUES (@Id, @Photo, @Title, @Description, @StartDate, @EndDate, @Location, @Host, @Now)",
+                    conn, tx))
+                {
+                    insertEventCmd.Parameters.AddWithValue("@Id", nextId);
+                    insertEventCmd.Parameters.AddWithValue("@Photo", (object?)eventToBeAdded.Photo ?? DBNull.Value);
+                    insertEventCmd.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
+                    insertEventCmd.Parameters.AddWithValue("@Description", (object?)eventToBeAdded.Description ?? DBNull.Value);
+                    insertEventCmd.Parameters.AddWithValue("@StartDate", eventToBeAdded.StartDate);
+                    insertEventCmd.Parameters.AddWithValue("@EndDate", eventToBeAdded.EndDate);
+                    insertEventCmd.Parameters.AddWithValue("@Location", eventToBeAdded.Location);
+                    insertEventCmd.Parameters.AddWithValue("@Host", eventToBeAdded.HostID);
+                    insertEventCmd.Parameters.AddWithValue("@Now", DateTime.Now);
 
-                SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
+                    insertEventCmd.ExecuteNonQuery();
+                }
 
-                int nextIdToBeUsed = GetMaxEventId() + 1;
-                sqlCommand.Parameters.AddWithValue("@Id", nextIdToBeUsed);
-                sqlCommand.Parameters.AddWithValue("@Photo", eventToBeAdded.Photo ?? (object)DBNull.Value);
-                sqlCommand.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
-                sqlCommand.Parameters.AddWithValue("@Description", eventToBeAdded.Description ?? (object)DBNull.Value);
-                sqlCommand.Parameters.AddWithValue("@StartDate", eventToBeAdded.StartDate);
-                sqlCommand.Parameters.AddWithValue("@EndDate", eventToBeAdded.EndDate);
-                sqlCommand.Parameters.AddWithValue("@Location", eventToBeAdded.Location);
-                sqlCommand.Parameters.AddWithValue("@Host", eventToBeAdded.HostID);
-                sqlCommand.Parameters.AddWithValue("@CurrentDateTime", DateTime.Now);
+                eventToBeAdded.Id = nextId;
 
-                sqlCommand.ExecuteNonQuery();
-                eventToBeAdded.Id = nextIdToBeUsed;
+                if (eventToBeAdded.Collaborators != null)
+                {
+                    foreach (var collaborator in eventToBeAdded.Collaborators)
+                    {
+                        using var checkCmd = new SqlCommand(@"
+                            SELECT COUNT(*) 
+                            FROM event_collaborators 
+                            WHERE company_id = @CompanyId",
+                            conn, tx);
+
+                        checkCmd.Parameters.AddWithValue("@CompanyId", collaborator.CompanyId);
+                        int existingCount = (int)checkCmd.ExecuteScalar();
+
+                        using var insertCollabCmd = new SqlCommand(@"
+                            INSERT INTO event_collaborators (event_id, company_id)
+                            VALUES (@EventId, @CompanyId)",
+                            conn, tx);
+
+                        insertCollabCmd.Parameters.AddWithValue("@EventId", nextId);
+                        insertCollabCmd.Parameters.AddWithValue("@CompanyId", collaborator.CompanyId);
+                        insertCollabCmd.ExecuteNonQuery();
+
+                        if (existingCount == 0)
+                        {
+                            using var updateCmd = new SqlCommand(@"
+                                UPDATE companies
+                                SET collaborators_count = collaborators_count + 1
+                                WHERE company_id = @CompanyId",
+                                conn, tx);
+
+                            updateCmd.Parameters.AddWithValue("@CompanyId", collaborator.CompanyId);
+                            updateCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                tx.Commit();
+            }
+            catch
+            {
+                tx.Rollback();
+                throw;
             }
         }
 

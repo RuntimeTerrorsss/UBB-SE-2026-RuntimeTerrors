@@ -13,14 +13,16 @@ namespace OurApp.Core.Services
     public class EventsService : IEventsService
     {
         IEventsRepo eventsRepository;
+        //Company company;
 
         /// <summary>
         /// Events service constructor
         /// </summary>
         /// <param name="eventsRepo"> events repository </param>
-        public EventsService(IEventsRepo eventsRepo)
+        public EventsService(IEventsRepo eventsRepo)//, Company Company)
         {
             this.eventsRepository = eventsRepo;
+            //this.company = Company;
         }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace OurApp.Core.Services
         {
             Event eventToBeAdded = new Event(eventPhoto, eventTitle, eventDescription, eventStartDate, eventEndDate, eventLocation, hostId, collaborators ?? new List<Company>());
             this.eventsRepository.AddEventToRepo(eventToBeAdded);
+            //this.company.CollaboratorsCount += collaborators.Count;
             return eventToBeAdded;
         }
 

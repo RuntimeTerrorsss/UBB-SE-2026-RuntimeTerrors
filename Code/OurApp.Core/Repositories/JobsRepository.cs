@@ -182,6 +182,38 @@ namespace OurApp.Core.Repositories
                     }
                 }
 
+                using var checkCmd = new SqlCommand(@"
+                    SELECT COUNT(*) 
+                    FROM jobs 
+                    WHERE company_id = @CompanyId",
+                    conn, tx);
+
+                checkCmd.Parameters.AddWithValue("@CompanyId", companyId);
+                int existingJobs = (int)checkCmd.ExecuteScalar();
+
+                if (existingJobs == 1) 
+                {
+                    using var updateCmd = new SqlCommand(@"
+                        UPDATE companies
+                        SET posted_jobs_count = 1
+                        WHERE company_id = @CompanyId",
+                        conn, tx);
+
+                    updateCmd.Parameters.AddWithValue("@CompanyId", companyId);
+                    updateCmd.ExecuteNonQuery();
+                }
+                else
+                {
+                    using var updateCmd = new SqlCommand(@"
+                        UPDATE companies
+                        SET posted_jobs_count = posted_jobs_count + 1
+                        WHERE company_id = @CompanyId",
+                        conn, tx);
+
+                    updateCmd.Parameters.AddWithValue("@CompanyId", companyId);
+                    updateCmd.ExecuteNonQuery();
+                }
+
                 tx.Commit();
                 return nextId;
             }
