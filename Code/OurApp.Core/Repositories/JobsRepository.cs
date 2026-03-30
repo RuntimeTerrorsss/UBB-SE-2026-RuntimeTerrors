@@ -111,37 +111,6 @@ namespace OurApp.Core.Repositories
             return list;
         }
 
-        //public IReadOnlyList<JobSkill> GetSkillsForJob(int jobId)
-        //{
-        //    var list = new List<JobSkill>();
-        //    var jobStub = new JobPosting { JobId = jobId };
-        //    using var conn = DbConnectionHelper.GetConnection();
-        //    conn.Open();
-        //    using var cmd = new SqlCommand(
-        //        @"SELECT js.skill_id, js.required_percentage, s.skill_name
-        //          FROM job_skills js
-        //          INNER JOIN skills s ON js.skill_id = s.skill_id
-        //          WHERE js.job_id = @jobId",
-        //        conn);
-        //    cmd.Parameters.AddWithValue("@jobId", jobId);
-        //    using var reader = cmd.ExecuteReader();
-        //    while (reader.Read())
-        //    {
-        //        list.Add(new JobSkill
-        //        {
-        //            Job = jobStub,
-        //            RequiredPercentage = reader.GetInt32(reader.GetOrdinal("required_percentage")),
-        //            Skill = new Skill
-        //            {
-        //                SkillId = reader.GetInt32(reader.GetOrdinal("skill_id")),
-        //                SkillName = reader.GetString(reader.GetOrdinal("skill_name"))
-        //            }
-        //        });
-        //    }
-
-        //    return list;
-        //}
-
         public int AddJob(JobPosting job, int companyId, IReadOnlyList<(int SkillId, int RequiredPercentage)> skillLinks)
         {
             if (job == null)

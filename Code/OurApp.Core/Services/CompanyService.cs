@@ -70,7 +70,6 @@ namespace OurApp.Core.Services
         {
             return this.CompanyRepo.GetCompanyByName(companyName);
         }
-
        
     }
 }

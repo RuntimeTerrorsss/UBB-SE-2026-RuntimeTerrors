@@ -51,7 +51,7 @@ namespace OurApp.Core.Services
 
         private static bool IsMiniGameComplete(Game g)
         {
-            return g.IsPublished;
+            return g != null && g.IsPublished;
         }
 
         public (List<string> skillNames, List<int> percents) GetSkillsTop3(int companyId)
