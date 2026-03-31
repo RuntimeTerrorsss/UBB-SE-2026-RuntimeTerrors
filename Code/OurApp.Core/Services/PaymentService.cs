@@ -28,7 +28,7 @@ namespace OurApp.Core.Services
                 // 2. Fetch emails to notify
                 List<string> emailsToNotify = _repository.GetCompaniesToNotify(jobId, amount);
 
-                // 3. Send Emails using your colleague's credentials
+                // 3. Send Emails 
                 if (emailsToNotify.Count > 0)
                 {
                     await SendNotificationEmailsAsync(emailsToNotify, amount);
