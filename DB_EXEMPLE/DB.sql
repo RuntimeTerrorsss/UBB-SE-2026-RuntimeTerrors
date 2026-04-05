@@ -1,12 +1,11 @@
-create table iss_project;
-use iss_project;
+create database iss_project
 
 CREATE TABLE companies (
     company_id int PRIMARY KEY,
     company_name nvarchar(255) not null,
     about_us text,
-    profile_picture_url nvarchar(255),
-    logo_picture_url nvarchar(255) not null,
+    profile_picture_url nvarchar(max),
+    logo_picture_url nvarchar(max) not null,
     location nvarchar(300),
     email nvarchar(100),
     buddy_name nvarchar(255),
@@ -25,7 +24,10 @@ CREATE TABLE companies (
     scen2_answer3 text,
     scen2_reaction1 text,
     scen2_reaction2 text,
-    scen2_reaction3 text    
+    scen2_reaction3 text,
+    buddy_description nvarchar(255),
+    posted_jobs_count int,
+    collaborators_count int    
     );
 
 CREATE TABLE jobs (
@@ -75,6 +77,7 @@ CREATE TABLE applicants (
     application_status nvarchar(50),
     recommended_from_company_id int,
     applied_at datetime,
+    user id int,
     FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
     FOREIGN KEY (recommended_from_company_id) REFERENCES companies(company_id)
 );
@@ -82,8 +85,8 @@ CREATE TABLE applicants (
 CREATE TABLE events (
     event_id int PRIMARY KEY,
     host_company_id int NOT NULL,
-    photo varchar(100),
-	title varchar(200) not null,
+    photo varchar(max),
+title varchar(200) not null,
 	description text,
 	start_date date not null,
 	end_date date not null,
@@ -99,4 +102,13 @@ CREATE TABLE collaborators (
     PRIMARY KEY (event_id, company_id),
     FOREIGN KEY (event_id) REFERENCES events(event_id) ON DELETE CASCADE,
     FOREIGN KEY (company_id) REFERENCES companies(company_id)
+);
+
+--from other team
+CREATE TABLE users (
+	user_id int PRIMARY KEY,
+	name nvarchar(255) not null,
+	email nvarchar(255) not null,
+	cv_xml nvarchar(max),
+FOREIGN KEY (user_id) REFERENCES applicants(user_id) ON DELETE CASCADE
 );
