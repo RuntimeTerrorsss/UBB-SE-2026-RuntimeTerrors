@@ -49,7 +49,7 @@ INSERT INTO users (user_id, name, email, cv_xml) VALUES (
     1,
     N'Cipicao ',
     N'florea.ciprianm@gmail.com',
-    N'<?xml version="1.0" encoding="utf-8"?><Cv><Name>Cipicao</Name><Email>florea.ciprianm@gmail.com</Email><Phone>+40 721 234 567</Phone><Summary>Software developer focused on dotnet, C sharp, SQL databases, and cloud services with agile teams shipping react and javascript features.</Summary><Projects>Built dotnet REST APIs with csharp and SQL. React SPA with javascript tests, docker on Azure, agile sprints with daily standups.</Projects><Skills>csharp sql dotnet agile react javascript</Skills><Interests>open source azure docker</Interests></Cv>'
+    N'<?xml version="1.0" encoding="utf-8"?><Cv><Name>Cipicao</Name><Email>florea.ciprianm@gmail.com</Email><Phone>+40 721 234 567</Phone><Summary>Software developer focused on cloud services with agile teams shipping react and javascript features.</Summary><Projects>Built dotnet REST APIs with csharp and SQL. React SPA with javascript tests, docker on Azure, agile sprints with daily standups.</Projects><Skills>javascript</Skills><Interests>open source azure docker</Interests></Cv>'
 );
 INSERT INTO users (user_id, name, email, cv_xml) VALUES (
     2,

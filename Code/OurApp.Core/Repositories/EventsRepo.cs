@@ -38,39 +38,6 @@ namespace OurApp.Core.Repositories
             }
         }
 
-        /// <summary>
-        /// Function that inserts an event into the database repository
-        /// </summary>
-        /// <param name="eventToBeAdded"> event to be inserted into the database </param>
-        //public void AddEventToRepo(Event eventToBeAdded)
-        //{
-        //    using (SqlConnection sqlConnection = DbConnectionHelper.GetConnection())
-        //    {
-        //        sqlConnection.Open();
-
-        //        string queryToBeRun = @"
-        //            INSERT INTO events 
-        //            (event_id, photo, title, description, start_date, end_date, location, host_company_id, posted_at)
-        //            VALUES (@Id, @Photo, @Title, @Description, @StartDate, @EndDate, @Location, @Host, @CurrentDateTime)";
-
-        //        SqlCommand sqlCommand = new SqlCommand(queryToBeRun, sqlConnection);
-
-        //        int nextIdToBeUsed = GetMaxEventId() + 1;
-        //        sqlCommand.Parameters.AddWithValue("@Id", nextIdToBeUsed);
-        //        sqlCommand.Parameters.AddWithValue("@Photo", eventToBeAdded.Photo ?? (object)DBNull.Value);
-        //        sqlCommand.Parameters.AddWithValue("@Title", eventToBeAdded.Title);
-        //        sqlCommand.Parameters.AddWithValue("@Description", eventToBeAdded.Description ?? (object)DBNull.Value);
-        //        sqlCommand.Parameters.AddWithValue("@StartDate", eventToBeAdded.StartDate);
-        //        sqlCommand.Parameters.AddWithValue("@EndDate", eventToBeAdded.EndDate);
-        //        sqlCommand.Parameters.AddWithValue("@Location", eventToBeAdded.Location);
-        //        sqlCommand.Parameters.AddWithValue("@Host", eventToBeAdded.HostID);
-        //        sqlCommand.Parameters.AddWithValue("@CurrentDateTime", DateTime.Now);
-
-        //        sqlCommand.ExecuteNonQuery();
-        //        eventToBeAdded.Id = nextIdToBeUsed;
-        //    }
-        //}
-
         public void AddEventToRepo(Event eventToBeAdded)
         {
             using var conn = DbConnectionHelper.GetConnection();
